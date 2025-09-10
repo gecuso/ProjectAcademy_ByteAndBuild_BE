@@ -31,7 +31,7 @@ public class Marca {
 	
 	////////////////////////////////
 	
-	@OneToMany(mappedBy = "categoria",
+	@OneToMany(mappedBy = "marca",
 			   fetch = FetchType.EAGER)
 	private List<Prodotto> prodotto;
 	
