@@ -29,10 +29,9 @@ public class Laptop {
 			nullable = false)
 	private String caratteristiche;
 	
-	@Column(length = 100,
-			name = "consumo",
+	@Column(name = "consumo",
 			nullable = false)
-	private String consumo;
+	private Integer consumo;
 	
 	////////////////////////////////
 	
