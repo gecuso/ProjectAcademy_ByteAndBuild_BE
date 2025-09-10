@@ -32,7 +32,7 @@ public class Pc {
 	@Column(length = 100,
 			name = "totConsumo",
 			nullable = false)
-	private String totConsumo;
+	private Integer totConsumo;
 
 	////////////////////////////////
 	
