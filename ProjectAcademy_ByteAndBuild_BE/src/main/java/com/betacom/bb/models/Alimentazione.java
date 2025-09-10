@@ -28,5 +28,5 @@ public class Alimentazione {
 	
 	////////////////////////////////
 
-	
+	//todo cambiare le interazioni tra le tabelle del db
 }
