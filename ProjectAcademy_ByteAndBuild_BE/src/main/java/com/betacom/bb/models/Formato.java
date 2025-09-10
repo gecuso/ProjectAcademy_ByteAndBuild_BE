@@ -1,8 +1,10 @@
 package com.betacom.bb.models;
 
-import jakarta.persistence.CascadeType;
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,11 +29,11 @@ public class Formato {
 	////////////////////////////////
 	
 	@OneToMany(mappedBy = "formato",
-			  cascade = CascadeType.REMOVE) //non so cosa mettere qui dentro in realta
-	private SchedaMadre schedaMadre;
+			   fetch = FetchType.EAGER)
+	private List<SchedaMadre> schedaMadre;
 	
 	@OneToMany(mappedBy = "formato",
-			  cascade = CascadeType.REMOVE)
-	private Case casee; //doppia ee perche case da errore
+			   fetch = FetchType.EAGER)
+	private  List<Case> casee; //doppia ee perche case da errore
 		
 }

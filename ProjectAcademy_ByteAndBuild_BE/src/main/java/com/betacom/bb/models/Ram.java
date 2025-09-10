@@ -5,6 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -22,17 +25,19 @@ public class Ram {
 			nullable = false)
 	private String descrizione;
 	
-	@Column(length = 100,
-			name = "marca",
-			nullable = false)
-	private String marca;
-	
 	@Column(name = "consumo",
 			nullable = false)
 	private Integer consumo;
 	
 	////////////////////////////////	
 	
+	@OneToOne
+	@JoinColumn(name="id_prodotto",
+			    referencedColumnName = "id")
+	private Prodotto prodotto;
 	
+	@ManyToOne
+	@JoinColumn(name = "id_pc")
+	private Pc pc;
 	
 }

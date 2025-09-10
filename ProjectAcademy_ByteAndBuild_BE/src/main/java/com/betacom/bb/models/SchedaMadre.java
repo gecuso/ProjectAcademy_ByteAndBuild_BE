@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -25,11 +26,6 @@ public class SchedaMadre {
 	private String descrizione;
 	
 	@Column(length = 100,
-			name = "marca",
-			nullable = false)
-	private String marca;
-	
-	@Column(length = 100,
 			name = "compatibilita",
 			nullable = false)
 	private String compatibilita;
@@ -40,10 +36,17 @@ public class SchedaMadre {
 	
 	////////////////////////////////
 	
+	@OneToOne
+	@JoinColumn(name="id_prodotto",
+			    referencedColumnName = "id")
+	private Prodotto prodotto;
+	
 	@ManyToOne
-	@JoinColumn(name = "formato_id")
+	@JoinColumn(name = "id_formato")
 	private Formato formato; //foreign key di formato (ATX, MICROATX, MINI)
 	
-	
+	@ManyToOne
+	@JoinColumn(name = "id_pc")
+	private Pc pc;
 
 }
