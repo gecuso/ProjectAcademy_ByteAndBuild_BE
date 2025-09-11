@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -41,35 +42,35 @@ public class Pc {
 			    referencedColumnName = "id")
 	private Prodotto prodotto;
 	
-	@OneToMany(mappedBy = "pc",
-			   fetch = FetchType.EAGER)
-	private  List<SchedaMadre> schedaMadre;
+	@ManyToOne
+	@JoinColumn(name = "id_schedaMadre")
+	private SchedaMadre schedaMadre;
 	
-	@OneToMany(mappedBy = "pc",
-			   fetch = FetchType.EAGER)
-	private  List<SchedaGrafica> schedaGrafica;
+	@ManyToOne
+	@JoinColumn(name = "id_schedaGrafica")
+	private  SchedaGrafica schedaGrafica;
 	
-	@OneToMany(mappedBy = "pc",
-			   fetch = FetchType.EAGER)
-	private  List<Cpu> cpu;
+	@ManyToOne
+	@JoinColumn(name = "id_cpu")
+	private  Cpu cpu;
 	
-	@OneToMany(mappedBy = "pc",
-			   fetch = FetchType.EAGER)
-	private  List<Ram> ram;
+	@ManyToOne
+	@JoinColumn(name = "id_ram")
+	private  Ram ram;
 	
-	@OneToMany(mappedBy = "pc",
-			   fetch = FetchType.EAGER)
-	private  List<Memoria> memoria;
+	@ManyToOne
+	@JoinColumn(name = "id_memoria")
+	private  Memoria memoria;
 	
-	@OneToMany(mappedBy = "pc",
-			   fetch = FetchType.EAGER)
-	private  List<Case> casee;
+	@ManyToOne
+	@JoinColumn(name = "id_casee")
+	private  Case casee;
 	
-	@OneToMany(mappedBy = "pc",
-			   fetch = FetchType.EAGER)
-	private  List<SistemaRaffreddamento> sistemaRaffreddamento;
+	@ManyToOne
+	@JoinColumn(name = "id_sistemaRaffreddamento")
+	private  SistemaRaffreddamento sistemaRaffreddamento;
 	
-	@OneToMany(mappedBy = "pc",
-			   fetch = FetchType.EAGER)
-	private  List<Alimentazione> alimentazione;
+	@ManyToOne
+	@JoinColumn(name = "id_alimentazione")
+	private  Alimentazione alimentazione;
 }
