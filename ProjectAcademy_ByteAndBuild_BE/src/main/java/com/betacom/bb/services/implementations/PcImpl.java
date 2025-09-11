@@ -43,8 +43,6 @@ public class PcImpl implements IPcService{
 	private IAlimentazioneRepository alimR;
 	private ICaseRepository caseR;
 	private ICpuRepository cpuR;
-	private IFormatoRepository formR;
-	private IMarcaRepository marcaR;
 	private IProdottoRepository prodR;
 	private IMemoriaRepository memR;
 	private ISchedaGraficaRepository schgrfR;
@@ -63,8 +61,6 @@ public class PcImpl implements IPcService{
 		this.alimR = alimR;
 		this.caseR = caseR;
 		this.cpuR = cpuR;
-		this.formR = formR;
-		this.marcaR = marcaR;
 		this.prodR = prodR;
 		this.memR = memR;
 		this.schgrfR = schgrfR;
@@ -155,27 +151,8 @@ public class PcImpl implements IPcService{
 		c.setProdotto(pcReq.getProdotto());
 		c.setTotConsumo(consumoTot);
 		
+		
 		pcR.save(c);
-			
-		/*
-		Macchina c = new Macchina();
-		c.setCilindrata(carReq.getCilindrata());
-		c.setNumeroPorte(carReq.getNumeroPorte());
-		c.setTarga(carReq.getTarga());
-		Integer id =carR.save(c).getIdMacchina();
-		c.setIdMacchina(id);
-		
-		VeicoloImpl veiImpl= new VeicoloImpl(veiR, motoR, carR, biciR, aliR, catR, colR, marcaR, tipoR, sospR);
-		veiImpl.create(veiReq);
-		
-		List<Veicolo> lv = veiR.findAll();
-        Veicolo v = lv.getLast();
-        c.setVeicolo(v);
-        carR.save(c);
-        v.setMacchina(c);
-        
-        veiR.save(v);
-		*/
 	}
 
 	@Override
@@ -192,10 +169,8 @@ public class PcImpl implements IPcService{
 	@Override
 	public Boolean controlloCompatibilita(String comp1,String comp2)
 	{
-		return comp1.equals(comp2);
+		return comp1.equalsIgnoreCase(comp2);
 	}
-
-
 	@Override
 	public Boolean controlloQuantita(Integer n, PcReq pcReq) throws AcademyException {
 		
@@ -223,7 +198,6 @@ public class PcImpl implements IPcService{
 		
 		return true;
 	}
-
 	@Override
 	public Boolean controlloAlimentazione(PcReq pcReq) throws AcademyException {
 		
@@ -234,7 +208,6 @@ public class PcImpl implements IPcService{
 		
 		return consumoTot<pcReq.getAlimentazione().getPotenza();
 	} 
-	
 	@Override
 	public void riduciQuantita(Integer n,PcReq pcReq)
 	{
@@ -263,5 +236,44 @@ public class PcImpl implements IPcService{
 		pcReq.getSchedaMadre().getProdotto().setQuantita(pcReq.getSchedaMadre().getProdotto().getQuantita()-n);
 		prodR.save(pcReq.getSchedaMadre().getProdotto());
 	}
+	@Override
+	public void aumentaQuantita(Integer n, Pc pc) {
+		pc.getSistemaRaffreddamento().getProdotto().setQuantita(pc.getSistemaRaffreddamento().getProdotto().getQuantita()+n);
+		prodR.save(pc.getSistemaRaffreddamento().getProdotto());
+		
+		pc.getAlimentazione().getProdotto().setQuantita(pc.getAlimentazione().getProdotto().getQuantita()+n);
+		prodR.save(pc.getAlimentazione().getProdotto());
+		
+		pc.getCasee().getProdotto().setQuantita(pc.getCasee().getProdotto().getQuantita()+n);
+		prodR.save(pc.getCasee().getProdotto());
+		
+		pc.getCpu().getProdotto().setQuantita(pc.getCpu().getProdotto().getQuantita()+n);
+		prodR.save(pc.getCpu().getProdotto());
+		
+		pc.getMemoria().getProdotto().setQuantita(pc.getMemoria().getProdotto().getQuantita()+n);
+		prodR.save(pc.getMemoria().getProdotto());
+		
+		pc.getRam().getProdotto().setQuantita(pc.getRam().getProdotto().getQuantita()+n);
+		prodR.save(pc.getRam().getProdotto());
+		
+		pc.getSchedaGrafica().getProdotto().setQuantita(pc.getSchedaGrafica().getProdotto().getQuantita()+n);
+		prodR.save(pc.getSchedaGrafica().getProdotto());
+		
+		pc.getSchedaMadre().getProdotto().setQuantita(pc.getSchedaMadre().getProdotto().getQuantita()+n);
+		prodR.save(pc.getSchedaMadre().getProdotto());
+	}
+	@Override
+	public void update(PcReq pcReq) throws AcademyException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(PcReq pcReq) throws AcademyException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 	
 }

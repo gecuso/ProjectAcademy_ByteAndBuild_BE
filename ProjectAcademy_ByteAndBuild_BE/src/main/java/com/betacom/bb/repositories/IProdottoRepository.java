@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.betacom.bb.models.Prodotto;
 
-public interface IProdottoRepository extends JpaRepository<Prodotto, Integer>{
+public interface IProdottoRepository extends JpaRepository<Prodotto,Integer>{
 
 }
