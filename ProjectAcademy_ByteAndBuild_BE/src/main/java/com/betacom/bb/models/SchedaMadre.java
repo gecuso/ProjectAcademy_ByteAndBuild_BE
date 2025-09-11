@@ -26,7 +26,8 @@ public class SchedaMadre {
 	
 	@Column(length = 100,
 			name = "descrizione",
-			nullable = false)
+			nullable = false,
+			unique = true)
 	private String descrizione;
 	
 	@Column(length = 100,
