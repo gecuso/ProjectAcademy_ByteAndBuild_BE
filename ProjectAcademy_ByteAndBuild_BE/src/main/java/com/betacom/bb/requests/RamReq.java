@@ -6,12 +6,11 @@ import com.betacom.bb.models.Prodotto;
 import lombok.Data;
 
 @Data
-public class CaseReq {
+public class RamReq {
 	private Integer id;
 	private String descrizione;
-	private String dimensioni;
-	private String formato;
+	private Integer consumo;
 	private Prodotto prodotto;
 	private Pc pc;
-
+	
 }
