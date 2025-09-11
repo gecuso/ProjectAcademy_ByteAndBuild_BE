@@ -35,6 +35,6 @@ public class Categoria {
 	
 	@ManyToMany(mappedBy = "marca",
 			    fetch = FetchType.EAGER)
-	private List<Categoria> categoria; 
+	private List<Marca> marca; 
 
 }
