@@ -18,8 +18,9 @@ public class PcReq {
 	private Integer id;
 	private String descrizione;
 	private Integer totConsumo;
-	////////////////////////////////
 	private Prodotto prodotto;
+	////////////////////////////////
+	
 	private  SchedaMadre schedaMadre;
 	private  SchedaGrafica schedaGrafica;
 	private  Cpu cpu;
