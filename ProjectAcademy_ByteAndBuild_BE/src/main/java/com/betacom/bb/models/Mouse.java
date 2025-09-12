@@ -21,13 +21,9 @@ public class Mouse {
 	
 	@Column(length = 100,
 			name = "descrizione",
-			nullable = false)
+			nullable = false,
+			unique = true)
 	private String descrizione;
-	
-	@Column(length = 100,
-			name = "tipologia",
-			nullable = false)
-	private String tipologia;
 	
 	@Column(length = 100,
 			name = "collegamento",

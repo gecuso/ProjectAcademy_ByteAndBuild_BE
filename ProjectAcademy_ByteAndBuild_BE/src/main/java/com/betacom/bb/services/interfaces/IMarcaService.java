@@ -1,0 +1,12 @@
+package com.betacom.bb.services.interfaces;
+
+import com.betacom.bb.exception.AcademyException;
+import com.betacom.bb.requests.MarcaReq;
+
+public interface IMarcaService {
+
+	void create(MarcaReq req) throws AcademyException;
+	void update(MarcaReq req) throws AcademyException;
+	void delete(MarcaReq req) throws AcademyException;
+	
+}

@@ -6,7 +6,6 @@ import lombok.Data;
 public class MouseDTO {
 
 	private Integer id;
-	private String tipologia;
 	private String collegamento;
 	
 }

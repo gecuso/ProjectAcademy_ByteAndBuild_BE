@@ -8,7 +8,6 @@ import lombok.Data;
 public class MouseReq {
 	private Integer id;
 	private String descrizione;
-	private String tipologia;
 	private String collegamento;
 	private Prodotto prodotto;
 }
