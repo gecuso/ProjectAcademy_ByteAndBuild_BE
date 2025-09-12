@@ -48,29 +48,29 @@ public class Pc {
 	
 	@ManyToOne
 	@JoinColumn(name = "id_schedaGrafica")
-	private  SchedaGrafica schedaGrafica;
+	private SchedaGrafica schedaGrafica;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_cpu")
-	private  Cpu cpu;
+	private Cpu cpu;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_ram")
-	private  Ram ram;
+	private Ram ram;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_memoria")
-	private  Memoria memoria;
+	private Memoria memoria;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_case")
-	private  Case casee;
+	private Case casee;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_sistemaRaffreddamento")
-	private  SistemaRaffreddamento sistemaRaffreddamento;
+	private SistemaRaffreddamento sistemaRaffreddamento;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_alimentazione")
-	private  Alimentazione alimentazione;
+	private Alimentazione alimentazione;
 }
