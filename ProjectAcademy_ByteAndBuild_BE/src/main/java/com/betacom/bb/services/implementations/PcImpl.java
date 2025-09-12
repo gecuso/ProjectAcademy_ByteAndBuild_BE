@@ -182,7 +182,7 @@ public class PcImpl implements IPcService{
 			m = pcR.findById(newId);
 			m.get().setId(oldId);
 		} catch (Exception e) {
-			// TODO: handle exception
+			throw new AcademyException(e.getMessage());
 		}
 		
 
