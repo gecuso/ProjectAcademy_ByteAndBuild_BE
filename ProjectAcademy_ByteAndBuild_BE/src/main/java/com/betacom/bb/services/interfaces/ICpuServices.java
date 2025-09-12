@@ -1,5 +1,8 @@
 package com.betacom.bb.services.interfaces;
 
+import java.util.List;
+
+import com.betacom.bb.dto.CpuDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.requests.CpuReq;
 
@@ -9,4 +12,6 @@ public interface ICpuServices{
 	void update(CpuReq req) throws AcademyException;
 	void delete(CpuReq req) throws AcademyException;
 	
+	CpuDTO getById(Integer id) throws AcademyException;
+	List<CpuDTO> listAll();
 }

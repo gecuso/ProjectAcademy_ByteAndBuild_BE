@@ -1,21 +1,25 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.betacom.bb.dto.CpuDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Cpu;
 import com.betacom.bb.repositories.ICpuRepository;
 import com.betacom.bb.requests.CpuReq;
 import com.betacom.bb.services.interfaces.ICpuServices;
+import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Service
-public class CpuImpl implements ICpuServices{
+public class CpuImpl extends Utilities implements ICpuServices{
 
 	private ICpuRepository cpuR;
 
@@ -86,5 +90,40 @@ public class CpuImpl implements ICpuServices{
 			throw new AcademyException("Cpu contenuta in un pc, non eliminabile");
 		
 		cpuR.delete(c.get());
+	}
+	
+	@Override
+	public CpuDTO getById(Integer id) throws AcademyException {
+		log.debug("getCpu: " + id);
+		Optional<Cpu> cpu = cpuR.findById(id);
+		
+
+		if(cpu.isEmpty())
+			throw new AcademyException("Cpu nonn esistente");
+		Cpu c = cpu.get();
+		
+		return CpuDTO.builder()
+				.id(c.getId())
+				.descrizione(c.getDescrizione())
+				.compatibilita(c.getCompatibilita())
+				.consumo(c.getConsumo())
+				.prodotto(buildProdottoDTO(c.getProdotto()))
+				.build();
+	}
+	
+	@Override
+	public List<CpuDTO> listAll() {
+		log.debug("lisAll di Cpu: ");
+		List<Cpu> lC = cpuR.findAll();
+		
+		return lC.stream()
+				.map(c -> CpuDTO.builder()
+						.id(c.getId())
+						.descrizione(c.getDescrizione())
+						.compatibilita(c.getCompatibilita())
+						.consumo(c.getConsumo())
+						.prodotto(buildProdottoDTO(c.getProdotto()))
+						.build())
+				.collect(Collectors.toList());
 	}
 }

@@ -1,21 +1,25 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.betacom.bb.dto.SchedaMadreDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.SchedaMadre;
 import com.betacom.bb.repositories.ISchedaMadreRepository;
 import com.betacom.bb.requests.SchedaMadreReq;
 import com.betacom.bb.services.interfaces.ISchedaMadreServices;
+import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Service
-public class SchedaMadreImpl implements ISchedaMadreServices{
+public class SchedaMadreImpl extends Utilities implements ISchedaMadreServices{
 
 
 	private ISchedaMadreRepository smR;
@@ -91,5 +95,39 @@ public class SchedaMadreImpl implements ISchedaMadreServices{
 			throw new AcademyException("SchedaMadre contenutaa in un pc, non eliminabile");
 		
 		smR.delete(s.get());
+	}
+	
+	@Override
+	public SchedaMadreDTO getById(Integer id) throws AcademyException {
+		log.debug("getSchedaMAdre " + id);
+		Optional<SchedaMadre> sm = smR.findById(id);
+		
+		if(sm.isEmpty())
+			throw new AcademyException("SchedaMadre non esistente");
+		SchedaMadre s = sm.get();
+		
+		return SchedaMadreDTO.builder()
+				.id(s.getId())
+				.descrizione(s.getDescrizione())
+				.consumo(s.getConsumo())
+				.prodotto(buildProdottoDTO(s.getProdotto()))
+				.formato(buildFormatoDTO(s.getFormato()))
+				.build();	
+		}
+	
+	@Override
+	public List<SchedaMadreDTO> listAll() {
+		log.debug("lisAll di SchedaMadre: ");
+		List<SchedaMadre> lS = smR.findAll();
+		
+		return lS.stream()
+				.map(s -> SchedaMadreDTO.builder()
+						.id(s.getId())
+						.descrizione(s.getDescrizione())
+						.consumo(s.getConsumo())
+						.prodotto(buildProdottoDTO(s.getProdotto()))
+						.formato(buildFormatoDTO(s.getFormato()))
+						.build())
+				.collect(Collectors.toList());
 	}
 }

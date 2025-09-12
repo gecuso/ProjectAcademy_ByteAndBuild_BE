@@ -1,5 +1,7 @@
 package com.betacom.bb.services.interfaces;
 
+import java.util.List;
+
 import com.betacom.bb.dto.AlimentazioneDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.requests.AlimentazioneReq;
@@ -11,5 +13,6 @@ public interface IAlimentazioneServices {
 	void delete(AlimentazioneReq req) throws AcademyException;
 	
 	AlimentazioneDTO getById(Integer id) throws AcademyException;
+	List<AlimentazioneDTO> listAll();
 	
 }
