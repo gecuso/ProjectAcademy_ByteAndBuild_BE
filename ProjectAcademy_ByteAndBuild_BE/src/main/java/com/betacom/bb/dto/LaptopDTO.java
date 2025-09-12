@@ -1,7 +1,9 @@
 package com.betacom.bb.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
+@Builder
 @Data
 public class LaptopDTO {
 
@@ -9,5 +11,6 @@ public class LaptopDTO {
     private String descrizione;
     private String caratteristiche;
     private Integer consumo;
+    private ProdottoDTO prodotto;
     
 }

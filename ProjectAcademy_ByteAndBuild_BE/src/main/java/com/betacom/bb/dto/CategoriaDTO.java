@@ -5,11 +5,10 @@ import lombok.Data;
 
 @Builder
 @Data
-public class AlimentazioneDTO {
+public class CategoriaDTO {
 
-    private Integer id;
+	private Integer id;
     private String descrizione;
-    private Integer potenza;
     private ProdottoDTO prodotto;
-
+    
 }
