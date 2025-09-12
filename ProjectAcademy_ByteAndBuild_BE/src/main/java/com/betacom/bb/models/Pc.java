@@ -20,57 +20,57 @@ import lombok.Data;
 @Entity
 @Table(name = "pc")
 public class Pc {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-	
-	@Column(length = 100,
-			name = "descrizione",
-			nullable = false)
-	private String descrizione;
-	
-	@Column(length = 100,
-			name = "totConsumo",
-			nullable = false)
-	private Integer totConsumo;
 
-	////////////////////////////////
-	
-	@OneToOne
-	@JoinColumn(name="id_prodotto",
-			    referencedColumnName = "id")
-	private Prodotto prodotto;
-	
-	@ManyToOne
-	@JoinColumn(name = "id_schedaMadre")
-	private SchedaMadre schedaMadre;
-	
-	@ManyToOne
-	@JoinColumn(name = "id_schedaGrafica")
-	private  SchedaGrafica schedaGrafica;
-	
-	@ManyToOne
-	@JoinColumn(name = "id_cpu")
-	private  Cpu cpu;
-	
-	@ManyToOne
-	@JoinColumn(name = "id_ram")
-	private  Ram ram;
-	
-	@ManyToOne
-	@JoinColumn(name = "id_memoria")
-	private  Memoria memoria;
-	
-	@ManyToOne
-	@JoinColumn(name = "id_casee")
-	private  Case casee;
-	
-	@ManyToOne
-	@JoinColumn(name = "id_sistemaRaffreddamento")
-	private  SistemaRaffreddamento sistemaRaffreddamento;
-	
-	@ManyToOne
-	@JoinColumn(name = "id_alimentazione")
-	private  Alimentazione alimentazione;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(length = 100,
+            name = "descrizione",
+            nullable = false)
+    private String descrizione;
+
+    @Column(length = 100,
+            name = "totConsumo",
+            nullable = false)
+    private Integer totConsumo;
+
+    ////////////////////////////////
+
+    @OneToOne
+    @JoinColumn(name="id_prodotto",
+                referencedColumnName = "id")
+    private Prodotto prodotto;
+
+    @ManyToOne
+    @JoinColumn(name = "id_schedaMadre")
+    private SchedaMadre schedaMadre;
+
+    @ManyToOne
+    @JoinColumn(name = "id_schedaGrafica")
+    private SchedaGrafica schedaGrafica;
+
+    @ManyToOne
+    @JoinColumn(name = "id_cpu")
+    private Cpu cpu;
+
+    @ManyToOne
+    @JoinColumn(name = "id_ram")
+    private Ram ram;
+
+    @ManyToOne
+    @JoinColumn(name = "id_memoria")
+    private Memoria memoria;
+
+    @ManyToOne
+    @JoinColumn(name = "id_casee")
+    private Case casee;
+
+    @ManyToOne
+    @JoinColumn(name = "id_sistemaRaffreddamento")
+    private SistemaRaffreddamento sistemaRaffreddamento;
+
+    @ManyToOne
+    @JoinColumn(name = "id_alimentazione")
+    private  Alimentazione alimentazione;
 }

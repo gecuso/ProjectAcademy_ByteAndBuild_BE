@@ -1,7 +1,9 @@
 package com.betacom.bb.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
+@Builder
 @Data
 public class TastieraDTO {
 
@@ -9,5 +11,6 @@ public class TastieraDTO {
 	private String descrizione;
 	private String tipologia;
 	private String collegamento;
+	private ProdottoDTO prodotto;
 	
 }

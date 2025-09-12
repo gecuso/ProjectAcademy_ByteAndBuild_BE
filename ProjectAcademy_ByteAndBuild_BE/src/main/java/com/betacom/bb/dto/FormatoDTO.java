@@ -1,15 +1,13 @@
 package com.betacom.bb.dto;
 
-import java.util.List;
-
+import lombok.Builder;
 import lombok.Data;
 
+@Builder
 @Data
 public class FormatoDTO {
 
     private Integer id;
     private String descrizione;
-    private List<SchedaMadreDTO> schedaMadre;
-    private List<CaseDTO> casee;
 
 }

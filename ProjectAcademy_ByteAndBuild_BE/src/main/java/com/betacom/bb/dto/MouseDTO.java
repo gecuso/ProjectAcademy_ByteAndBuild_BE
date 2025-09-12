@@ -10,6 +10,6 @@ public class MouseDTO {
 	private Integer id;
 	private String descrizione;
 	private String collegamento;
-	//private ProdottoDTO prodotto;
+	private ProdottoDTO prodotto;
 	
 }
