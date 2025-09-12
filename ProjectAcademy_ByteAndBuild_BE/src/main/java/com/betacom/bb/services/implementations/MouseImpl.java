@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.betacom.bb.dto.MouseDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Mouse;
 import com.betacom.bb.repositories.IMouseRepository;
@@ -84,8 +85,34 @@ public class MouseImpl implements IMouseService{
 		//elimino nel database
 		mouseR.delete(mou.get());	
 	}
-	
+
 	////////////////////////////////
+	
+	//da finire post pull
+	
+//	@Override
+//	public MouseDTO getById(Integer id) throws AcademyException {
+//		log.debug("get Mouse by Id: " + id);
+//		
+//		//controllo se il mouse esiste
+//		Optional<Mouse> m = mouseR.findById(id);
+//		if(m.isEmpty())
+//			throw new AcademyException("Mouse non presente nel database");
+//		
+//		Mouse mou = m.get();
+//		return MouseDTO.builder()
+//				.id(mou.getId())
+//				.descrizione(mou.getDescrizione())
+//				.collegamento(mou.getCollegamento())
+//				.
+//				.build();
+//				
+//	}
+	
+	
+	
+	
+	
 	
 	
 	

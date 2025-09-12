@@ -44,7 +44,7 @@ public class Case {
 	@JoinColumn(name = "id_formato")
 	private Formato formato; //foreign key di formato (ATX, MICROATX, MINI)
 	
-	@OneToMany(mappedBy = "case",
+	@OneToMany(mappedBy = "casee",
 			   fetch = FetchType.EAGER)
 	private  List<Pc> pc;
 

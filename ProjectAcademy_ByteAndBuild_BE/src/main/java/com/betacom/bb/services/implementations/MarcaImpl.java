@@ -130,4 +130,25 @@ public class MarcaImpl implements IMarcaService{
 	
 	////////////////////////////////
 	
+	@Override
+	public List<String> findAllMarche() throws AcademyException {
+		log.debug("findAllMarche, no duplicati");
+		
+		//recupero tutte le marche
+		List<Marca> marche = marcaR.findAll();
+		
+		//inserisco tutte le marche in una lista
+		List<String> tutteLeMarche = new ArrayList<String>();
+		for (Marca marca : marche) {
+			if(!tutteLeMarche.contains(marca.getDescrizione())) {
+				tutteLeMarche.add(marca.getDescrizione());
+			}
+		}
+		
+		//mando in output
+		return tutteLeMarche;
+	}
+	
+	
+	
 }
