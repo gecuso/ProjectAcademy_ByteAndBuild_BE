@@ -71,7 +71,7 @@ public class PcImpl implements IPcService{
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void create(PcReq pcReq) throws AcademyException {
+	public Integer create(PcReq pcReq) throws AcademyException {
 		
 		log.debug("dati PcReq: "+pcReq);
 		
@@ -111,7 +111,7 @@ public class PcImpl implements IPcService{
 		if(schmdr.isEmpty())throw new AcademyException("scheda madre non esistente");
 
 		Optional<SistemaRaffreddamento> sisRaf = sisRafR.findById(pcReq.getProdotto().getId());
-		if(prod.isEmpty())throw new AcademyException("prodotto non esistente");
+		if(sisRaf.isEmpty())throw new AcademyException("sistema di raffreddamento non esistente");
 		
 		Optional<Pc> m = pcR.findByDescrizione(pcReq.getDescrizione());
 		if(m.isPresent()) throw new AcademyException("pc con descrizione :"+pcReq.getDescrizione()+" è gia esistente ");
@@ -152,12 +152,53 @@ public class PcImpl implements IPcService{
 		c.setTotConsumo(consumoTot);
 		
 		
-		pcR.save(c);
+		return pcR.save(c).getId();
 	}
 
 	@Override
+	public void delete(PcReq pcReq) throws AcademyException {
+		Optional<Pc> m = pcR.findById(pcReq.getId());
+		if(!m.isPresent()) throw new AcademyException("pc non esistente");
+		
+		if(pcReq.getProdotto().getQuantita()>0)
+		{
+			aumentaQuantita(m.get().getProdotto().getQuantita(),m.get());
+		}
+		
+		pcR.delete(m.get());	
+	}
+	
+	@Override
+	public void update(PcReq pcReq) throws AcademyException {
+		if(pcReq.getId()==null) throw new AcademyException("necessario l'id del pc per modificarlo");
+		Optional<Pc> m = pcR.findById(pcReq.getId());
+		Integer oldId=pcReq.getId();
+		if(!m.isPresent()) throw new AcademyException("pc non esistente");
+		
+		try {
+			aumentaQuantita(m.get().getProdotto().getQuantita(), m.get());
+			Integer newId = create(pcReq);
+			pcR.delete(m.get());
+			m = pcR.findById(newId);
+			m.get().setId(oldId);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+
+		
+		
+		
+	}
+	
+	@Override
 	public List<PcDTO> listAll() throws AcademyException {
-		// TODO Auto-generated method stub
+		
+		return null;
+	}
+	public List<Object> list(String str) throws AcademyException {
+		
+		
 		return null;
 	}
 
@@ -174,30 +215,43 @@ public class PcImpl implements IPcService{
 	@Override
 	public Boolean controlloQuantita(Integer n, PcReq pcReq) throws AcademyException {
 		
+		if(pcReq.getAlimentazione()!=null)
 		if(pcReq.getAlimentazione().getProdotto().getQuantita()<n) {
 			throw new AcademyException("alimentatori non sufficienti");
 		}
+		if(pcReq.getCasee()!=null)
 		if(pcReq.getCasee().getProdotto().getQuantita()<n) {
 			throw new AcademyException("Case non sufficienti");
 		}
+		if(pcReq.getCpu()!=null)
 		if(pcReq.getCpu().getProdotto().getQuantita()<n) {
 			throw new AcademyException("Processori non sufficienti");
 		}
+		if(pcReq.getMemoria()!=null)
 		if(pcReq.getMemoria().getProdotto().getQuantita()<n) {
 			throw new AcademyException("schede di memoria non sufficienti");
 		}
+		if(pcReq.getRam()!=null)
 		if(pcReq.getRam().getProdotto().getQuantita()<n) {
 			throw new AcademyException("schede di memoria RAM non sufficienti");
 		}	
+		if(pcReq.getSchedaGrafica()!=null)
 		if(pcReq.getSchedaGrafica().getProdotto().getQuantita()<n) {
 			throw new AcademyException("schede grafiche non sufficienti");
 		}
+		if(pcReq.getSchedaMadre()!=null)
 		if(pcReq.getSchedaMadre().getProdotto().getQuantita()<n) {
 			throw new AcademyException("scheda madre non sufficienti");
 		}
+		if(pcReq.getSistemaRaffreddamento()!=null)
+			if(pcReq.getSistemaRaffreddamento().getProdotto().getQuantita()<n) {
+				throw new AcademyException("moduli del sistema di raffreddamento non sufficienti");
+			}	
 		
 		return true;
 	}
+	
+	
 	@Override
 	public Boolean controlloAlimentazione(PcReq pcReq) throws AcademyException {
 		
@@ -262,17 +316,10 @@ public class PcImpl implements IPcService{
 		pc.getSchedaMadre().getProdotto().setQuantita(pc.getSchedaMadre().getProdotto().getQuantita()+n);
 		prodR.save(pc.getSchedaMadre().getProdotto());
 	}
-	@Override
-	public void update(PcReq pcReq) throws AcademyException {
-		// TODO Auto-generated method stub
-		
-	}
+	
+	
 
-	@Override
-	public void delete(PcReq pcReq) throws AcademyException {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	
 	

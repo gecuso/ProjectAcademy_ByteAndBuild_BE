@@ -8,7 +8,7 @@ import com.betacom.bb.models.Pc;
 import com.betacom.bb.requests.PcReq;
 
 public interface IPcService {
-	void create(PcReq pcReq) throws AcademyException;
+	Integer create(PcReq pcReq) throws AcademyException;
 	void update(PcReq pcReq) throws AcademyException;
 	void delete(PcReq pcReq) throws AcademyException;
 	
