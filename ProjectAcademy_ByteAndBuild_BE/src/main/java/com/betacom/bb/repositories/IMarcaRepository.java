@@ -8,6 +8,7 @@ import com.betacom.bb.models.Marca;
 
 public interface IMarcaRepository extends JpaRepository<Marca, Integer>{
 
-    Optional<Marca> findByDescrizione(String descrizione);
-
+	Optional<Marca> findByDescrizione(String descrizione);
+	Optional<List<Marca>> findAllByDescrizione(String descrizione);
+	
 }

@@ -33,7 +33,7 @@ public class Categoria {
 			   fetch = FetchType.EAGER)
 	private List<Prodotto> prodotto;
 	
-	@ManyToMany(mappedBy = "marca",
+	@ManyToMany(mappedBy = "categoria",
 			    fetch = FetchType.EAGER)
 	private List<Marca> marca; 
 

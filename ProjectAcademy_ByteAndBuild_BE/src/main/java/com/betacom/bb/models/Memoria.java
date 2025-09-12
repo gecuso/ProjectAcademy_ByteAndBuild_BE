@@ -9,7 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -26,13 +25,9 @@ public class Memoria {
 	
 	@Column(length = 100,
 			name = "descrizione",
-			nullable = false)
+			nullable = false,
+			unique = true)
 	private String descrizione;
-	
-	@Column(length = 100,
-			name = "marca",
-			nullable = false)
-	private String marca;
 	
 	@Column(name = "spazio",
 			nullable = false)
@@ -47,6 +42,6 @@ public class Memoria {
 
 	@OneToMany(mappedBy = "memoria",
 			   fetch = FetchType.EAGER)
-	private  List<Pc> pc;
+	private List<Pc> pc;
 	
 }
