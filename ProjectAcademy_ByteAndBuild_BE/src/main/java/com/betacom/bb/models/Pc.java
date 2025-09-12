@@ -63,7 +63,7 @@ public class Pc {
 	private  Memoria memoria;
 	
 	@ManyToOne
-	@JoinColumn(name = "id_casee")
+	@JoinColumn(name = "id_case")
 	private  Case casee;
 	
 	@ManyToOne

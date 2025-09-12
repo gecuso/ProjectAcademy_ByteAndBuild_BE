@@ -9,7 +9,6 @@ import lombok.Data;
 public class MemoriaReq {
 	private Integer id;
 	private String descrizione;
-	private String marca;
 	private Integer spazio;
 	private Prodotto prodotto;
 	private Pc pc;
