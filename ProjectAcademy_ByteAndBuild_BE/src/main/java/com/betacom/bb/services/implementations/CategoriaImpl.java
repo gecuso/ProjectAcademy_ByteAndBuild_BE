@@ -22,10 +22,12 @@ public class CategoriaImpl extends Utilities implements ICategoriaService{
 	private ICategoriaRepository catR;
 	private IProdottoRepository prodR;
 	private IMarcaRepository marR;
-	
-	public CategoriaImpl(ICategoriaRepository catR) {
+
+	public CategoriaImpl(ICategoriaRepository catR, IProdottoRepository prodR, IMarcaRepository marR) {
 		super();
 		this.catR = catR;
+		this.prodR = prodR;
+		this.marR = marR;
 	}
 
 	@Override
