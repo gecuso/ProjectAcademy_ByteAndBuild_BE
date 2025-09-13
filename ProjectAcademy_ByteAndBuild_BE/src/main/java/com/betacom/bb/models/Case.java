@@ -17,7 +17,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "case")
+@Table(name = "casee")
 public class Case {
 
 	@Id
