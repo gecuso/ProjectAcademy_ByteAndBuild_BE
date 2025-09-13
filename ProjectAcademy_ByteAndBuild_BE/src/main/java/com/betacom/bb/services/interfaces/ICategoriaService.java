@@ -12,5 +12,6 @@ public interface ICategoriaService {
 	void update(CategoriaReq catReq) throws AcademyException;
 	CategoriaDTO getById(Integer id) throws AcademyException;
 
+	
 	List<CategoriaDTO> listall();
 }
