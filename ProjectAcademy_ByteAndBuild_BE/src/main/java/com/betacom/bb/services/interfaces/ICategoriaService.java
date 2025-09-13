@@ -13,5 +13,5 @@ public interface ICategoriaService {
 	CategoriaDTO getById(Integer id) throws AcademyException;
 
 	
-	List<CategoriaDTO> listall();
+	List<CategoriaDTO> listAll();
 }
