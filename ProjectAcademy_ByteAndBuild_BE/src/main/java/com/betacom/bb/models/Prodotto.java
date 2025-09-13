@@ -1,5 +1,6 @@
 package com.betacom.bb.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -50,5 +52,84 @@ public class Prodotto {
 	@ManyToOne
 	@JoinColumn(name="id_marca")
 	private Marca marca; 
+	
+	@OneToOne(
+			mappedBy = "prodotto",
+			cascade = CascadeType.REMOVE
+			)
+	private Alimentazione alimentazione;
+	
+	@OneToOne(
+			mappedBy = "prodotto",
+			cascade = CascadeType.REMOVE
+			)
+	private Case casee;
+	
+	@OneToOne(
+			mappedBy = "prodotto",
+			cascade = CascadeType.REMOVE
+			)
+	private Cpu cpu;
+	
+	@OneToOne(
+			mappedBy = "prodotto",
+			cascade = CascadeType.REMOVE
+			)
+	private Laptop laptop;
+	
+	@OneToOne(
+			mappedBy = "prodotto",
+			cascade = CascadeType.REMOVE
+			)
+	private Memoria memoria;
+	
+	@OneToOne(
+			mappedBy = "prodotto",
+			cascade = CascadeType.REMOVE
+			)
+	private Monitor monitor;
+	
+	@OneToOne(
+			mappedBy = "prodotto",
+			cascade = CascadeType.REMOVE
+			)
+	private Mouse mouse;
+	
+	@OneToOne(
+			mappedBy = "prodotto",
+			cascade = CascadeType.REMOVE
+			)
+	private Pc pc;
+	
+	@OneToOne(
+			mappedBy = "prodotto",
+			cascade = CascadeType.REMOVE
+			)
+	private Ram ram;
+	
+	@OneToOne(
+			mappedBy = "prodotto",
+			cascade = CascadeType.REMOVE
+			)
+	private SchedaGrafica schedagrafica;
+	
+	@OneToOne(
+			mappedBy = "prodotto",
+			cascade = CascadeType.REMOVE
+			)
+	private SchedaMadre schedamadre;
+	
+	@OneToOne(
+			mappedBy = "prodotto",
+			cascade = CascadeType.REMOVE
+			)
+	private SistemaRaffreddamento sistemaRaffreddamento;
+	
+	@OneToOne(
+			mappedBy = "prodotto",
+			cascade = CascadeType.REMOVE
+			)
+	private Tastiera tastiera;
+	
 	
 }
