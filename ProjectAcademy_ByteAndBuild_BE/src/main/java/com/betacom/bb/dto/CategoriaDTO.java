@@ -9,6 +9,5 @@ public class CategoriaDTO {
 
 	private Integer id;
     private String descrizione;
-    private ProdottoDTO prodotto;
     
 }

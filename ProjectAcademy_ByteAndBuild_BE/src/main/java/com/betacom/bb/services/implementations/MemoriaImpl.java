@@ -1,10 +1,14 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.betacom.bb.dto.MemoriaDTO;
+import com.betacom.bb.dto.ProdottoDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Memoria;
 import com.betacom.bb.repositories.IMemoriaRepository;
@@ -90,6 +94,41 @@ public class MemoriaImpl implements IMemoriaService{
 	
 	////////////////////////////////
 	
+	@Override
+	public List<MemoriaDTO> findAll() throws AcademyException {
+		log.debug("findAll memoria");
+		List<Memoria> listMemoria = memR.findAll();
+		
+		return listMemoria.stream()
+				.map(mem -> MemoriaDTO.builder()
+						.id(mem.getId())
+						.descrizione(mem.getDescrizione())
+						.spazio(mem.getSpazio())
+						.prodotto(ProdottoDTO.builder()
+								.id(mem.getProdotto().getId())
+								.build())
+						.build()).collect(Collectors.toList());
+	}
 	
+	
+	@Override
+	public MemoriaDTO getById(Integer id) throws AcademyException {
+		log.debug("get Memoria by Id: " + id);
+		
+		//controllo se il mouse esiste
+		Optional<Memoria> m = memR.findById(id);
+		if(m.isEmpty())
+			throw new AcademyException("Memoria non presente nel database");
+		
+		Memoria mem = m.get();
+		return MemoriaDTO.builder()
+				.id(mem.getId())
+				.descrizione(mem.getDescrizione())
+				.spazio(mem.getSpazio())
+				.prodotto(ProdottoDTO.builder()
+						.id(mem.getProdotto().getId())
+						.build())
+				.build();		
+	}
 	
 }
