@@ -12,6 +12,7 @@ public interface IPcService {
 	void update(PcReq pcReq) throws AcademyException;
 	void delete(PcReq pcReq) throws AcademyException;
 	
+	PcDTO getById(Integer id) throws AcademyException;
 	
 	List<PcDTO> listAll() throws AcademyException;
 	Boolean controlloAlimentazione(PcReq pcReq) throws AcademyException;
