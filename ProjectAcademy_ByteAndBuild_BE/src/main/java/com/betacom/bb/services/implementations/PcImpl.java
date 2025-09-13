@@ -191,7 +191,7 @@ public class PcImpl extends Utilities implements IPcService{
 	@Override
 	public PcDTO getById(Integer id) throws AcademyException
 	{
-		log.debug("getSocio :" + id);
+		log.debug("getPc :" + id);
 		Optional<Pc> pcO = pcR.findById(id);
 		
 		if (pcO.isEmpty())
