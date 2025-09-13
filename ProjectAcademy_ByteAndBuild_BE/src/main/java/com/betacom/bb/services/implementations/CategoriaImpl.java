@@ -101,7 +101,7 @@ public class CategoriaImpl extends Utilities implements ICategoriaService{
 	}
 
 	@Override
-	public List<CategoriaDTO> listall() {
+	public List<CategoriaDTO> listAll() {
 		List<Categoria> lc = catR.findAll();
 		return buildListCategoriaDTO(lc);
 	}
