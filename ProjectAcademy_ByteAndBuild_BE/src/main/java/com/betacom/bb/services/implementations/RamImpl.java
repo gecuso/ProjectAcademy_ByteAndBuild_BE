@@ -1,21 +1,25 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.betacom.bb.dto.RamDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Ram;
 import com.betacom.bb.repositories.IRamRepository;
 import com.betacom.bb.requests.RamReq;
 import com.betacom.bb.services.interfaces.IRamServices;
+import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Service
-public class RamImpl implements IRamServices{
+public class RamImpl extends Utilities implements IRamServices{
 
 	private IRamRepository ramR;
 
@@ -71,12 +75,44 @@ public class RamImpl implements IRamServices{
 		Optional<Ram> r = ramR.findById(req.getId());
 		
 		if(r.isEmpty())
-			throw new AcademyException("Cpu non esistente");
+			throw new AcademyException("Ram non esistente");
 		
 		if(!r.get().getPc().isEmpty())
-			throw new AcademyException("Cpu contenuta in un pc, non contenibile");
+			throw new AcademyException("Ram contenuta in un pc, non contenibile");
 		
 		ramR.delete(r.get());
 		
+	}
+	
+	@Override
+	public RamDTO getById(Integer id) throws AcademyException {
+		log.debug("getRam: " + id);
+		Optional<Ram> ram = ramR.findById(id);
+		
+		if(ram.isEmpty())
+			throw new AcademyException("Ram non esistente");
+		Ram r = ram.get();
+		
+		return RamDTO.builder()
+				.id(r.getId())
+				.descrizione(r.getDescrizione())
+				.consumo(r.getConsumo())
+				.prodotto(buildProdottoDTO(r.getProdotto()))
+				.build();
+	}
+	
+	@Override
+	public List<RamDTO> listAll() {
+		log.debug("lisAll di Ram: ");
+		List<Ram> lR = ramR.findAll();
+		
+		return  lR.stream()
+				.map(r ->RamDTO.builder()
+						.id(r.getId())
+						.descrizione(r.getDescrizione())
+						.consumo(r.getConsumo())
+						.prodotto(buildProdottoDTO(r.getProdotto()))
+						.build())
+				.collect(Collectors.toList());
 	}
 }

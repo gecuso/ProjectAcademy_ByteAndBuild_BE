@@ -7,7 +7,7 @@
         primary key (id)
     ) engine=InnoDB;
 
-    create table case (
+    create table casee (
         id integer not null auto_increment,
         id_formato integer,
         id_prodotto integer,
@@ -160,11 +160,11 @@
     alter table alimentazione 
        add constraint UKq4q9p35gc0lk9518ljake6jvb unique (descrizione);
 
-    alter table case 
-       add constraint UKcj9twbr5alu4hba4oh68yhbym unique (id_prodotto);
+    alter table casee 
+       add constraint UKgo3orw0mwdoap3amq50hrn3xk unique (id_prodotto);
 
-    alter table case 
-       add constraint UKdecs3h8fy6q9tt5qx3ir4u1ae unique (descrizione);
+    alter table casee 
+       add constraint UKidu4sigetyt75h8alyodh87j6 unique (descrizione);
 
     alter table cpu 
        add constraint UKxqg63nqqlvxg1hdk7jjg24ub unique (id_prodotto);
@@ -234,13 +234,13 @@
        foreign key (id_prodotto) 
        references prodotto (id);
 
-    alter table case 
-       add constraint FKgco5cwlu9w44aqmbxrqw1j1om 
+    alter table casee 
+       add constraint FKku42w51dqftbygngninjhdd9n 
        foreign key (id_formato) 
        references formato (id);
 
-    alter table case 
-       add constraint FK3bnyggj79ddswerpiypb2hkt0 
+    alter table casee 
+       add constraint FKik9u2ydycw3j77lla39csxb1v 
        foreign key (id_prodotto) 
        references prodotto (id);
 
@@ -285,9 +285,9 @@
        references alimentazione (id);
 
     alter table pc 
-       add constraint FK1ly53mwgf43tojxb10bcnxwm 
+       add constraint FKi1ki5o09ra9kkgvqrukn8msdn 
        foreign key (id_casee) 
-       references case (id);
+       references casee (id);
 
     alter table pc 
        add constraint FKqv76gwb8fjp08q3fulsvql7y7 

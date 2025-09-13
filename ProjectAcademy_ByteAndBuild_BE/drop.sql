@@ -3,13 +3,13 @@
        drop 
        foreign key FKbvchl8gmwr1hga1q8yyphwsmf;
 
-    alter table case 
+    alter table casee 
        drop 
-       foreign key FKgco5cwlu9w44aqmbxrqw1j1om;
+       foreign key FKku42w51dqftbygngninjhdd9n;
 
-    alter table case 
+    alter table casee 
        drop 
-       foreign key FK3bnyggj79ddswerpiypb2hkt0;
+       foreign key FKik9u2ydycw3j77lla39csxb1v;
 
     alter table categoria_marca 
        drop 
@@ -45,7 +45,7 @@
 
     alter table pc 
        drop 
-       foreign key FK1ly53mwgf43tojxb10bcnxwm;
+       foreign key FKi1ki5o09ra9kkgvqrukn8msdn;
 
     alter table pc 
        drop 
@@ -109,7 +109,7 @@
 
     drop table if exists alimentazione;
 
-    drop table if exists case;
+    drop table if exists casee;
 
     drop table if exists categoria;
 
