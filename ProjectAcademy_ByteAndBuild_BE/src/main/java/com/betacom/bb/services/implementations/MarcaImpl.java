@@ -3,10 +3,13 @@ package com.betacom.bb.services.implementations;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.betacom.bb.dto.CategoriaDTO;
+import com.betacom.bb.dto.MarcaDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Categoria;
 import com.betacom.bb.models.Marca;
@@ -131,6 +134,44 @@ public class MarcaImpl implements IMarcaService{
 	////////////////////////////////
 	
 	@Override
+	public List<MarcaDTO> findAll() throws AcademyException {
+		log.debug("findAll marca");
+		List<Marca> listaMarca = marcaR.findAll();
+		
+		return listaMarca.stream()
+				.map(mar -> MarcaDTO.builder()
+						.id(mar.getId())
+						.descrizione(mar.getDescrizione())
+						.categoria(mar.getCategoria().stream()
+									.map(cat -> CategoriaDTO.builder()
+											.id(cat.getId())
+											.descrizione(cat.getDescrizione())
+											.build()).collect(Collectors.toList()))
+						.build()).collect(Collectors.toList());
+	}
+
+	@Override
+	public MarcaDTO getById(Integer id) throws AcademyException {
+		log.debug("get Marca by Id: " + id);
+		
+		//controllo se il mouse esiste
+		Optional<Marca> m = marcaR.findById(id);
+		if(m.isEmpty())
+			throw new AcademyException("Marca non presente nel database");
+		
+		Marca mar = m.get();
+		return MarcaDTO.builder()
+				.id(mar.getId())
+				.descrizione(mar.getDescrizione())
+				.categoria(mar.getCategoria().stream()
+							.map(cat -> CategoriaDTO.builder()
+									.id(cat.getId())
+									.descrizione(cat.getDescrizione())
+									.build()).collect(Collectors.toList()))
+				.build();
+	}
+	
+	@Override
 	public List<String> findAllMarche() throws AcademyException {
 		log.debug("findAllMarche, no duplicati");
 		
@@ -148,6 +189,8 @@ public class MarcaImpl implements IMarcaService{
 		//mando in output
 		return tutteLeMarche;
 	}
+
+	
 	
 	
 	
