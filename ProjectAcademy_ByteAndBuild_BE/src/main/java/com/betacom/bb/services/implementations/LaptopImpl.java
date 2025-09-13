@@ -1,10 +1,14 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.betacom.bb.dto.LaptopDTO;
+import com.betacom.bb.dto.ProdottoDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Laptop;
 import com.betacom.bb.repositories.ILaptopRepository;
@@ -94,6 +98,48 @@ public class LaptopImpl implements ILaptopService{
 	
 	////////////////////////////////
 
+	@Override
+	public List<LaptopDTO> findAll() throws AcademyException {
+		log.debug("findAll laptop");
+		List<Laptop> listLaptop = lapR.findAll();
+		
+		return listLaptop.stream()
+				.map(lap -> LaptopDTO.builder()
+						.id(lap.getId())
+						.descrizione(lap.getDescrizione())
+						.caratteristiche(lap.getCaratteristiche())
+						.consumo(lap.getConsumo())
+						.prodotto(ProdottoDTO.builder()
+								.id(lap.getProdotto().getId())
+								.build())
+						.build()).collect(Collectors.toList());
+				
+	}
 
+	@Override
+	public LaptopDTO getById(Integer id) throws AcademyException {
+		log.debug("get Laptop by Id: " + id);
+		
+		//controllo se il laptop esiste
+		Optional<Laptop> l = lapR.findById(id);
+		if(l.isEmpty())
+			throw new AcademyException("Laptop non presente nel database");
+		
+		Laptop lap = l.get();
+		return LaptopDTO.builder()
+				.id(lap.getId())
+				.descrizione(lap.getDescrizione())
+				.caratteristiche(lap.getCaratteristiche())
+				.consumo(lap.getConsumo())
+				.prodotto(ProdottoDTO.builder()
+						.id(lap.getProdotto().getId())
+						.build())
+				.build();
+	}
+	
+	
+	
+	
+	
 	
 }

@@ -1,10 +1,14 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.betacom.bb.dto.MonitorDTO;
+import com.betacom.bb.dto.ProdottoDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Monitor;
 import com.betacom.bb.repositories.IMonitorRepository;
@@ -99,6 +103,44 @@ public class MonitorImpl implements IMonitorService{
 
 	////////////////////////////////
 	
+	@Override
+	public List<MonitorDTO> findAll() throws AcademyException {
+		log.debug("findAll monitor");
+		List<Monitor> listMonitor = monR.findAll();
 		
+		return listMonitor.stream()
+				.map(mon -> MonitorDTO.builder()
+						.id(mon.getId())
+						.descrizione(mon.getDescrizione())
+						.risoluzione(mon.getRisoluzione())
+						.latenza(mon.getLatenza())
+						.frequenza(mon.getFrequenza())
+						.prodotto(ProdottoDTO.builder()
+								.id(mon.getProdotto().getId())
+								.build())
+						.build()).collect(Collectors.toList());
+	}
+
+	@Override
+	public MonitorDTO getById(Integer id) throws AcademyException {
+		log.debug("get Monitor by Id: " + id);
+		
+		//controllo se il mouse esiste
+		Optional<Monitor> m = monR.findById(id);
+		if(m.isEmpty())
+			throw new AcademyException("Monitor non presente nel database");
+		
+		Monitor mon = m.get();
+		return MonitorDTO.builder()
+				.id(mon.getId())
+				.descrizione(mon.getDescrizione())
+				.risoluzione(mon.getRisoluzione())
+				.latenza(mon.getLatenza())
+				.frequenza(mon.getFrequenza())
+				.prodotto(ProdottoDTO.builder()
+						.id(mon.getProdotto().getId())
+						.build())
+				.build();
+	}	
 	
 }
