@@ -37,7 +37,7 @@ public class AlimentazioneImpl extends Utilities implements IAlimentazioneServic
 		if(a.isPresent())
 			throw new AcademyException("Alimentatore già esistente nel database");
 		
-		if(req.getDescrizione().isEmpty())
+		if(req.getDescrizione()== null)
 			throw new AcademyException("Descrizione non presente, riprova");
 		alim.setDescrizione(req.getDescrizione());
 		

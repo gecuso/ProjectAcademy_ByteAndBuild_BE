@@ -46,7 +46,7 @@ public class MarcaImpl implements IMarcaService{
 		
 		//controllo dei dati
 		Marca marca = new Marca();
-		if(req.getDescrizione().isEmpty())
+		if(req.getDescrizione() == null)
 			throw new AcademyException("Descrizione non presente, riprovare");
 		marca.setDescrizione(req.getDescrizione());
 		

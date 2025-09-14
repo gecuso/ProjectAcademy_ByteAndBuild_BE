@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.betacom.bb.dto.SchedaGraficaDTO;
@@ -13,7 +14,7 @@ import com.betacom.bb.response.ResponseList;
 import com.betacom.bb.response.ResponseObject;
 import com.betacom.bb.services.interfaces.ISchedaGraficaServices;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/rest/schedaGrafica")
@@ -66,7 +67,7 @@ public class SchedaGraficaController {
 	}
 	
 	@GetMapping("/getSchedaGrafica")
-	public ResponseObject<SchedaGraficaDTO> getSchedaGrafica(@RequestBody (required = true) Integer id ){
+	public ResponseObject<SchedaGraficaDTO> getSchedaGrafica(@RequestParam (required = true) Integer id ){
 		ResponseObject<SchedaGraficaDTO> r = new ResponseObject<SchedaGraficaDTO>();
 		try {
 			r.setDati(sgS.getById(id));

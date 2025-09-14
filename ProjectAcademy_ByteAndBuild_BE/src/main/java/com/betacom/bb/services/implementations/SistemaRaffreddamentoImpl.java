@@ -41,7 +41,7 @@ public class SistemaRaffreddamentoImpl extends Utilities implements ISistemaRaff
 		if(s.isPresent())
 			throw new AcademyException("Sistema di raffredamento già esistente nel database");
 		
-		if(req.getDescrizione().isEmpty())
+		if(req.getDescrizione() == null)
 			throw new AcademyException("Descrizione non presente, riprova");
 		sys.setDescrizione(req.getDescrizione());
 		

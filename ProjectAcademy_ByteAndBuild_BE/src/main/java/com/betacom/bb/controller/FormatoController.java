@@ -2,33 +2,34 @@ package com.betacom.bb.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.betacom.bb.dto.CaseDTO;
-import com.betacom.bb.requests.CaseReq;
+import com.betacom.bb.dto.FormatoDTO;
+import com.betacom.bb.requests.FormatoReq;
 import com.betacom.bb.response.ResponseBase;
 import com.betacom.bb.response.ResponseList;
 import com.betacom.bb.response.ResponseObject;
-import com.betacom.bb.services.interfaces.ICaseServices;
+import com.betacom.bb.services.interfaces.IFormatoServices;
+
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
-@RequestMapping("/rest/case")
-public class CaseController {
+@RequestMapping("/rest/formato")
+public class FormatoController {
 
-	private ICaseServices csS;
+	private IFormatoServices fS;
 
-	public CaseController(ICaseServices csS) {
-		this.csS = csS;
+	public FormatoController(IFormatoServices fS) {
+		this.fS = fS;
 	}
 	
 	@PostMapping("/create")
-	public ResponseBase create(@RequestBody (required = true) CaseReq req) {
+	public ResponseBase create(@RequestBody (required = true) FormatoReq req) {
 		ResponseBase r = new ResponseBase();
 		try {
-			csS.create(req);
+			fS.create(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);
@@ -37,13 +38,12 @@ public class CaseController {
 		
 		return r;
 	}
-
 	
 	@PostMapping("/delete")
-	public ResponseBase delete(@RequestBody (required = true)  CaseReq req) {
+	public ResponseBase delete(@RequestBody (required = true)  FormatoReq req) {
 		ResponseBase r = new ResponseBase();
 		try {
-			csS.delete(req);
+			fS.delete(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);
@@ -52,11 +52,11 @@ public class CaseController {
 		return r;
 	}
 	
-	@GetMapping("/getCase")
-	public ResponseObject<CaseDTO> getCase(@RequestParam (required = true) Integer id ){
-		ResponseObject<CaseDTO> r = new ResponseObject<CaseDTO>();
+	@GetMapping("/getFormato")
+	public ResponseObject<FormatoDTO> getFormato(@RequestBody (required = true) Integer id ){
+		ResponseObject<FormatoDTO> r = new ResponseObject<FormatoDTO>();
 		try {
-			r.setDati(csS.getById(id));
+			r.setDati(fS.getById(id));
 		}catch (Exception e) {
 			r.setRc(false);
 			r.setMsg(e.getMessage());
@@ -64,11 +64,11 @@ public class CaseController {
 		return r;
 	}
 	
-	@GetMapping("/listAllCase")
-	public ResponseList<CaseDTO> listAllCase(){
-		ResponseList<CaseDTO> r = new ResponseList<CaseDTO>();
+	@GetMapping("/listAllFormato")
+	public ResponseList<FormatoDTO> listAllFormato(){
+		ResponseList<FormatoDTO> r = new ResponseList<FormatoDTO>();
 		try {
-			r.setDati(csS.listAll());
+			r.setDati(fS.listAll());
 		}catch (Exception e) {
 			r.setRc(false);
 			r.setMsg(e.getMessage());
