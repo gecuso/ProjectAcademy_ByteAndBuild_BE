@@ -81,7 +81,7 @@ public class Utilities {
 	public SchedaMadreDTO buildSchedaMadreDTO(SchedaMadre sm) {
 		return SchedaMadreDTO.builder()
 				.id(sm.getId())
-				.descrizione(sm.getDescrizione())
+//				.descrizione(sm.getDescrizione())
 				.compatibilita(sm.getCompatibilita())
 				.consumo(sm.getConsumo())
 				.prodotto(buildProdottoDTO(sm.getProdotto()))
@@ -91,7 +91,7 @@ public class Utilities {
 	public SchedaGraficaDTO buildSchedaGraficaDTO(SchedaGrafica sm) {
 		return SchedaGraficaDTO.builder()
 				.id(sm.getId())
-				.descrizione(sm.getDescrizione())
+//				.descrizione(sm.getDescrizione())
 				.consumo(sm.getConsumo())
 				.prodotto(buildProdottoDTO(sm.getProdotto()))
 				.build();
@@ -99,7 +99,7 @@ public class Utilities {
 	public CpuDTO buildCpuDTO(Cpu c) {
 		return CpuDTO.builder()
 				.id(c.getId())
-				.descrizione(c.getDescrizione())
+//				.descrizione(c.getDescrizione())
 				.consumo(c.getConsumo())
 				.compatibilita(c.getCompatibilita())
 				.prodotto(buildProdottoDTO(c.getProdotto()))
@@ -109,7 +109,7 @@ public class Utilities {
 	public RamDTO buildRamDTO(Ram r) {
 		return RamDTO.builder()
 				.id(r.getId())
-				.descrizione(r.getDescrizione())
+//				.descrizione(r.getDescrizione())
 				.consumo(r.getConsumo())
 				.prodotto(buildProdottoDTO(r.getProdotto()))
 				.build();
@@ -118,7 +118,7 @@ public class Utilities {
 	public MemoriaDTO buildMemoriaDTO(Memoria m) {
 		return MemoriaDTO.builder()
 				.id(m.getId())
-				.descrizione(m.getDescrizione())
+//				.descrizione(m.getDescrizione())
 				.spazio(m.getSpazio())
 				.prodotto(buildProdottoDTO(m.getProdotto()))
 				.build();
@@ -126,7 +126,7 @@ public class Utilities {
 	public CaseDTO buildCaseDTO(Case c) {
 		return CaseDTO.builder()
 				.id(c.getId())
-				.descrizione(c.getDescrizione())
+//				.descrizione(c.getDescrizione())
 				.dimensioni(c.getDimensioni())
 				.formato(buildFormatoDTO(c.getFormato()))
 				.prodotto(buildProdottoDTO(c.getProdotto()))
@@ -136,7 +136,7 @@ public class Utilities {
 	{
 		return SistemaRaffreddamentoDTO.builder()
 				.id(s.getId())
-				.descrizione(s.getDescrizione())
+//				.descrizione(s.getDescrizione())
 				.consumo(s.getConsumo())
 				.prodotto(buildProdottoDTO(s.getProdotto()))
 				.build();		
@@ -144,7 +144,7 @@ public class Utilities {
 	public AlimentazioneDTO buildAlimentazioneDTO(Alimentazione a) {
 		return AlimentazioneDTO.builder()
 				.id(a.getId())
-				.descrizione(a.getDescrizione())
+//				.descrizione(a.getDescrizione())
 				.potenza(a.getPotenza())
 				.prodotto(buildProdottoDTO(a.getProdotto()))
 				.build();	
@@ -154,7 +154,7 @@ public class Utilities {
 		return lp.stream()
 				.map((p -> PcDTO.builder()
 						.id(p.getId())
-						.descrizione(p.getDescrizione())
+//						.descrizione(p.getDescrizione())
 						.totConsumo(p.getTotConsumo())
 						.prodotto(buildProdottoDTO(p.getProdotto()))
 						.schedaMadre(buildSchedaMadreDTO(p.getSchedaMadre()))
@@ -173,7 +173,7 @@ public class Utilities {
 	public TastieraDTO buildTastieraDTO(Tastiera a) {
 		return TastieraDTO.builder()
 				.id(a.getId())
-				.descrizione(a.getDescrizione())
+//				.descrizione(a.getDescrizione())
 				.tipologia(a.getTipologia())
 				.collegamento(a.getCollegamento())
 				.prodotto(buildProdottoDTO(a.getProdotto()))
@@ -184,7 +184,7 @@ public class Utilities {
 		return lp.stream()
 				.map((a -> TastieraDTO.builder()
 						.id(a.getId())
-						.descrizione(a.getDescrizione())
+//						.descrizione(a.getDescrizione())
 						.tipologia(a.getTipologia())
 						.collegamento(a.getCollegamento())
 						.prodotto(buildProdottoDTO(a.getProdotto()))

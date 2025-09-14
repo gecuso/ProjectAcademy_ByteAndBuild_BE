@@ -118,6 +118,14 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 
 		if(req.getDescrizione() == null)
 			throw new AcademyException("Descrizione non presente, riprova");
+		List<Prodotto> lp = prodR.findAll();
+		
+		for(Prodotto pr : lp )
+		{
+			if(pr.getDescrizione().equalsIgnoreCase(req.getDescrizione())&& pr.getId()!=req.getId())
+				throw new AcademyException("esiste gia un altro prodotto con questa descrizione");
+		}
+		
 		prod.setDescrizione(req.getDescrizione());
 		
 		if(req.getCategoria() == null)

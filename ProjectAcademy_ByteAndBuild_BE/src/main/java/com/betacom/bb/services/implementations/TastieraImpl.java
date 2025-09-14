@@ -29,15 +29,15 @@ public class TastieraImpl extends Utilities implements ITastieraService{
 	@Override
 	public void create(TastieraReq req) throws AcademyException {
 		log.debug("create: " + req);
-		Optional<Tastiera> tasO = tastR.findByDescrizione(req.getDescrizione());
-		if(tasO.isPresent())
-			throw new AcademyException("tastiera già presente nel database");
-		
+//		Optional<Tastiera> tasO = tastR.findByDescrizione(req.getDescrizione());
+//		if(tasO.isPresent())
+//			throw new AcademyException("tastiera già presente nel database");
+//		
 		//controllo dei dati
 		Tastiera tastiera = new Tastiera();
-		if(req.getDescrizione()==null)
-			throw new AcademyException("Descrizione non presente, riprovare");
-		tastiera.setDescrizione(req.getDescrizione());
+//		if(req.getDescrizione()==null)
+//			throw new AcademyException("Descrizione non presente, riprovare");
+//		tastiera.setDescrizione(req.getDescrizione());
 		if(req.getTipologia()==null)
 			throw new AcademyException("tipologia non presente, riprovare");
 		tastiera.setTipologia(req.getTipologia());
@@ -58,15 +58,15 @@ public class TastieraImpl extends Utilities implements ITastieraService{
 	@Override
 	public void update(TastieraReq req) throws AcademyException {
 		log.debug("update: " + req);
-		Optional<Tastiera> tasO = tastR.findByDescrizione(req.getDescrizione());
+		Optional<Tastiera> tasO = tastR.findById(req.getId());
 		if(tasO.isPresent())
 			throw new AcademyException("tastiera già presente nel database");
 		
 		//controllo dei dati
 		Tastiera tastiera = tasO.get();
-		if(req.getDescrizione()==null)
-			throw new AcademyException("Descrizione non presente, riprovare");
-		tastiera.setDescrizione(req.getDescrizione());
+//		if(req.getDescrizione()==null)
+//			throw new AcademyException("Descrizione non presente, riprovare");
+//		tastiera.setDescrizione(req.getDescrizione());
 		if(req.getTipologia()==null)
 			throw new AcademyException("tipologia non presente, riprovare");
 		tastiera.setTipologia(req.getTipologia());

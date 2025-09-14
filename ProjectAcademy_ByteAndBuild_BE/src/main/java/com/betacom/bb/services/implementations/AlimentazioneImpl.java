@@ -33,13 +33,12 @@ public class AlimentazioneImpl extends Utilities implements IAlimentazioneServic
 	public void create(AlimentazioneReq req) throws AcademyException {
 		log.debug("create: " + req);
 		Alimentazione alim = new Alimentazione();
-		Optional<Alimentazione> a = alimR.findByDescrizione(req.getDescrizione());
-		if(a.isPresent())
-			throw new AcademyException("Alimentatore già esistente nel database");
-		
-		if(req.getDescrizione()== null)
-			throw new AcademyException("Descrizione non presente, riprova");
-		alim.setDescrizione(req.getDescrizione());
+//		Optional<Alimentazione> a = alimR.findByDescrizione(req.getDescrizione());
+//		if(a.isPresent())
+//			throw new AcademyException("Alimentatore già esistente nel database");
+//		if(req.getDescrizione()== null)
+//			throw new AcademyException("Descrizione non presente, riprova");
+//		alim.setDescrizione(req.getDescrizione());
 		
 		if(req.getPotenza() == null || req.getPotenza()<=0)
 			throw new AcademyException("Potenza non presente, riprova");
@@ -98,7 +97,7 @@ public class AlimentazioneImpl extends Utilities implements IAlimentazioneServic
 
 		return AlimentazioneDTO.builder()
 				.id(a.getId())
-				.descrizione(a.getDescrizione())
+//				.descrizione(a.getDescrizione())
 				.potenza(a.getPotenza())
 				.prodotto(buildProdottoDTO(a.getProdotto()))
 				.build();
@@ -112,7 +111,7 @@ public class AlimentazioneImpl extends Utilities implements IAlimentazioneServic
 		return lA.stream()
 				.map(a -> AlimentazioneDTO.builder()
 						.id(a.getId())
-						.descrizione(a.getDescrizione())
+//						.descrizione(a.getDescrizione())
 						.potenza(a.getPotenza())
 						.prodotto(buildProdottoDTO(a.getProdotto()))
 						.build())

@@ -33,15 +33,15 @@ public class MonitorImpl implements IMonitorService{
 	@Override
 	public void create(MonitorReq req) throws AcademyException {
 		log.debug("create: " + req);
-		Optional<Monitor> mon = monR.findByDescrizione(req.getDescrizione());
-		if(mon.isPresent())
-			throw new AcademyException("Monitor già presente nel database");
-		
+//		Optional<Monitor> mon = monR.findByDescrizione(req.getDescrizione());
+//		if(mon.isPresent())
+//			throw new AcademyException("Monitor già presente nel database");
+//		
 		//controllo dei dati
 		Monitor monitor = new Monitor();
-		if(req.getDescrizione()==null)
-			throw new AcademyException("Descrizione non presente, riprovare");
-		monitor.setDescrizione(req.getDescrizione());
+//		if(req.getDescrizione()==null)
+//			throw new AcademyException("Descrizione non presente, riprovare");
+//		monitor.setDescrizione(req.getDescrizione());
 		if(req.getRisoluzione()==null)
 			throw new AcademyException("Risoluzione non presente, riprovare");
 		monitor.setRisoluzione(req.getRisoluzione());
@@ -71,7 +71,7 @@ public class MonitorImpl implements IMonitorService{
 		//controllo dei dati
 		Monitor monitor = mon.get();
 		//descrizione non può cambiare
-		monitor.setDescrizione(mon.get().getDescrizione());
+//		monitor.setDescrizione(mon.get().getDescrizione());
 		if(req.getRisoluzione()==null)
 			throw new AcademyException("Risoluzione non presente, riprovare");
 		monitor.setDescrizione(req.getRisoluzione());
@@ -108,7 +108,7 @@ public class MonitorImpl implements IMonitorService{
 		return listMonitor.stream()
 				.map(mon -> MonitorDTO.builder()
 						.id(mon.getId())
-						.descrizione(mon.getDescrizione())
+//						.descrizione(mon.getDescrizione())
 						.risoluzione(mon.getRisoluzione())
 						.latenza(mon.getLatenza())
 						.frequenza(mon.getFrequenza())
@@ -130,7 +130,7 @@ public class MonitorImpl implements IMonitorService{
 		Monitor mon = m.get();
 		return MonitorDTO.builder()
 				.id(mon.getId())
-				.descrizione(mon.getDescrizione())
+//				.descrizione(mon.getDescrizione())
 				.risoluzione(mon.getRisoluzione())
 				.latenza(mon.getLatenza())
 				.frequenza(mon.getFrequenza())

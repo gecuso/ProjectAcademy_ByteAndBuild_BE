@@ -34,13 +34,13 @@ public class SchedaGraficaImpl extends Utilities implements ISchedaGraficaServic
 	public void create(SchedaGraficaReq req) throws AcademyException {
 		log.debug("create: " + req);
 		SchedaGrafica sgrafica = new SchedaGrafica();
-		Optional<SchedaGrafica> s = sgR.findByDescrizione(req.getDescrizione());
-		if(s.isPresent())
-			throw new AcademyException("SchedaGrafica già esistente nel database");
-		
-		if(req.getDescrizione() == null)
-			throw new AcademyException("Descrizione non presente, riprova");
-		sgrafica.setDescrizione(req.getDescrizione());
+//		Optional<SchedaGrafica> s = sgR.findByDescrizione(req.getDescrizione());
+//		if(s.isPresent())
+//			throw new AcademyException("SchedaGrafica già esistente nel database");
+//		
+//		if(req.getDescrizione() == null)
+//			throw new AcademyException("Descrizione non presente, riprova");
+//		sgrafica.setDescrizione(req.getDescrizione());
 		
 		if(req.getConsumo() == null || req.getConsumo()<=0)
 			throw new AcademyException("Consumo non presente, riprova");
@@ -95,7 +95,7 @@ public class SchedaGraficaImpl extends Utilities implements ISchedaGraficaServic
 		
 		return SchedaGraficaDTO.builder()
 				.id(s.getId())
-				.descrizione(s.getDescrizione())
+//				.descrizione(s.getDescrizione())
 				.consumo(s.getConsumo())
 				.prodotto(buildProdottoDTO(s.getProdotto()))
 				.build();
@@ -109,7 +109,7 @@ public class SchedaGraficaImpl extends Utilities implements ISchedaGraficaServic
 		return lS.stream()
 				.map(s -> SchedaGraficaDTO.builder()
 						.id(s.getId())
-						.descrizione(s.getDescrizione())
+//						.descrizione(s.getDescrizione())
 						.consumo(s.getConsumo())
 						.prodotto(buildProdottoDTO(s.getProdotto()))
 						.build())
