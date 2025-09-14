@@ -3,6 +3,7 @@ package com.betacom.bb.services.implementations;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.betacom.bb.dto.CategoriaDTO;
@@ -14,10 +15,14 @@ import com.betacom.bb.repositories.ICategoriaRepository;
 import com.betacom.bb.repositories.IMarcaRepository;
 import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.requests.CategoriaReq;
-import com.betacom.bb.services.interfaces.ICategoriaService;
+import com.betacom.bb.services.interfaces.ICategoriaServices;
 import com.betacom.bb.utilis.Utilities;
 
-public class CategoriaImpl extends Utilities implements ICategoriaService{
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
+@Service
+public class CategoriaImpl extends Utilities implements ICategoriaServices{
 
 	private ICategoriaRepository catR;
 	private IProdottoRepository prodR;
@@ -30,20 +35,23 @@ public class CategoriaImpl extends Utilities implements ICategoriaService{
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void create(CategoriaReq catReq) throws AcademyException {
-		if(catReq.getDescrizione()==null)throw new AcademyException("necessaria una descrizione");
+	public void create(CategoriaReq req) throws AcademyException {
+		log.debug("create: " + req);
 		
-		Optional<Categoria> cat = catR.findByDescrizione(catReq.getDescrizione());
+		if(req.getDescrizione() == null)throw new AcademyException("necessaria una descrizione");
+		
+		Optional<Categoria> cat = catR.findByDescrizione(req.getDescrizione());
 		if(!cat.isEmpty())throw new AcademyException("questa categoria esiste gia");
 		
 		Categoria c = new Categoria();
-		c.setDescrizione(catReq.getDescrizione());
+		c.setDescrizione(req.getDescrizione());
 		catR.save(c);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void delete(CategoriaReq catReq) throws AcademyException {
+		log.debug("delete: " + catReq);
 		Optional<Categoria> cat = catR.findById(catReq.getId());
 		if(cat.isEmpty())throw new AcademyException("categoria non esistente");
 		
@@ -70,6 +78,7 @@ public class CategoriaImpl extends Utilities implements ICategoriaService{
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void update(CategoriaReq catReq) throws AcademyException {
+		log.debug("update: " + catReq);
 		Optional<Categoria> cat = catR.findById(catReq.getId());
 		if(cat.isEmpty())throw new AcademyException("categoria: "+catReq.getId()+" non esistente");
 		

@@ -3,7 +3,9 @@ package com.betacom.bb.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.betacom.bb.dto.SchedaMadreDTO;
@@ -12,8 +14,6 @@ import com.betacom.bb.response.ResponseBase;
 import com.betacom.bb.response.ResponseList;
 import com.betacom.bb.response.ResponseObject;
 import com.betacom.bb.services.interfaces.ISchedaMadreServices;
-
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
 @RequestMapping("/rest/schedaMadre")
@@ -66,7 +66,7 @@ public class SchedaMadreController {
 	}
 	
 	@GetMapping("/getSchedaMadre")
-	public ResponseObject<SchedaMadreDTO> getSchedaMadre(@RequestBody (required = true) Integer id ){
+	public ResponseObject<SchedaMadreDTO> getSchedaMadre(@RequestParam (required = true) Integer id ){
 		ResponseObject<SchedaMadreDTO> r = new ResponseObject<SchedaMadreDTO>();
 		try {
 			r.setDati(smS.getById(id));

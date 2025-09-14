@@ -3,7 +3,9 @@ package com.betacom.bb.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.betacom.bb.dto.SistemaRaffreddamentoDTO;
@@ -12,8 +14,6 @@ import com.betacom.bb.response.ResponseBase;
 import com.betacom.bb.response.ResponseList;
 import com.betacom.bb.response.ResponseObject;
 import com.betacom.bb.services.interfaces.ISistemaRaffreddamentoServices;
-
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
 @RequestMapping("/rest/sistemaRaffreddamento")
@@ -66,7 +66,7 @@ public class SistemaRaffreddamentoController {
 	}
 	
 	@GetMapping("/getSistemaRaffreddamento")
-	public ResponseObject<SistemaRaffreddamentoDTO> getSistemaRaffreddamento(@RequestBody (required = true) Integer id ){
+	public ResponseObject<SistemaRaffreddamentoDTO> getSistemaRaffreddamento(@RequestParam (required = true) Integer id ){
 		ResponseObject<SistemaRaffreddamentoDTO> r = new ResponseObject<SistemaRaffreddamentoDTO>();
 		try {
 			r.setDati(srS.getById(id));

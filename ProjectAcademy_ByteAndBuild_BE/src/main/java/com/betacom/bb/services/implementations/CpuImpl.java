@@ -32,15 +32,15 @@ public class CpuImpl extends Utilities implements ICpuServices{
 	public void create(CpuReq req) throws AcademyException {
 		log.debug("create: " + req);
 		Cpu cpu = new Cpu();
+		if(req.getDescrizione()== null)
+			throw new AcademyException("Descrizione non presente, riprova");
 		Optional<Cpu> c = cpuR.findByDescrizione(req.getDescrizione());
 		if(c.isPresent())
 			throw new AcademyException("Cpu già esistente nel database");
 		
-		if(req.getDescrizione().isEmpty())
-			throw new AcademyException("Descrizione non presente, riprova");
 		cpu.setDescrizione(req.getDescrizione());
 		
-		if(req.getCompatibilita().isEmpty())
+		if(req.getCompatibilita()== null)
 			throw new AcademyException("Compatibilità nulla");
 		cpu.setCompatibilita(req.getCompatibilita());
 		
@@ -65,7 +65,7 @@ public class CpuImpl extends Utilities implements ICpuServices{
 			throw new AcademyException("Cpu non esistente");
 		Cpu cpu = c.get();
 		
-		if(req.getCompatibilita().isEmpty())
+		if(req.getCompatibilita() == null)
 			throw new AcademyException("Compatibilità non presente, riprova");
 		cpu.setCompatibilita(req.getCompatibilita());
 		

@@ -37,11 +37,11 @@ public class SchedaMadreImpl extends Utilities implements ISchedaMadreServices{
 		if(s.isPresent())
 			throw new AcademyException("SchedaMadre già esistente nel database");
 		
-		if(req.getDescrizione().isEmpty())
+		if(req.getDescrizione() == null)
 			throw new AcademyException("Descrizione non presente, riprova");
 		smadre.setDescrizione(req.getDescrizione());
 		
-		if(req.getCompatibilita().isEmpty())
+		if(req.getCompatibilita() == null)
 			throw new AcademyException("Compatibilità non presente, riprova");
 		smadre.setCompatibilita(req.getCompatibilita());
 		
@@ -71,7 +71,7 @@ public class SchedaMadreImpl extends Utilities implements ISchedaMadreServices{
 			throw new AcademyException("SchedaMadre non esistente");
 		SchedaMadre smadre = s.get();
 		
-		if(req.getCompatibilita().isEmpty())
+		if(req.getCompatibilita() == null)
 			throw new AcademyException("Compatibilità non presente, riprova");
 		smadre.setCompatibilita(req.getCompatibilita());
 		
