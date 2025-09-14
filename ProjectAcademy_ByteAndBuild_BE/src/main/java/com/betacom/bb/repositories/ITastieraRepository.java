@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.betacom.bb.models.Tastiera;
 
 public interface ITastieraRepository extends JpaRepository<Tastiera, Integer>{
-	Optional<Tastiera> findByDescrizione(String descrizione);
+//	Optional<Tastiera> findByDescrizione(String descrizione);
 }

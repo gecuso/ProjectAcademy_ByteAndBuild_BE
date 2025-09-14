@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.betacom.bb.models.Pc;
 
 public interface IPcRepository extends JpaRepository<Pc, Integer>{
-	Optional<Pc> findByDescrizione(String descrizione);
+//	Optional<Pc> findByDescrizione(String descrizione);
 }
