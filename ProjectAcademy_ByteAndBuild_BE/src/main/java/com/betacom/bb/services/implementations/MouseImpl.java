@@ -58,7 +58,7 @@ public class MouseImpl implements IMouseService{
 	@Override
 	public void update(MouseReq req) throws AcademyException {
 		log.debug("create: " + req);
-		Optional<Mouse> mou = mouseR.findByDescrizione(req.getDescrizione());
+		Optional<Mouse> mou = mouseR.findById(req.getId());
 		if(mou.isEmpty())
 			throw new AcademyException("Mouse non presente nel database");
 		

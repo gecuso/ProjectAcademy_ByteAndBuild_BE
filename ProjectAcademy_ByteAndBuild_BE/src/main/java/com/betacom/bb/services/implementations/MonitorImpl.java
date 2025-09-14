@@ -74,7 +74,7 @@ public class MonitorImpl implements IMonitorService{
 //		monitor.setDescrizione(mon.get().getDescrizione());
 		if(req.getRisoluzione()==null)
 			throw new AcademyException("Risoluzione non presente, riprovare");
-		monitor.setDescrizione(req.getRisoluzione());
+		monitor.setRisoluzione(req.getRisoluzione());
 		if(req.getLatenza()==null)
 			throw new AcademyException("Latenza non presente, riprovare");
 		monitor.setLatenza(req.getLatenza());
