@@ -8,7 +8,7 @@ import lombok.Data;
 public class CpuDTO {
 
     private Integer id;
-    private String descrizione;
+//    private String descrizione;
     private String compatibilita;
     private Integer consumo;
     private ProdottoDTO prodotto;
