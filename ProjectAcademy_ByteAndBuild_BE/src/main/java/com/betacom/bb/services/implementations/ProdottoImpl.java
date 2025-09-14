@@ -25,9 +25,11 @@ import com.betacom.bb.requests.MonitorReq;
 import com.betacom.bb.requests.MouseReq;
 import com.betacom.bb.requests.PcReq;
 import com.betacom.bb.requests.ProdottoReq;
+import com.betacom.bb.requests.RamReq;
 import com.betacom.bb.requests.SchedaGraficaReq;
 import com.betacom.bb.requests.SchedaMadreReq;
 import com.betacom.bb.requests.SistemaRaffreddamentoReq;
+import com.betacom.bb.requests.TastieraReq;
 import com.betacom.bb.services.interfaces.IAlimentazioneServices;
 import com.betacom.bb.services.interfaces.ICaseServices;
 import com.betacom.bb.services.interfaces.ICpuServices;
@@ -41,6 +43,7 @@ import com.betacom.bb.services.interfaces.IRamServices;
 import com.betacom.bb.services.interfaces.ISchedaGraficaServices;
 import com.betacom.bb.services.interfaces.ISchedaMadreServices;
 import com.betacom.bb.services.interfaces.ISistemaRaffreddamentoServices;
+import com.betacom.bb.services.interfaces.ITastieraService;
 import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
@@ -62,7 +65,7 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 	private ISchedaGraficaServices sgS;
 	private ISchedaMadreServices smS;
 	private ISistemaRaffreddamentoServices sisS;
-	//todo tastiera services
+	private ITastieraService tS;
 	
 	
 	public ProdottoImpl(IProdottoRepository prodR) {
@@ -112,12 +115,18 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 		log.debug("update: " + req);
 		Optional<Prodotto> p = prodR.findById(req.getId());
 		if(p.isEmpty())
-			throw new AcademyException("Prodotto già esistente nel database");
+			throw new AcademyException("Prodotto non esistente nel database");
 		Prodotto prod = p.get();
 		
 
-		if(req.getDescrizione() == null)
+		if(req.getDescrizione() == null) {
 			throw new AcademyException("Descrizione non presente, riprova");
+		}
+		List<Prodotto> lp = prodR.findAll();
+		for (Prodotto pr : lp) {
+			if(pr.getDescrizione().equalsIgnoreCase(req.getDescrizione())&&pr.getId()!=req.getId())
+				throw new AcademyException("Prodotto con la stessa descrizione");
+			}
 		prod.setDescrizione(req.getDescrizione());
 		
 		if(req.getCategoria() == null)
@@ -219,6 +228,14 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 			prodR.delete(p.get());
 			
 		}
+		case "Ram": {
+			RamReq r = new RamReq();
+			
+			r.setId(p.get().getPc().getId());
+			ramS.delete(r);
+			prodR.delete(p.get());
+			
+		}
 		case "SchedaGrafica": {
 			SchedaGraficaReq r = new SchedaGraficaReq();
 			
@@ -243,14 +260,14 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 			prodR.delete(p.get());
 			
 		}
-//		case "Tasiera": {
-//			TasieraReq r = new TasieraReq();
-//			
-//			r.setId(p.get().getTasiera().getId());
-//			tS.delete(r);
-//			prodR.delete(p.get());
-//			
-//		}
+		case "Tasiera": {
+			TastieraReq r = new TastieraReq();
+			
+			r.setId(p.get().getTastiera().getId());
+			tS.delete(r);
+			prodR.delete(p.get());
+			
+		}
 		
 		
 		default:

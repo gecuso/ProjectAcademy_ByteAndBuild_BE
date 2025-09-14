@@ -8,7 +8,7 @@ import lombok.Data;
 public class MouseDTO {
 
 	private Integer id;
-	private String descrizione;
+//	private String descrizione;
 	private String collegamento;
 	private ProdottoDTO prodotto;
 	

@@ -8,7 +8,7 @@ import lombok.Data;
 public class PcDTO {
 
 	private Integer id;
-	private String descrizione;
+//	private String descrizione;
 	private Integer totConsumo;
 	
 	private ProdottoDTO prodotto;

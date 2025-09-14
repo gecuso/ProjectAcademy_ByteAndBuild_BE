@@ -8,7 +8,7 @@ import lombok.Data;
 public class AlimentazioneDTO {
 
     private Integer id;
-    private String descrizione;
+//    private String descrizione;
     private Integer potenza;
     private ProdottoDTO prodotto;
 

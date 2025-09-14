@@ -23,11 +23,11 @@ public class Memoria {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(length = 100,
-			name = "descrizione",
-			nullable = false,
-			unique = true)
-	private String descrizione;
+//	@Column(length = 100,
+//			name = "descrizione",
+//			nullable = false,
+//			unique = true)
+//	private String descrizione;
 	
 	@Column(name = "spazio",
 			nullable = false)

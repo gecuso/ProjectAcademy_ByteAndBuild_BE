@@ -8,7 +8,7 @@ import lombok.Data;
 public class MemoriaDTO {
 
     private Integer id;
-    private String descrizione;
+//    private String descrizione;
     private Integer spazio;
     private ProdottoDTO prodotto;
 
