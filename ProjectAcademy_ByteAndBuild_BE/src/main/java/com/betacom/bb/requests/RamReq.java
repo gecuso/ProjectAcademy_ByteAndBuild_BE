@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class RamReq {
 	private Integer id;
-	private String descrizione;
+//	private String descrizione;
 	private Integer consumo;
 	private Prodotto prodotto;
 	private Pc pc;

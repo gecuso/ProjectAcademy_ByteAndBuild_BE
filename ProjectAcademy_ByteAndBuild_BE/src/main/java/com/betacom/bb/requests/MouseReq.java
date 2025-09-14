@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class MouseReq {
 	private Integer id;
-	private String descrizione;
+//	private String descrizione;
 	private String collegamento;
 	private Prodotto prodotto;
 }

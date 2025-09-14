@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class AlimentazioneReq {
 	private Integer id;
-	private String descrizione;
+//	private String descrizione;
 	private Integer potenza;
 	private Prodotto prodotto;
 	private Pc pc;

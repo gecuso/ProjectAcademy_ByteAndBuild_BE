@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class CpuReq {
 	private Integer id;
-	private String descrizione;
+//	private String descrizione;
 	private String marca;
 	private String compatibilita;
 	private Integer consumo;
