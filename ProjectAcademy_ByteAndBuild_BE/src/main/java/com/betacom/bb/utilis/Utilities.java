@@ -16,6 +16,7 @@ import com.betacom.bb.dto.RamDTO;
 import com.betacom.bb.dto.SchedaGraficaDTO;
 import com.betacom.bb.dto.SchedaMadreDTO;
 import com.betacom.bb.dto.SistemaRaffreddamentoDTO;
+import com.betacom.bb.dto.TastieraDTO;
 import com.betacom.bb.models.Alimentazione;
 import com.betacom.bb.models.Case;
 import com.betacom.bb.models.Categoria;
@@ -29,6 +30,7 @@ import com.betacom.bb.models.Ram;
 import com.betacom.bb.models.SchedaGrafica;
 import com.betacom.bb.models.SchedaMadre;
 import com.betacom.bb.models.SistemaRaffreddamento;
+import com.betacom.bb.models.Tastiera;
 
 public class Utilities {
 
@@ -165,6 +167,28 @@ public class Utilities {
 						.alimentazione(buildAlimentazioneDTO(p.getAlimentazione()))
 						.build())
 						)
+				.collect(Collectors.toList());
+				
+	}
+	public TastieraDTO buildTastieraDTO(Tastiera a) {
+		return TastieraDTO.builder()
+				.id(a.getId())
+				.descrizione(a.getDescrizione())
+				.tipologia(a.getTipologia())
+				.collegamento(a.getCollegamento())
+				.prodotto(buildProdottoDTO(a.getProdotto()))
+				.build();	
+	}
+	public List<TastieraDTO> buildListTastieraDTO(List<Tastiera> lp)
+	{
+		return lp.stream()
+				.map((a -> TastieraDTO.builder()
+						.id(a.getId())
+						.descrizione(a.getDescrizione())
+						.tipologia(a.getTipologia())
+						.collegamento(a.getCollegamento())
+						.prodotto(buildProdottoDTO(a.getProdotto()))
+						.build()))
 				.collect(Collectors.toList());
 				
 	}
