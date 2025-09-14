@@ -17,6 +17,7 @@ import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.repositories.ICategoriaRepository;
 import com.betacom.bb.repositories.IMarcaRepository;
 import com.betacom.bb.repositories.IProdottoRepository;
+import com.betacom.bb.requests.CategoriaReq;
 import com.betacom.bb.requests.MarcaReq;
 import com.betacom.bb.services.interfaces.IMarcaService;
 
@@ -49,62 +50,24 @@ public class MarcaImpl implements IMarcaService{
 		if(req.getDescrizione() == null)
 			throw new AcademyException("Descrizione non presente, riprovare");
 		marca.setDescrizione(req.getDescrizione());
-		
-		//il controllo su prodotto non è necessario nel create
-		Optional<Categoria> categoria = cateR.findById(req.getCategoria().getId());
-		if(categoria.isEmpty())
-			throw new AcademyException("Categoria non presente o non accettabile, riprovare");
-		
-		//roba brutta ma dovrebbe funzionare
-		List<Categoria> categorie = new ArrayList<Categoria>();
-		categorie.add(req.getCategoria());
-		marca.setCategoria(categorie);
-		
+//		
+//		//il controllo su prodotto non è necessario nel create
+//		Optional<Categoria> categoria = cateR.findById(req.getIdCategoria());
+//		if(categoria.isEmpty())
+//			throw new AcademyException("Categoria non presente o non accettabile, riprovare");
+//		
+//		//roba brutta ma dovrebbe funzionare
+////		List<Categoria> categorie = new ArrayList<Categoria>();
+////		categorie.add(req.getIdCategoria());
+//		
+		List<Categoria> c = new ArrayList<Categoria>();
+		marca.setCategoria(c);
 		//salvo nel database
 		marcaR.save(marca);
 		
 	}
 
-	@Transactional(rollbackFor = Exception.class)
-	@Override
-	public void update(MarcaReq req) throws AcademyException {
-		log.debug("update: " + req);
-		Optional<Marca> mar = marcaR.findById(req.getId());
-		if(mar.isEmpty())
-			throw new AcademyException("Marca non presente nel database");
-		
-		//controllo dei dati
-		Marca marca = new Marca();
-		marca.setId(mar.get().getId());
-		//descrizione non può cambiare
-		marca.setDescrizione(mar.get().getDescrizione());
-		//id prodotto non deve cambiare
-		marca.setProdotto(mar.get().getProdotto());
-		
-		//controllo che la categoria che voglio usare esista
-		Optional<Categoria> categoria = cateR.findById(req.getCategoria().getId());
-		if(categoria.isEmpty())
-			throw new AcademyException("Categoria non presente o non accettabile, riprovare");
 
-		//controllo se esiste già la marca uguale
-		Optional<List<Marca>> marcheUsate = marcaR.findAllByDescrizione(req.getDescrizione());
-		if(!marcheUsate.isEmpty()) {
-			//controllo se usate gia quella categoria
-			for(int i=0; i<marcheUsate.get().size(); i++) {
-				if(marcheUsate.get().get(i).getCategoria().equals(req.getCategoria())) {
-					throw new AcademyException("Categoria già usata con questa marca, evita duplicati...");
-				}
-			}
-		}
-		
-		//CONTROLLA CHE FUNZIONI QUESTA PARTE
-		List<Categoria> salvaCategoria = new ArrayList<Categoria>();
-		salvaCategoria.add(req.getCategoria());
-		marca.setCategoria(salvaCategoria);
-		
-		//update nel database
-		marcaR.save(marca);
-	}
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -128,6 +91,30 @@ public class MarcaImpl implements IMarcaService{
 	
 		//elimino nel database
 		marcaR.delete(mar.get());
+		
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void insertCategoriaIntoMarca(MarcaReq m, List<CategoriaReq> lC) throws AcademyException{
+		log.debug("insertCategoriaIntoMarca: ");
+		
+		Optional<Marca> mO = marcaR.findById(m.getId());
+		if(mO.isEmpty())
+			throw new AcademyException("Marca non presente nel database");
+		
+		List<Categoria> cl = new ArrayList<Categoria>();
+		
+		for (CategoriaReq cr : lC) {
+			
+			Optional<Categoria> cO = cateR.findById(cr.getId());
+			if(!cO.isEmpty())
+				cl.add(cO.get());
+			
+		}
+		mO.get().setCategoria(cl);
+		
+		marcaR.save(mO.get());
 		
 	}
 	
@@ -189,9 +176,5 @@ public class MarcaImpl implements IMarcaService{
 		//mando in output
 		return tutteLeMarche;
 	}
-
-	
-	
-	
 	
 }
