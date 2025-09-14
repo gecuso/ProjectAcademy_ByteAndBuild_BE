@@ -39,10 +39,10 @@ public class MouseImpl implements IMouseService{
 		
 		//controllo dei dati
 		Mouse mouse = new Mouse();
-		if(req.getDescrizione().isEmpty())
+		if(req.getDescrizione() == null)
 			throw new AcademyException("Descrizione non presente, riprovare");
 		mouse.setDescrizione(req.getDescrizione());
-		if(req.getCollegamento().isEmpty())
+		if(req.getCollegamento() == null)
 			throw new AcademyException("Collegamento non presente, riprovare");
 		mouse.setCollegamento(req.getCollegamento());
 		
@@ -67,7 +67,7 @@ public class MouseImpl implements IMouseService{
 		mouse.setId(mou.get().getId());
 		//descrizione non può cambiare
 		mouse.setDescrizione(mou.get().getDescrizione());
-		if(req.getCollegamento().isEmpty())
+		if(req.getCollegamento() == null)
 			throw new AcademyException("Collegamento non presente, riprovare");
 		mouse.setCollegamento(req.getCollegamento());
 		//id prodotto non deve cambiare

@@ -38,7 +38,7 @@ public class SchedaGraficaImpl extends Utilities implements ISchedaGraficaServic
 		if(s.isPresent())
 			throw new AcademyException("SchedaGrafica già esistente nel database");
 		
-		if(req.getDescrizione().isEmpty())
+		if(req.getDescrizione() == null)
 			throw new AcademyException("Descrizione non presente, riprova");
 		sgrafica.setDescrizione(req.getDescrizione());
 		

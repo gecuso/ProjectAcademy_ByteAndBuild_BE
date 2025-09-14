@@ -3,7 +3,9 @@ package com.betacom.bb.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.betacom.bb.dto.CategoriaDTO;
@@ -11,17 +13,15 @@ import com.betacom.bb.requests.CategoriaReq;
 import com.betacom.bb.response.ResponseBase;
 import com.betacom.bb.response.ResponseList;
 import com.betacom.bb.response.ResponseObject;
-import com.betacom.bb.services.interfaces.ICategoriaService;
-
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import com.betacom.bb.services.interfaces.ICategoriaServices;
 
 @RestController
 @RequestMapping("/rest/categoria")
 public class CategoriaController {
 
-	private ICategoriaService catS;
+	private ICategoriaServices catS;
 
-	public CategoriaController(ICategoriaService catS) {
+	public CategoriaController(ICategoriaServices catS) {
 		this.catS = catS;
 	}
 	
@@ -39,7 +39,7 @@ public class CategoriaController {
 		return r;
 	}
 	
-	@PutMapping("update")
+	@PutMapping("/update")
 	public ResponseBase update(@RequestBody (required = true)  CategoriaReq req) {
 		ResponseBase r = new ResponseBase();
 		try {
@@ -66,7 +66,7 @@ public class CategoriaController {
 	}
 	
 	@GetMapping("/getCategoria")
-	public ResponseObject<CategoriaDTO> getCategoria(@RequestBody (required = true) Integer id ){
+	public ResponseObject<CategoriaDTO> getCategoria(@RequestParam (required = true) Integer id ){
 		ResponseObject<CategoriaDTO> r = new ResponseObject<CategoriaDTO>();
 		try {
 			r.setDati(catS.getById(id));
