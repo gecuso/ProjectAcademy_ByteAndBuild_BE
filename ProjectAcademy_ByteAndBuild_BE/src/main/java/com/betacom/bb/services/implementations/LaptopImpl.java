@@ -8,23 +8,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.betacom.bb.dto.LaptopDTO;
-import com.betacom.bb.dto.ProdottoDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Laptop;
+import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.repositories.ILaptopRepository;
+import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.requests.LaptopReq;
 import com.betacom.bb.services.interfaces.ILaptopService;
+import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Service
-public class LaptopImpl implements ILaptopService{
+public class LaptopImpl extends Utilities implements ILaptopService{
 	
 	private ILaptopRepository lapR;
+	private IProdottoRepository prodR;
 	
-	public LaptopImpl(ILaptopRepository lapR) {
+	public LaptopImpl(ILaptopRepository lapR, IProdottoRepository prodR) {
 		this.lapR = lapR;
+		this.prodR = prodR;
 	}
 	
 	////////////////////////////////
@@ -49,9 +53,14 @@ public class LaptopImpl implements ILaptopService{
 			throw new AcademyException("Consumo non presente o non valido, riprovare");
 		laptop.setConsumo(req.getConsumo());
 		
-		if(req.getProdotto().getId() == null)
+		if(req.getIdProdotto() == null)
 			throw new AcademyException("Id del prodotto non inserito, riprovare");
-		laptop.setProdotto(req.getProdotto());
+		
+		//controllo se esiste il prodotto
+		Optional<Prodotto> prodotto = prodR.findById(req.getIdProdotto());
+		if(prodotto.isEmpty())
+			throw new AcademyException("Prodotto non presente, riprovare");
+		laptop.setProdotto(prodotto.get());
 		
 		//salvo nel database
 		lapR.save(laptop);
@@ -109,9 +118,7 @@ public class LaptopImpl implements ILaptopService{
 						.descrizione(lap.getDescrizione())
 						.caratteristiche(lap.getCaratteristiche())
 						.consumo(lap.getConsumo())
-						.prodotto(ProdottoDTO.builder()
-								.id(lap.getProdotto().getId())
-								.build())
+						.prodotto(buildProdottoDTO(lap.getProdotto()))
 						.build()).collect(Collectors.toList());
 				
 	}
@@ -131,9 +138,7 @@ public class LaptopImpl implements ILaptopService{
 				.descrizione(lap.getDescrizione())
 				.caratteristiche(lap.getCaratteristiche())
 				.consumo(lap.getConsumo())
-				.prodotto(ProdottoDTO.builder()
-						.id(lap.getProdotto().getId())
-						.build())
+				.prodotto(buildProdottoDTO(lap.getProdotto()))
 				.build();
 	}
 	

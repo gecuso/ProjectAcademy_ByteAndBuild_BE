@@ -8,23 +8,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.betacom.bb.dto.MouseDTO;
-import com.betacom.bb.dto.ProdottoDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Mouse;
+import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.repositories.IMouseRepository;
+import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.requests.MouseReq;
 import com.betacom.bb.services.interfaces.IMouseService;
+import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Service
-public class MouseImpl implements IMouseService{
+public class MouseImpl extends Utilities implements IMouseService{
 
 	private IMouseRepository mouseR;
+	private IProdottoRepository prodR;
 
-	public MouseImpl(IMouseRepository mouseR) {
+	public MouseImpl(IMouseRepository mouseR, IProdottoRepository prodR) {
 		this.mouseR = mouseR;
+		this.prodR = prodR;
 	}
 	
 	////////////////////////////////
@@ -46,9 +50,14 @@ public class MouseImpl implements IMouseService{
 			throw new AcademyException("Collegamento non presente, riprovare");
 		mouse.setCollegamento(req.getCollegamento());
 		
-		if(req.getProdotto().getId() == null)
+		if(req.getIdProdotto() == null)
 			throw new AcademyException("Id del prodotto non inserito, riprovare");
-		mouse.setProdotto(req.getProdotto());
+		
+		//controllo se esiste il prodotto
+		Optional<Prodotto> prodotto = prodR.findById(req.getIdProdotto());
+		if(prodotto.isEmpty())
+			throw new AcademyException("Prodotto non presente, riprovare");
+		mouse.setProdotto(prodotto.get());
 		
 		//salvo nel database
 		mouseR.save(mouse);
@@ -101,9 +110,7 @@ public class MouseImpl implements IMouseService{
 						.id(mou.getId())
 						.descrizione(mou.getDescrizione())
 						.collegamento(mou.getCollegamento())
-						.prodotto(ProdottoDTO.builder()
-								.id(mou.getProdotto().getId())
-								.build())
+						.prodotto(buildProdottoDTO(mou.getProdotto()))
 						.build()).collect(Collectors.toList());
 	}
 	
@@ -122,9 +129,7 @@ public class MouseImpl implements IMouseService{
 				.id(mou.getId())
 				.descrizione(mou.getDescrizione())
 				.collegamento(mou.getCollegamento())
-				.prodotto(ProdottoDTO.builder()
-						.id(mou.getProdotto().getId())
-						.build())
+				.prodotto(buildProdottoDTO(mou.getProdotto()))
 				.build();		
 	}
 
