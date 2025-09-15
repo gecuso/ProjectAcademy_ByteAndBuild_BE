@@ -32,7 +32,7 @@ public class MarcaController {
 	
 	////////////////////////////////
 	
-	@PostMapping("create")
+	@PostMapping("/create")
 	public ResponseBase create(@RequestBody (required = true) MarcaReq req) {		
 		ResponseBase r = new ResponseBase();
 		try {
@@ -45,8 +45,8 @@ public class MarcaController {
 		return r;
 	}
 	
-	@PostMapping("update")
-	public ResponseBase update(@RequestBody (required = true) MarcaReq req, List<CategoriaReq> lC) {
+	@PostMapping("/update")
+	public ResponseBase update(@RequestBody (required = true) MarcaReq req,@Request(required = true) List<CategoriaReq> lC) {
 		ResponseBase r = new ResponseBase();
 		try {
 			marS.insertCategoriaIntoMarca(req, lC);
@@ -58,7 +58,7 @@ public class MarcaController {
 		return r;
 	}
 	
-	@DeleteMapping("delete")
+	@DeleteMapping("/delete")
 	public ResponseBase delete(@RequestBody (required = true) MarcaReq req) {
 		ResponseBase r = new ResponseBase();
 		try {

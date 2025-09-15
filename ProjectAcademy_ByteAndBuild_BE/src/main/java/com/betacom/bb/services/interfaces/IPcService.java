@@ -20,7 +20,7 @@ public interface IPcService {
 	Boolean controlloCompatibilita(String comp1,String comp2);
 	Boolean controlloQuantita(Integer n,PcReq pcReq) throws AcademyException;
 	void riduciQuantita(Integer n,PcReq pcReq);
-	void aumentaQuantita(Integer n,Pc pc);
+	void aumentaQuantita(Integer n, PcReq pc);
 
 	
 	

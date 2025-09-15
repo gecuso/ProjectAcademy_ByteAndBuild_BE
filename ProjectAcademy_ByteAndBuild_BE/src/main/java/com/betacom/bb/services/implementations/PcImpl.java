@@ -76,42 +76,42 @@ public class PcImpl extends Utilities implements IPcService{
 		
 		log.debug("dati PcReq: "+pcReq);
 		
-		if(pcReq.getAlimentazione()==null)throw new AcademyException("Alimentazione nulla");
-		if(pcReq.getCasee()==null)throw new AcademyException("case nulla");
-		if(pcReq.getCpu()==null)throw new AcademyException("cpu nulla");
+		if(pcReq.getIdAlimentazione()==null)throw new AcademyException("Alimentazione nulla");
+		if(pcReq.getIdCase()==null)throw new AcademyException("case nulla");
+		if(pcReq.getIdCpu()==null)throw new AcademyException("cpu nulla");
 		if(pcReq.getDescrizione()==null)throw new AcademyException("descrizione nulla");
-		if(pcReq.getMemoria()==null)throw new AcademyException("memoria nulla");
-		if(pcReq.getProdotto()==null)throw new AcademyException("prodotto nulla");
-		if(pcReq.getRam()==null)throw new AcademyException("ram nulla");
-		if(pcReq.getSchedaGrafica()==null)throw new AcademyException("scheda grafica nulla");
-		if(pcReq.getSchedaMadre()==null)throw new AcademyException("scheda madre nulla");
-		if(pcReq.getSistemaRaffreddamento()==null)throw new AcademyException("sistema di raffreddamento nulla");
+		if(pcReq.getIdMemoria()==null)throw new AcademyException("memoria nulla");
+		if(pcReq.getIdProdotto()==null)throw new AcademyException("prodotto nulla");
+		if(pcReq.getIdRam()==null)throw new AcademyException("ram nulla");
+		if(pcReq.getIdSchedaGrafica()==null)throw new AcademyException("scheda grafica nulla");
+		if(pcReq.getIdSchedaMadre()==null)throw new AcademyException("scheda madre nulla");
+		if(pcReq.getIdSistemaRaffreddamento()==null)throw new AcademyException("sistema di raffreddamento nulla");
 		
-		Optional<Alimentazione> alim = alimR.findById(pcReq.getAlimentazione().getId());
+		Optional<Alimentazione> alim = alimR.findById(pcReq.getIdAlimentazione());
 		if(alim.isEmpty())throw new AcademyException("alimentazione non esistente");
 		
-		Optional<Case> casee = caseR.findById(pcReq.getCasee().getId());
+		Optional<Case> casee = caseR.findById(pcReq.getIdCase());
 		if(casee.isEmpty())throw new AcademyException("case non esistente");
 		
-		Optional<Cpu> cpu = cpuR.findById(pcReq.getCpu().getId());
+		Optional<Cpu> cpu = cpuR.findById(pcReq.getIdCpu());
 		if(cpu.isEmpty())throw new AcademyException("cpu non esistente");
 		
-		Optional<Memoria> mem = memR.findById(pcReq.getMemoria().getId());
+		Optional<Memoria> mem = memR.findById(pcReq.getIdMemoria());
 		if(mem.isEmpty())throw new AcademyException("memoria non esistente");
 		
-		Optional<Prodotto> prod = prodR.findById(pcReq.getProdotto().getId());
+		Optional<Prodotto> prod = prodR.findById(pcReq.getIdProdotto());
 		if(prod.isEmpty())throw new AcademyException("prodotto non esistente");
 
-		Optional<Ram> ram = ramR.findById(pcReq.getRam().getId());
+		Optional<Ram> ram = ramR.findById(pcReq.getIdRam());
 		if(ram.isEmpty())throw new AcademyException("ram non esistente");
 
-		Optional<SchedaGrafica> schgraf = schgrfR.findById(pcReq.getSchedaGrafica().getId());
+		Optional<SchedaGrafica> schgraf = schgrfR.findById(pcReq.getIdSchedaGrafica());
 		if(schgraf.isEmpty())throw new AcademyException("scheda grafica non esistente");
 
-		Optional<SchedaMadre> schmdr = schMdrR.findById(pcReq.getSchedaMadre().getId());
+		Optional<SchedaMadre> schmdr = schMdrR.findById(pcReq.getIdSchedaMadre());
 		if(schmdr.isEmpty())throw new AcademyException("scheda madre non esistente");
 
-		Optional<SistemaRaffreddamento> sisRaf = sisRafR.findById(pcReq.getProdotto().getId());
+		Optional<SistemaRaffreddamento> sisRaf = sisRafR.findById(pcReq.getIdProdotto());
 		if(sisRaf.isEmpty())throw new AcademyException("sistema di raffreddamento non esistente");
 		
 		Optional<Pc> m = pcR.findByDescrizione(pcReq.getDescrizione());
@@ -119,11 +119,11 @@ public class PcImpl extends Utilities implements IPcService{
 		
 		Pc c = new Pc();
 		
-		if(!controlloFormato(pcReq.getSchedaMadre().getFormato().getDescrizione(), pcReq.getCasee().getFormato().getDescrizione()))
+		if(!controlloFormato(schMdrR.getById(pcReq.getIdSchedaMadre()).getDescrizione(), caseR.getById(pcReq.getIdCase()).getDescrizione()))
 		{
 			throw new AcademyException("case e scheda madre incompatibili, formati diversi");
 		}
-		if(!controlloCompatibilita(pcReq.getSchedaMadre().getCompatibilita(), pcReq.getCpu().getCompatibilita()))
+		if(!controlloCompatibilita(schMdrR.getById(pcReq.getIdSchedaMadre()).getDescrizione(), cpuR.getById(pcReq.getIdCpu()).getDescrizione()))
 		{
 			throw new AcademyException("Processore e scheda madre incompatibili, compatibilità diverse");
 		}
@@ -131,25 +131,25 @@ public class PcImpl extends Utilities implements IPcService{
 		{
 			throw new AcademyException("gli elementi consumano troppa potenza, scegliere un alimentatore piu potente");
 		}
-		if(controlloQuantita(pcReq.getProdotto().getQuantita(),pcReq))
+		if(controlloQuantita(prodR.getById(pcReq.getIdProdotto()).getQuantita(),pcReq))
 		{
-			riduciQuantita(pcReq.getProdotto().getQuantita(),pcReq);
+			riduciQuantita(prodR.getById(pcReq.getIdProdotto()).getQuantita(),pcReq);
 		}
 		else throw new AcademyException("elementi non sufficienti");
 
-		Integer consumoTot =pcReq.getCpu().getConsumo()+pcReq.getSistemaRaffreddamento().getConsumo()+
-				pcReq.getRam().getConsumo()+pcReq.getSchedaGrafica().getConsumo()+pcReq.getSchedaMadre().getConsumo();
+		Integer consumoTot =cpu.get().getConsumo()+sisRaf.get().getConsumo()+
+				ram.get().getConsumo()+schgraf.get().getConsumo()+schmdr.get().getConsumo();
 		
-		c.setCasee(pcReq.getCasee());
-		c.setCpu(pcReq.getCpu());
-		c.setMemoria(pcReq.getMemoria());
-		c.setSistemaRaffreddamento(pcReq.getSistemaRaffreddamento());
-		c.setAlimentazione(pcReq.getAlimentazione());
-		c.setRam(pcReq.getRam());
-		c.setSchedaGrafica(pcReq.getSchedaGrafica());
-		c.setSchedaMadre(pcReq.getSchedaMadre());
+		c.setCasee(casee.get());
+		c.setCpu(cpu.get());
+		c.setMemoria(mem.get());
+		c.setSistemaRaffreddamento(sisRaf.get());
+		c.setAlimentazione(alim.get());
+		c.setRam(ram.get());
+		c.setSchedaGrafica(schgraf.get());
+		c.setSchedaMadre(schmdr.get());
 		c.setDescrizione(pcReq.getDescrizione());
-		c.setProdotto(pcReq.getProdotto());
+		c.setProdotto(prod.get());
 		c.setTotConsumo(consumoTot);
 		
 		
@@ -161,9 +161,9 @@ public class PcImpl extends Utilities implements IPcService{
 		Optional<Pc> m = pcR.findById(pcReq.getId());
 		if(!m.isPresent()) throw new AcademyException("pc non esistente");
 		
-		if(pcReq.getProdotto().getQuantita()>0)
+		if(m.get().getProdotto().getQuantita()>0)
 		{
-			aumentaQuantita(m.get().getProdotto().getQuantita(),m.get());
+			aumentaQuantita(m.get().getProdotto().getQuantita(),pcReq);
 		}
 		
 		pcR.delete(m.get());	
@@ -177,7 +177,7 @@ public class PcImpl extends Utilities implements IPcService{
 		if(!m.isPresent()) throw new AcademyException("pc non esistente");
 		
 		try {
-			aumentaQuantita(m.get().getProdotto().getQuantita(), m.get());
+			aumentaQuantita(m.get().getProdotto().getQuantita(), pcReq);
 			Integer newId = create(pcReq);
 			pcR.delete(m.get());
 			m = pcR.findById(newId);
@@ -233,36 +233,36 @@ public class PcImpl extends Utilities implements IPcService{
 	@Override
 	public Boolean controlloQuantita(Integer n, PcReq pcReq) throws AcademyException {
 		
-		if(pcReq.getAlimentazione()!=null)
-		if(pcReq.getAlimentazione().getProdotto().getQuantita()<n) {
+		if(pcReq.getIdAlimentazione()!=null)
+		if(alimR.getById(pcReq.getIdAlimentazione()).getProdotto().getQuantita()<n) {
 			throw new AcademyException("alimentatori non sufficienti");
 		}
-		if(pcReq.getCasee()!=null)
-		if(pcReq.getCasee().getProdotto().getQuantita()<n) {
+		if(pcReq.getIdCase()!=null)
+		if(caseR.getById(pcReq.getIdCase()).getProdotto().getQuantita()<n) {
 			throw new AcademyException("Case non sufficienti");
 		}
-		if(pcReq.getCpu()!=null)
-		if(pcReq.getCpu().getProdotto().getQuantita()<n) {
+		if(pcReq.getIdCpu()!=null)
+		if(cpuR.getById(pcReq.getIdCpu()).getProdotto().getQuantita()<n) {
 			throw new AcademyException("Processori non sufficienti");
 		}
-		if(pcReq.getMemoria()!=null)
-		if(pcReq.getMemoria().getProdotto().getQuantita()<n) {
+		if(pcReq.getIdMemoria()!=null)
+		if(memR.getById(pcReq.getIdMemoria()).getProdotto().getQuantita()<n) {
 			throw new AcademyException("schede di memoria non sufficienti");
 		}
-		if(pcReq.getRam()!=null)
-		if(pcReq.getRam().getProdotto().getQuantita()<n) {
+		if(pcReq.getIdRam()!=null)
+		if(ramR.getById(pcReq.getIdRam()).getProdotto().getQuantita()<n) {
 			throw new AcademyException("schede di memoria RAM non sufficienti");
 		}	
-		if(pcReq.getSchedaGrafica()!=null)
-		if(pcReq.getSchedaGrafica().getProdotto().getQuantita()<n) {
+		if(pcReq.getIdSchedaGrafica()!=null)
+		if(schgrfR.getById(pcReq.getIdSchedaGrafica()).getProdotto().getQuantita()<n) {
 			throw new AcademyException("schede grafiche non sufficienti");
 		}
-		if(pcReq.getSchedaMadre()!=null)
-		if(pcReq.getSchedaMadre().getProdotto().getQuantita()<n) {
+		if(pcReq.getIdSchedaMadre()!=null)
+		if(schMdrR.getById(pcReq.getIdSchedaMadre()).getProdotto().getQuantita()<n) {
 			throw new AcademyException("scheda madre non sufficienti");
 		}
-		if(pcReq.getSistemaRaffreddamento()!=null)
-			if(pcReq.getSistemaRaffreddamento().getProdotto().getQuantita()<n) {
+		if(pcReq.getIdSistemaRaffreddamento()!=null)
+			if(sisRafR.getById(pcReq.getIdSistemaRaffreddamento()).getProdotto().getQuantita()<n) {
 				throw new AcademyException("moduli del sistema di raffreddamento non sufficienti");
 			}	
 		
@@ -273,66 +273,66 @@ public class PcImpl extends Utilities implements IPcService{
 	@Override
 	public Boolean controlloAlimentazione(PcReq pcReq) throws AcademyException {
 		
-		Integer consumoTot =pcReq.getCpu().getConsumo()+pcReq.getSistemaRaffreddamento().getConsumo()+
-				pcReq.getRam().getConsumo()+pcReq.getSchedaGrafica().getConsumo()+pcReq.getSchedaMadre().getConsumo();
+		Integer consumoTot =cpuR.getById(pcReq.getIdCpu()).getConsumo()+sisRafR.getById(pcReq.getIdSistemaRaffreddamento()).getConsumo()+
+				ramR.getById(pcReq.getIdRam()).getConsumo()+schgrfR.getById(pcReq.getIdSchedaGrafica()).getConsumo()+schMdrR.getById(pcReq.getIdSchedaMadre()).getConsumo();
 		
 		consumoTot=(int) (consumoTot*1.5);
 		
-		return consumoTot<pcReq.getAlimentazione().getPotenza();
+		return consumoTot<alimR.getById(pcReq.getIdAlimentazione()).getPotenza();
 	} 
 	@Override
 	public void riduciQuantita(Integer n,PcReq pcReq)
 	{
-
-		pcReq.getSistemaRaffreddamento().getProdotto().setQuantita(pcReq.getSistemaRaffreddamento().getProdotto().getQuantita()-n);
-		prodR.save(pcReq.getSistemaRaffreddamento().getProdotto());
 		
-		pcReq.getAlimentazione().getProdotto().setQuantita(pcReq.getAlimentazione().getProdotto().getQuantita()-n);
-		prodR.save(pcReq.getAlimentazione().getProdotto());
+		sisRafR.getById(pcReq.getIdSistemaRaffreddamento()).getProdotto().setQuantita(sisRafR.getById(pcReq.getIdSistemaRaffreddamento()).getProdotto().getQuantita()-n);
+		prodR.save(sisRafR.getById(pcReq.getIdSistemaRaffreddamento()).getProdotto());
 		
-		pcReq.getCasee().getProdotto().setQuantita(pcReq.getCasee().getProdotto().getQuantita()-n);
-		prodR.save(pcReq.getCasee().getProdotto());
+		alimR.getById(pcReq.getIdAlimentazione()).getProdotto().setQuantita(alimR.getById(pcReq.getIdAlimentazione()).getProdotto().getQuantita()-n);
+		prodR.save(alimR.getById(pcReq.getIdAlimentazione()).getProdotto());
 		
-		pcReq.getCpu().getProdotto().setQuantita(pcReq.getCpu().getProdotto().getQuantita()-n);
-		prodR.save(pcReq.getCpu().getProdotto());
+		caseR.getById(pcReq.getIdCase()).getProdotto().setQuantita(caseR.getById(pcReq.getIdCase()).getProdotto().getQuantita()-n);
+		prodR.save(caseR.getById(pcReq.getIdCase()).getProdotto());
 		
-		pcReq.getMemoria().getProdotto().setQuantita(pcReq.getMemoria().getProdotto().getQuantita()-n);
-		prodR.save(pcReq.getMemoria().getProdotto());
+		cpuR.getById(pcReq.getIdCpu()).getProdotto().setQuantita(cpuR.getById(pcReq.getIdCpu()).getProdotto().getQuantita()-n);
+		prodR.save(cpuR.getById(pcReq.getIdCpu()).getProdotto());
 		
-		pcReq.getRam().getProdotto().setQuantita(pcReq.getRam().getProdotto().getQuantita()-n);
-		prodR.save(pcReq.getRam().getProdotto());
+		memR.getById(pcReq.getIdMemoria()).getProdotto().setQuantita(memR.getById(pcReq.getIdMemoria()).getProdotto().getQuantita()-n);
+		prodR.save(memR.getById(pcReq.getIdMemoria()).getProdotto());
 		
-		pcReq.getSchedaGrafica().getProdotto().setQuantita(pcReq.getSchedaGrafica().getProdotto().getQuantita()-n);
-		prodR.save(pcReq.getSchedaGrafica().getProdotto());
+		ramR.getById(pcReq.getIdRam()).getProdotto().setQuantita(ramR.getById(pcReq.getIdRam()).getProdotto().getQuantita()-n);
+		prodR.save(ramR.getById(pcReq.getIdRam()).getProdotto());
 		
-		pcReq.getSchedaMadre().getProdotto().setQuantita(pcReq.getSchedaMadre().getProdotto().getQuantita()-n);
-		prodR.save(pcReq.getSchedaMadre().getProdotto());
+		schgrfR.getById(pcReq.getIdSchedaGrafica()).getProdotto().setQuantita(schgrfR.getById(pcReq.getIdSchedaGrafica()).getProdotto().getQuantita()-n);
+		prodR.save(schgrfR.getById(pcReq.getIdSchedaGrafica()).getProdotto());
+		
+		schMdrR.getById(pcReq.getIdSchedaMadre()).getProdotto().setQuantita(schMdrR.getById(pcReq.getIdSchedaMadre()).getProdotto().getQuantita()-n);
+		prodR.save(schMdrR.getById(pcReq.getIdSchedaMadre()).getProdotto());
 	}
 	@Override
-	public void aumentaQuantita(Integer n, Pc pc) {
-		pc.getSistemaRaffreddamento().getProdotto().setQuantita(pc.getSistemaRaffreddamento().getProdotto().getQuantita()+n);
-		prodR.save(pc.getSistemaRaffreddamento().getProdotto());
+	public void aumentaQuantita(Integer n, PcReq pcReq) {
+		sisRafR.getById(pcReq.getIdSistemaRaffreddamento()).getProdotto().setQuantita(sisRafR.getById(pcReq.getIdSistemaRaffreddamento()).getProdotto().getQuantita()+n);
+		prodR.save(sisRafR.getById(pcReq.getIdSistemaRaffreddamento()).getProdotto());
 		
-		pc.getAlimentazione().getProdotto().setQuantita(pc.getAlimentazione().getProdotto().getQuantita()+n);
-		prodR.save(pc.getAlimentazione().getProdotto());
+		alimR.getById(pcReq.getIdAlimentazione()).getProdotto().setQuantita(alimR.getById(pcReq.getIdAlimentazione()).getProdotto().getQuantita()+n);
+		prodR.save(alimR.getById(pcReq.getIdAlimentazione()).getProdotto());
 		
-		pc.getCasee().getProdotto().setQuantita(pc.getCasee().getProdotto().getQuantita()+n);
-		prodR.save(pc.getCasee().getProdotto());
+		caseR.getById(pcReq.getIdCase()).getProdotto().setQuantita(caseR.getById(pcReq.getIdCase()).getProdotto().getQuantita()+n);
+		prodR.save(caseR.getById(pcReq.getIdCase()).getProdotto());
 		
-		pc.getCpu().getProdotto().setQuantita(pc.getCpu().getProdotto().getQuantita()+n);
-		prodR.save(pc.getCpu().getProdotto());
+		cpuR.getById(pcReq.getIdCpu()).getProdotto().setQuantita(cpuR.getById(pcReq.getIdCpu()).getProdotto().getQuantita()+n);
+		prodR.save(cpuR.getById(pcReq.getIdCpu()).getProdotto());
 		
-		pc.getMemoria().getProdotto().setQuantita(pc.getMemoria().getProdotto().getQuantita()+n);
-		prodR.save(pc.getMemoria().getProdotto());
+		memR.getById(pcReq.getIdMemoria()).getProdotto().setQuantita(memR.getById(pcReq.getIdMemoria()).getProdotto().getQuantita()+n);
+		prodR.save(memR.getById(pcReq.getIdMemoria()).getProdotto());
 		
-		pc.getRam().getProdotto().setQuantita(pc.getRam().getProdotto().getQuantita()+n);
-		prodR.save(pc.getRam().getProdotto());
+		ramR.getById(pcReq.getIdRam()).getProdotto().setQuantita(ramR.getById(pcReq.getIdRam()).getProdotto().getQuantita()+n);
+		prodR.save(ramR.getById(pcReq.getIdRam()).getProdotto());
 		
-		pc.getSchedaGrafica().getProdotto().setQuantita(pc.getSchedaGrafica().getProdotto().getQuantita()+n);
-		prodR.save(pc.getSchedaGrafica().getProdotto());
+		schgrfR.getById(pcReq.getIdSchedaGrafica()).getProdotto().setQuantita(schgrfR.getById(pcReq.getIdSchedaGrafica()).getProdotto().getQuantita()+n);
+		prodR.save(schgrfR.getById(pcReq.getIdSchedaGrafica()).getProdotto());
 		
-		pc.getSchedaMadre().getProdotto().setQuantita(pc.getSchedaMadre().getProdotto().getQuantita()+n);
-		prodR.save(pc.getSchedaMadre().getProdotto());
+		schMdrR.getById(pcReq.getIdSchedaMadre()).getProdotto().setQuantita(schMdrR.getById(pcReq.getIdSchedaMadre()).getProdotto().getQuantita()+n);
+		prodR.save(schMdrR.getById(pcReq.getIdSchedaMadre()).getProdotto());
 	}
 	
 	
