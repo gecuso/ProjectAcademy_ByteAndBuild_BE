@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.betacom.bb.dto.CategoriaDTO;
 import com.betacom.bb.dto.MarcaDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Categoria;
@@ -19,12 +18,13 @@ import com.betacom.bb.repositories.IMarcaRepository;
 import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.requests.MarcaReq;
 import com.betacom.bb.services.interfaces.IMarcaService;
+import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Service
-public class MarcaImpl implements IMarcaService{
+public class MarcaImpl extends Utilities implements IMarcaService{
 
 	private IMarcaRepository marcaR;
 	private ICategoriaRepository cateR;
@@ -55,10 +55,22 @@ public class MarcaImpl implements IMarcaService{
 		if(categoria.isEmpty())
 			throw new AcademyException("Categoria non presente o non accettabile, riprovare");
 		
-		//roba brutta ma dovrebbe funzionare
-		List<Categoria> categorie = new ArrayList<Categoria>();
-		categorie.add(req.getCategoria());
-		marca.setCategoria(categorie);
+		//controllo se esiste già la marca uguale
+		Optional<List<Marca>> marcheUsate = marcaR.findAllByDescrizione(req.getDescrizione());
+			if(!marcheUsate.isEmpty()) {
+				//controllo se usate gia quella categoria
+				for(int i=0; i<marcheUsate.get().size(); i++) {
+					//controllo se la marca(i) ha categoria già usata
+					if(marcheUsate.get().get(i).getCategoria().get(0).getId().equals(req.getIdCategoria())) {
+						throw new AcademyException("Categoria già usata con questa marca, evita duplicati...");
+				}
+			}
+		}
+
+		//CONTROLLA CHE FUNZIONI QUESTA PARTE
+		List<Categoria> salvaCategoria = new ArrayList<Categoria>();
+		salvaCategoria.add(cateR.findById(req.getIdCategoria()).get()); //già controllato sopra
+		marca.setCategoria(salvaCategoria);
 		
 		//salvo nel database
 		marcaR.save(marca);
@@ -82,7 +94,7 @@ public class MarcaImpl implements IMarcaService{
 		marca.setProdotto(mar.get().getProdotto());
 		
 		//controllo che la categoria che voglio usare esista
-		Optional<Categoria> categoria = cateR.findById(req.getCategoria().getId());
+		Optional<Categoria> categoria = cateR.findById(req.getIdCategoria());
 		if(categoria.isEmpty())
 			throw new AcademyException("Categoria non presente o non accettabile, riprovare");
 
@@ -91,7 +103,8 @@ public class MarcaImpl implements IMarcaService{
 		if(!marcheUsate.isEmpty()) {
 			//controllo se usate gia quella categoria
 			for(int i=0; i<marcheUsate.get().size(); i++) {
-				if(marcheUsate.get().get(i).getCategoria().equals(req.getCategoria())) {
+				//controllo se la marca(i) ha categoria già usata
+				if(marcheUsate.get().get(i).getCategoria().get(0).getId().equals(req.getIdCategoria())) {
 					throw new AcademyException("Categoria già usata con questa marca, evita duplicati...");
 				}
 			}
@@ -99,7 +112,7 @@ public class MarcaImpl implements IMarcaService{
 		
 		//CONTROLLA CHE FUNZIONI QUESTA PARTE
 		List<Categoria> salvaCategoria = new ArrayList<Categoria>();
-		salvaCategoria.add(req.getCategoria());
+		salvaCategoria.add(cateR.findById(req.getIdCategoria()).get()); //già controllato sopra
 		marca.setCategoria(salvaCategoria);
 		
 		//update nel database
@@ -142,11 +155,7 @@ public class MarcaImpl implements IMarcaService{
 				.map(mar -> MarcaDTO.builder()
 						.id(mar.getId())
 						.descrizione(mar.getDescrizione())
-						.categoria(mar.getCategoria().stream()
-									.map(cat -> CategoriaDTO.builder()
-											.id(cat.getId())
-											.descrizione(cat.getDescrizione())
-											.build()).collect(Collectors.toList()))
+						.categoria(buildListCategoriaDTO(mar.getCategoria()))
 						.build()).collect(Collectors.toList());
 	}
 
@@ -160,15 +169,7 @@ public class MarcaImpl implements IMarcaService{
 			throw new AcademyException("Marca non presente nel database");
 		
 		Marca mar = m.get();
-		return MarcaDTO.builder()
-				.id(mar.getId())
-				.descrizione(mar.getDescrizione())
-				.categoria(mar.getCategoria().stream()
-							.map(cat -> CategoriaDTO.builder()
-									.id(cat.getId())
-									.descrizione(cat.getDescrizione())
-									.build()).collect(Collectors.toList()))
-				.build();
+		return buildMarcaDTO(mar);
 	}
 	
 	@Override
@@ -189,9 +190,5 @@ public class MarcaImpl implements IMarcaService{
 		//mando in output
 		return tutteLeMarche;
 	}
-
-	
-	
-	
 	
 }

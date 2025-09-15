@@ -8,23 +8,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.betacom.bb.dto.MemoriaDTO;
-import com.betacom.bb.dto.ProdottoDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Memoria;
+import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.repositories.IMemoriaRepository;
+import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.requests.MemoriaReq;
 import com.betacom.bb.services.interfaces.IMemoriaService;
+import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Service
-public class MemoriaImpl implements IMemoriaService{
+public class MemoriaImpl extends Utilities implements IMemoriaService{
 
 	private IMemoriaRepository memR;
+	private IProdottoRepository prodR;
 
-	public MemoriaImpl(IMemoriaRepository memR) {
+	public MemoriaImpl(IMemoriaRepository memR, IProdottoRepository prodR) {
 		this.memR = memR;
+		this.prodR = prodR;
 	}
 	
 	////////////////////////////////
@@ -45,9 +49,14 @@ public class MemoriaImpl implements IMemoriaService{
 		if(req.getSpazio() == null || req.getSpazio()<=0)
 			throw new AcademyException("Spazio non presente o non valido, riprovare");
 		
-		if(req.getProdotto().getId() == null)
+		if(req.getIdProdotto() == null)
 			throw new AcademyException("Id del prodotto non inserito, riprovare");
-		memoria.setProdotto(req.getProdotto());
+		
+		//controllo se esiste il prodotto
+		Optional<Prodotto> prodotto = prodR.findById(req.getIdProdotto());
+		if(prodotto.isEmpty())
+			throw new AcademyException("Prodotto non presente, riprovare");
+		memoria.setProdotto(prodotto.get());
 		
 		//salvo nel database
 		memR.save(memoria);	
@@ -104,9 +113,7 @@ public class MemoriaImpl implements IMemoriaService{
 						.id(mem.getId())
 						.descrizione(mem.getDescrizione())
 						.spazio(mem.getSpazio())
-						.prodotto(ProdottoDTO.builder()
-								.id(mem.getProdotto().getId())
-								.build())
+						.prodotto(buildProdottoDTO(mem.getProdotto()))
 						.build()).collect(Collectors.toList());
 	}
 	
@@ -125,9 +132,7 @@ public class MemoriaImpl implements IMemoriaService{
 				.id(mem.getId())
 				.descrizione(mem.getDescrizione())
 				.spazio(mem.getSpazio())
-				.prodotto(ProdottoDTO.builder()
-						.id(mem.getProdotto().getId())
-						.build())
+				.prodotto(buildProdottoDTO(mem.getProdotto()))
 				.build();		
 	}
 	
