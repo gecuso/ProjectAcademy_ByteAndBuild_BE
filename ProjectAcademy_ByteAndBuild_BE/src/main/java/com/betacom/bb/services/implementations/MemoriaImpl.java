@@ -33,15 +33,15 @@ public class MemoriaImpl implements IMemoriaService{
 	@Override
 	public void create(MemoriaReq req) throws AcademyException {
 		log.debug("create: " + req);
-//		Optional<Memoria> mem = memR.findByDescrizione(req.getDescrizione());
-//		if(mem.isPresent())
-//			throw new AcademyException("Memoria già presente nel database");
-//		
-//		//controllo dei dati
+		Optional<Memoria> mem = memR.findByDescrizione(req.getDescrizione());
+		if(mem.isPresent())
+			throw new AcademyException("Memoria già presente nel database");
+		
+		//controllo dei dati
 		Memoria memoria = new Memoria();
-//		if(req.getDescrizione().isEmpty())
-//			throw new AcademyException("Descrizione non presente, riprovare");
-//		memoria.setDescrizione(req.getDescrizione());
+		if(req.getDescrizione().isEmpty())
+			throw new AcademyException("Descrizione non presente, riprovare");
+		memoria.setDescrizione(req.getDescrizione());
 		if(req.getSpazio() == null || req.getSpazio()<=0)
 			throw new AcademyException("Spazio non presente o non valido, riprovare");
 		
@@ -65,7 +65,7 @@ public class MemoriaImpl implements IMemoriaService{
 		Memoria memoria = new Memoria();
 		memoria.setId(mem.get().getId());
 		//descrizione non può cambiare
-//		memoria.setDescrizione(mem.get().getDescrizione());
+		memoria.setDescrizione(mem.get().getDescrizione());
 		if(req.getSpazio() == null || req.getSpazio()<=0)
 			throw new AcademyException("Spazio non presente o non valido, riprovare");
 		memoria.setSpazio(req.getSpazio());
@@ -102,7 +102,7 @@ public class MemoriaImpl implements IMemoriaService{
 		return listMemoria.stream()
 				.map(mem -> MemoriaDTO.builder()
 						.id(mem.getId())
-//						.descrizione(mem.getDescrizione())
+						.descrizione(mem.getDescrizione())
 						.spazio(mem.getSpazio())
 						.prodotto(ProdottoDTO.builder()
 								.id(mem.getProdotto().getId())
@@ -123,7 +123,7 @@ public class MemoriaImpl implements IMemoriaService{
 		Memoria mem = m.get();
 		return MemoriaDTO.builder()
 				.id(mem.getId())
-//				.descrizione(mem.getDescrizione())
+				.descrizione(mem.getDescrizione())
 				.spazio(mem.getSpazio())
 				.prodotto(ProdottoDTO.builder()
 						.id(mem.getProdotto().getId())

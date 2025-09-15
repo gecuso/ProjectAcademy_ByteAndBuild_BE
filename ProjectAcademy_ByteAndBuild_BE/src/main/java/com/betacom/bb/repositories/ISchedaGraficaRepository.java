@@ -8,6 +8,6 @@ import com.betacom.bb.models.SchedaGrafica;
 
 public interface ISchedaGraficaRepository extends JpaRepository<SchedaGrafica, Integer>{
 
-//	Optional<SchedaGrafica> findByDescrizione(String descrizione);
+	Optional<SchedaGrafica> findByDescrizione(String descrizione);
 	
 }

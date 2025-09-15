@@ -8,6 +8,6 @@ import com.betacom.bb.models.Ram;
 
 public interface IRamRepository extends JpaRepository<Ram, Integer> {
 	
-//	Optional<Ram> findByDescrizione(String descrizione);
+	Optional<Ram> findByDescrizione(String descrizione);
 	
 }

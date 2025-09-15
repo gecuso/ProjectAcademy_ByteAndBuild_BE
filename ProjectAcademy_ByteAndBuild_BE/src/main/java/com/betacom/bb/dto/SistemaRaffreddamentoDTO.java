@@ -8,7 +8,7 @@ import lombok.Data;
 public class SistemaRaffreddamentoDTO {
 
     private Integer id;
-//    private String descrizione;
+    private String descrizione;
     private Integer consumo;
     private ProdottoDTO prodotto;
 

@@ -8,6 +8,6 @@ import com.betacom.bb.models.Case;
 
 public interface ICaseRepository extends JpaRepository<Case, Integer>{
 
-//	Optional<Case> findByDescrizione(String descrizione);
+	Optional<Case> findByDescrizione(String descrizione);
 	
 }

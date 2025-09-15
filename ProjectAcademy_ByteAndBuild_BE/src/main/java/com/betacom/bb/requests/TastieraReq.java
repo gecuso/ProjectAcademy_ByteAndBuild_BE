@@ -1,15 +1,13 @@
 package com.betacom.bb.requests;
 
-import com.betacom.bb.models.Prodotto;
-
 import lombok.Data;
 
 @Data
 public class TastieraReq {
 	private Integer id;
-//	private String descrizione;
+	private String descrizione;
 	private String tipologia;
 	private String collegamento;
-	private Prodotto prodotto;
+	private Integer idProdotto;
 	
 }

@@ -8,7 +8,7 @@ import lombok.Data;
 public class CaseDTO {
 
     private Integer id;
-//    private String descrizione;
+    private String descrizione;
     private String dimensioni;
     
     private ProdottoDTO prodotto;

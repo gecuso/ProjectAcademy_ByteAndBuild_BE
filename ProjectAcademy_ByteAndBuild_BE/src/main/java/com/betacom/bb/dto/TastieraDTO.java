@@ -8,7 +8,7 @@ import lombok.Data;
 public class TastieraDTO {
 
 	private Integer id;
-//	private String descrizione;
+	private String descrizione;
 	private String tipologia;
 	private String collegamento;
 	private ProdottoDTO prodotto;

@@ -32,13 +32,13 @@ public class RamImpl extends Utilities implements IRamServices{
 	public void create(RamReq req) throws AcademyException {
 		log.debug("create: " + req);
 		Ram ram = new Ram();
-//		Optional<Ram> r = ramR.findByDescrizione(req.getDescrizione());
-//		if(r.isPresent())
-//			throw new AcademyException("Ram già esistente nel database");
-//		
-//		if(req.getDescrizione().isEmpty())
-//			throw new AcademyException("Descrizione non presente, riprova");
-//		ram.setDescrizione(req.getDescrizione());
+		Optional<Ram> r = ramR.findByDescrizione(req.getDescrizione());
+		if(r.isPresent())
+			throw new AcademyException("Ram già esistente nel database");
+		
+		if(req.getDescrizione().isEmpty())
+			throw new AcademyException("Descrizione non presente, riprova");
+		ram.setDescrizione(req.getDescrizione());
 		
 		if(req.getConsumo() == null)
 			throw new AcademyException("Consumo nullo");
@@ -95,7 +95,7 @@ public class RamImpl extends Utilities implements IRamServices{
 		
 		return RamDTO.builder()
 				.id(r.getId())
-//				.descrizione(r.getDescrizione())
+				.descrizione(r.getDescrizione())
 				.consumo(r.getConsumo())
 				.prodotto(buildProdottoDTO(r.getProdotto()))
 				.build();
@@ -109,7 +109,7 @@ public class RamImpl extends Utilities implements IRamServices{
 		return  lR.stream()
 				.map(r ->RamDTO.builder()
 						.id(r.getId())
-//						.descrizione(r.getDescrizione())
+						.descrizione(r.getDescrizione())
 						.consumo(r.getConsumo())
 						.prodotto(buildProdottoDTO(r.getProdotto()))
 						.build())

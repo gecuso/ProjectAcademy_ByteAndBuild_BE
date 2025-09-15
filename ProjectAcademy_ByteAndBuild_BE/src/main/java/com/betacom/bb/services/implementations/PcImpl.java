@@ -79,7 +79,7 @@ public class PcImpl extends Utilities implements IPcService{
 		if(pcReq.getAlimentazione()==null)throw new AcademyException("Alimentazione nulla");
 		if(pcReq.getCasee()==null)throw new AcademyException("case nulla");
 		if(pcReq.getCpu()==null)throw new AcademyException("cpu nulla");
-//		if(pcReq.getDescrizione()==null)throw new AcademyException("descrizione nulla");
+		if(pcReq.getDescrizione()==null)throw new AcademyException("descrizione nulla");
 		if(pcReq.getMemoria()==null)throw new AcademyException("memoria nulla");
 		if(pcReq.getProdotto()==null)throw new AcademyException("prodotto nulla");
 		if(pcReq.getRam()==null)throw new AcademyException("ram nulla");
@@ -114,8 +114,8 @@ public class PcImpl extends Utilities implements IPcService{
 		Optional<SistemaRaffreddamento> sisRaf = sisRafR.findById(pcReq.getProdotto().getId());
 		if(sisRaf.isEmpty())throw new AcademyException("sistema di raffreddamento non esistente");
 		
-//		Optional<Pc> m = pcR.findByDescrizione(pcReq.getDescrizione());
-//		if(m.isPresent()) throw new AcademyException("pc con descrizione :"+pcReq.getDescrizione()+" è gia esistente ");
+		Optional<Pc> m = pcR.findByDescrizione(pcReq.getDescrizione());
+		if(m.isPresent()) throw new AcademyException("pc con descrizione :"+pcReq.getDescrizione()+" è gia esistente ");
 		
 		Pc c = new Pc();
 		
@@ -148,7 +148,7 @@ public class PcImpl extends Utilities implements IPcService{
 		c.setRam(pcReq.getRam());
 		c.setSchedaGrafica(pcReq.getSchedaGrafica());
 		c.setSchedaMadre(pcReq.getSchedaMadre());
-//		c.setDescrizione(pcReq.getDescrizione());
+		c.setDescrizione(pcReq.getDescrizione());
 		c.setProdotto(pcReq.getProdotto());
 		c.setTotConsumo(consumoTot);
 		
@@ -200,7 +200,7 @@ public class PcImpl extends Utilities implements IPcService{
 	
 		return PcDTO.builder()
 				.id(p.getId())
-//				.descrizione(p.getDescrizione())
+				.descrizione(p.getDescrizione())
 				.totConsumo(p.getTotConsumo())
 				.prodotto(buildProdottoDTO(p.getProdotto()))
 				.schedaMadre(buildSchedaMadreDTO(p.getSchedaMadre()))

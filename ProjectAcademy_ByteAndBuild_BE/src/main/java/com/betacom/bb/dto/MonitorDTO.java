@@ -8,7 +8,7 @@ import lombok.Data;
 public class MonitorDTO {
 
 	private Integer id;
-//	private String descrizione;
+	private String descrizione;
 	private String risoluzione;
 	private String latenza;
 	private String frequenza;

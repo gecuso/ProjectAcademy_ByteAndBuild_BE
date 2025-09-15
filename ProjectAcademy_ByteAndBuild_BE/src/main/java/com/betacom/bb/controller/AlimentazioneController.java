@@ -39,7 +39,7 @@ public class AlimentazioneController {
 		return r;
 	}
 	
-	@PutMapping("update")
+	@PutMapping("/update")
 	public ResponseBase update(@RequestBody (required = true)  AlimentazioneReq req) {
 		ResponseBase r = new ResponseBase();
 		try {

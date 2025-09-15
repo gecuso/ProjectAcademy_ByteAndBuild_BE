@@ -7,6 +7,6 @@ import com.betacom.bb.models.SistemaRaffreddamento;
 
 public interface ISistemaRaffreddamentoRepository extends JpaRepository<SistemaRaffreddamento, Integer>{
 
-//	Optional<SistemaRaffreddamento> findByDescrizione(String descrizione);
+	Optional<SistemaRaffreddamento> findByDescrizione(String descrizione);
 	
 }
