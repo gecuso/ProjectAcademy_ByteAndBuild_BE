@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.betacom.bb.dto.AlimentazioneDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Alimentazione;
+import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.repositories.IAlimentazioneRepository;
+import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.requests.AlimentazioneReq;
 import com.betacom.bb.services.interfaces.IAlimentazioneServices;
 import com.betacom.bb.utilis.Utilities;
@@ -22,12 +24,14 @@ import lombok.extern.log4j.Log4j2;
 public class AlimentazioneImpl extends Utilities implements IAlimentazioneServices{
 
 	private IAlimentazioneRepository alimR;
+	private IProdottoRepository prodR;
 
-
-	public AlimentazioneImpl(IAlimentazioneRepository alimR) {
-		this.alimR = alimR;
-	}
 	
+	public AlimentazioneImpl(IAlimentazioneRepository alimR, IProdottoRepository prodR) {
+		this.alimR = alimR;
+		this.prodR = prodR;
+	}
+
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void create(AlimentazioneReq req) throws AcademyException {
@@ -44,9 +48,12 @@ public class AlimentazioneImpl extends Utilities implements IAlimentazioneServic
 			throw new AcademyException("Potenza non presente, riprova");
 		alim.setPotenza(req.getPotenza());
 		
-		if(req.getProdotto().getId() == null)
+		if(req.getIdProdotto() == null)
 			throw new AcademyException("Prodotto non presente, riprova");
-		alim.setProdotto(req.getProdotto());
+		Optional<Prodotto> p = prodR.findById(req.getIdProdotto());
+		if(p.isEmpty())
+			throw new AcademyException("Prodotto non presente nel database");
+		alim.setProdotto(p.get());
 		
 		alimR.save(alim);
 		

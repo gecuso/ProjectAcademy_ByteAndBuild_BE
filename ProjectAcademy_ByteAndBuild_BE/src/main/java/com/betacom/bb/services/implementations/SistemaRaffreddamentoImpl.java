@@ -12,8 +12,10 @@ import com.betacom.bb.dto.SchedaMadreDTO;
 import com.betacom.bb.dto.SistemaRaffreddamentoDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Alimentazione;
+import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.models.SchedaMadre;
 import com.betacom.bb.models.SistemaRaffreddamento;
+import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.repositories.ISistemaRaffreddamentoRepository;
 import com.betacom.bb.requests.SistemaRaffreddamentoReq;
 import com.betacom.bb.services.interfaces.ISistemaRaffreddamentoServices;
@@ -26,10 +28,12 @@ import lombok.extern.log4j.Log4j2;
 public class SistemaRaffreddamentoImpl extends Utilities implements ISistemaRaffreddamentoServices{
 
 	private ISistemaRaffreddamentoRepository sysR;
+	private IProdottoRepository prodR;
 
 	
-	public SistemaRaffreddamentoImpl(ISistemaRaffreddamentoRepository sysR) {
+	public SistemaRaffreddamentoImpl(ISistemaRaffreddamentoRepository sysR,IProdottoRepository prodR) {
 		this.sysR = sysR;
+		this.prodR = prodR;
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
@@ -49,9 +53,12 @@ public class SistemaRaffreddamentoImpl extends Utilities implements ISistemaRaff
 			throw new AcademyException("Consumo non presente, riprova");
 		sys.setConsumo(req.getConsumo());
 		
-		if(req.getProdotto().getId() == null)
+		if(req.getIdProdotto() == null)
 			throw new AcademyException("Prodotto non presente, riprova");
-		sys.setProdotto(req.getProdotto());
+		Optional<Prodotto> p = prodR.findById(req.getIdProdotto());
+		if(p.isEmpty())
+			throw new AcademyException("Prodotto non presente nel database");
+		sys.setProdotto(p.get());
 		
 		sysR.save(sys);
 	}

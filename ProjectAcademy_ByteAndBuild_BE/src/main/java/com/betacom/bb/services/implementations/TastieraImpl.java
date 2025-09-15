@@ -10,6 +10,7 @@ import com.betacom.bb.dto.TastieraDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.models.Tastiera;
+import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.repositories.ITastieraRepository;
 import com.betacom.bb.requests.TastieraReq;
 import com.betacom.bb.services.interfaces.ITastieraService;
@@ -21,10 +22,15 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class TastieraImpl extends Utilities implements ITastieraService{
 
-	ITastieraRepository tastR;
-	private Prodotto p= new Prodotto();
+	private ITastieraRepository tastR;
+	private IProdottoRepository prodR;
 	
 	
+	public TastieraImpl(ITastieraRepository tastR, IProdottoRepository prodR) {
+		this.tastR = tastR;
+		this.prodR = prodR;
+	}
+
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void create(TastieraReq req) throws AcademyException {
@@ -45,9 +51,12 @@ public class TastieraImpl extends Utilities implements ITastieraService{
 			throw new AcademyException("collegamento non presente, riprovare");
 		tastiera.setCollegamento(req.getCollegamento());
 		
-		if(req.getProdotto().getId() == null)
-			throw new AcademyException("Id del prodotto non inserito, riprovare");
-		tastiera.setProdotto(req.getProdotto());
+		if(req.getIdProdotto() == null)
+			throw new AcademyException("Prodotto non presente, riprova");
+		Optional<Prodotto> p = prodR.findById(req.getIdProdotto());
+		if(p.isEmpty())
+			throw new AcademyException("Prodotto non presente nel database");
+		tastiera.setProdotto(p.get());
 		
 		//salvo nel database
 		tastR.save(tastiera);
@@ -74,9 +83,12 @@ public class TastieraImpl extends Utilities implements ITastieraService{
 			throw new AcademyException("collegamento non presente, riprovare");
 		tastiera.setCollegamento(req.getCollegamento());
 		
-		if(req.getProdotto().getId() == null)
-			throw new AcademyException("Id del prodotto non inserito, riprovare");
-		tastiera.setProdotto(req.getProdotto());
+		if(req.getIdProdotto() == null)
+			throw new AcademyException("Prodotto non presente, riprova");
+		Optional<Prodotto> p = prodR.findById(req.getIdProdotto());
+		if(p.isEmpty())
+			throw new AcademyException("Prodotto non presente nel database");
+		tastiera.setProdotto(p.get());
 		
 		//salvo nel database
 		tastR.save(tastiera);		

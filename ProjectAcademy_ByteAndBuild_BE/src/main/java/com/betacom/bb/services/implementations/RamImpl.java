@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.betacom.bb.dto.RamDTO;
 import com.betacom.bb.exception.AcademyException;
+import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.models.Ram;
+import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.repositories.IRamRepository;
 import com.betacom.bb.requests.RamReq;
 import com.betacom.bb.services.interfaces.IRamServices;
@@ -22,11 +24,14 @@ import lombok.extern.log4j.Log4j2;
 public class RamImpl extends Utilities implements IRamServices{
 
 	private IRamRepository ramR;
-
-	public RamImpl(IRamRepository ramR) {
-		this.ramR = ramR;
-	}
+	private IProdottoRepository prodR;
 	
+	
+	public RamImpl(IRamRepository ramR, IProdottoRepository prodR) {
+		this.ramR = ramR;
+		this.prodR = prodR;
+	}
+
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void create(RamReq req) throws AcademyException {
@@ -44,9 +49,12 @@ public class RamImpl extends Utilities implements IRamServices{
 			throw new AcademyException("Consumo nullo");
 		ram.setConsumo(req.getConsumo());
 		
-		if(req.getProdotto().getId() == null)
-			throw new AcademyException("Prodotto nullo");
-		ram.setProdotto(req.getProdotto());
+		if(req.getIdProdotto() == null)
+			throw new AcademyException("Id del prodotto non inserito, riprovare");
+		Optional<Prodotto> p = prodR.findById(req.getIdProdotto());
+		if(p.isEmpty())
+			throw new AcademyException("Prodotto non presente nel database");
+		ram.setProdotto(p.get());
 		
 		ramR.save(ram);
 	}

@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.betacom.bb.dto.CpuDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Cpu;
+import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.repositories.ICpuRepository;
+import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.requests.CpuReq;
 import com.betacom.bb.services.interfaces.ICpuServices;
 import com.betacom.bb.utilis.Utilities;
@@ -22,9 +24,12 @@ import lombok.extern.log4j.Log4j2;
 public class CpuImpl extends Utilities implements ICpuServices{
 
 	private ICpuRepository cpuR;
+	private IProdottoRepository prodR;
 
-	public CpuImpl(ICpuRepository cpuR) {
+	
+	public CpuImpl(ICpuRepository cpuR,IProdottoRepository prodR) {
 		this.cpuR = cpuR;
+		this.prodR = prodR;
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
@@ -48,9 +53,10 @@ public class CpuImpl extends Utilities implements ICpuServices{
 			throw new AcademyException("Consumo nullo");
 		cpu.setConsumo(req.getConsumo());
 		
-		if(req.getProdotto().getId() == null)
+		if(req.getIdPc() == null)
 			throw new AcademyException("Prodotto nullo");
-		cpu.setProdotto(req.getProdotto());
+		Optional<Prodotto> p = prodR.findById(req.getIdProdotto());
+		cpu.setProdotto(p.get());
 		
 		cpuR.save(cpu);
 	}

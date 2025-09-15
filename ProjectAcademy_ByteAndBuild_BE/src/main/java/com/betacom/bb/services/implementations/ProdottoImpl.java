@@ -11,9 +11,13 @@ import com.betacom.bb.dto.FormatoDTO;
 import com.betacom.bb.dto.ProdottoDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Alimentazione;
+import com.betacom.bb.models.Categoria;
 import com.betacom.bb.models.Formato;
+import com.betacom.bb.models.Marca;
 import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.repositories.IAlimentazioneRepository;
+import com.betacom.bb.repositories.ICategoriaRepository;
+import com.betacom.bb.repositories.IMarcaRepository;
 import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.requests.AlimentazioneReq;
 import com.betacom.bb.requests.CaseReq;
@@ -53,6 +57,8 @@ import lombok.extern.log4j.Log4j2;
 public class ProdottoImpl extends Utilities implements IProdottoServices{
 
 	private IProdottoRepository prodR;
+	private ICategoriaRepository catR;
+	private IMarcaRepository marcaR;
 	private IAlimentazioneServices alimS;
 	private ICaseServices csS;
 	private ICpuServices cpuS;
@@ -67,9 +73,11 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 	private ISistemaRaffreddamentoServices sisS;
 	private ITastieraService tS;
 	
-	
-	public ProdottoImpl(IProdottoRepository prodR) {
+
+	public ProdottoImpl(IProdottoRepository prodR, ICategoriaRepository catR, IMarcaRepository marcaR) {
 		this.prodR = prodR;
+		this.catR = catR;
+		this.marcaR = marcaR;
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -85,13 +93,19 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 			throw new AcademyException("Descrizione non presente, riprova");
 		prod.setDescrizione(req.getDescrizione());
 		
-		if(req.getCategoria() == null)
+		if(req.getIdCategoria() == null)
 			throw new AcademyException("Categoria non presente, riprova");
-		prod.setCategoria(req.getCategoria());
+		Optional<Categoria> c = catR.findById(req.getIdCategoria());
+		if(c.isEmpty())
+			throw new AcademyException("Categoria non presente, riprova");
+		prod.setCategoria(c.get());
 		
-		if(req.getMarca() == null)
+		if(req.getIdMarca() == null)
+			throw new AcademyException("Categoria non presente, riprova");
+		Optional<Marca> m = marcaR.findById(req.getIdMarca());
+		if(m.isEmpty())
 			throw new AcademyException("Marca non presente, riprova");
-		prod.setMarca(req.getMarca());
+		prod.setMarca(m.get());
 		
 		if(req.getCosto() == null || req.getCosto()<0)
 			throw new AcademyException("Costo non presente, riprova");
@@ -129,13 +143,19 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 			}
 		prod.setDescrizione(req.getDescrizione());
 		
-		if(req.getCategoria() == null)
+		if(req.getIdCategoria() == null)
 			throw new AcademyException("Categoria non presente, riprova");
-		prod.setCategoria(req.getCategoria());
+		Optional<Categoria> c = catR.findById(req.getIdCategoria());
+		if(c.isEmpty())
+			throw new AcademyException("Categoria non presente, riprova");
+		prod.setCategoria(c.get());
 		
-		if(req.getMarca() == null)
+		if(req.getIdMarca() == null)
+			throw new AcademyException("Categoria non presente, riprova");
+		Optional<Marca> m = marcaR.findById(req.getIdMarca());
+		if(m.isEmpty())
 			throw new AcademyException("Marca non presente, riprova");
-		prod.setMarca(req.getMarca());
+		prod.setMarca(m.get());
 		
 		if(req.getCosto() == null || req.getCosto()<0)
 			throw new AcademyException("Costo non presente, riprova");

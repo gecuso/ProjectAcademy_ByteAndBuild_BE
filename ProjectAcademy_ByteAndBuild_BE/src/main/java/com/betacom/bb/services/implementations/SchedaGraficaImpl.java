@@ -11,7 +11,9 @@ import com.betacom.bb.dto.AlimentazioneDTO;
 import com.betacom.bb.dto.SchedaGraficaDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Alimentazione;
+import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.models.SchedaGrafica;
+import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.repositories.ISchedaGraficaRepository;
 import com.betacom.bb.requests.SchedaGraficaReq;
 import com.betacom.bb.services.interfaces.ISchedaGraficaServices;
@@ -24,11 +26,14 @@ import lombok.extern.log4j.Log4j2;
 public class SchedaGraficaImpl extends Utilities implements ISchedaGraficaServices{
 
 	private ISchedaGraficaRepository sgR;
+	private IProdottoRepository prodR;
 
-	public SchedaGraficaImpl(ISchedaGraficaRepository sgR) {
-		this.sgR = sgR;
-	}
 	
+	public SchedaGraficaImpl(ISchedaGraficaRepository sgR, IProdottoRepository prodR) {
+		this.sgR = sgR;
+		this.prodR = prodR;
+	}
+
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void create(SchedaGraficaReq req) throws AcademyException {
@@ -46,9 +51,12 @@ public class SchedaGraficaImpl extends Utilities implements ISchedaGraficaServic
 			throw new AcademyException("Consumo non presente, riprova");
 		sgrafica.setConsumo(req.getConsumo());
 		
-		if(req.getProdotto().getId() == null)
+		if(req.getIdProdotto() == null)
 			throw new AcademyException("Prodotto non presente, riprova");
-		sgrafica.setProdotto(req.getProdotto());
+		Optional<Prodotto> p = prodR.findById(req.getIdProdotto());
+		if(p.isEmpty())
+			throw new AcademyException("Prodotto non presente nel database");
+		sgrafica.setProdotto(p.get());
 		
 		sgR.save(sgrafica);
 	}

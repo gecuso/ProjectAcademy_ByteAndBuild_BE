@@ -10,7 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.betacom.bb.dto.CaseDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Case;
+import com.betacom.bb.models.Formato;
+import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.repositories.ICaseRepository;
+import com.betacom.bb.repositories.IFormatoRepository;
+import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.requests.CaseReq;
 import com.betacom.bb.services.interfaces.ICaseServices;
 import com.betacom.bb.utilis.Utilities;
@@ -22,11 +26,17 @@ import lombok.extern.log4j.Log4j2;
 public class CaseImpl extends Utilities implements ICaseServices{
 
 	private ICaseRepository caseR;
-
-	public CaseImpl(ICaseRepository caseR) {
-		this.caseR = caseR;
-	}
+	private IFormatoRepository formR;
+	private IProdottoRepository prodR;
 	
+	
+	public CaseImpl(ICaseRepository caseR, IFormatoRepository formR, IProdottoRepository prodR) {
+		this.caseR = caseR;
+		this.formR = formR;
+		this.prodR = prodR;
+	}
+
+
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void create(CaseReq req) throws AcademyException {
@@ -44,13 +54,19 @@ public class CaseImpl extends Utilities implements ICaseServices{
 			throw new AcademyException("Dimensione non presente, riprova");
 		casee.setDimensioni(req.getDimensioni());
 		
-		if(req.getFormato().getId() == null)
+		if(req.getIdFormato() == null)
 			throw new AcademyException("Formato non presebte, ripova");
-		casee.setFormato(req.getFormato());
+		Optional<Formato> f = formR.findById(req.getIdFormato());
+		if(f.isEmpty())
+			throw new AcademyException("Formato non presente nel database");
+		casee.setFormato(f.get());
 		
-		if(req.getProdotto().getId() == null)
+		if(req.getIdProdotto() == null)
 			throw new AcademyException("Prodotto non presente, riprova");
-		casee.setProdotto(req.getProdotto());
+		Optional<Prodotto> p = prodR.findById(req.getIdProdotto());
+		if(p.isEmpty())
+			throw new AcademyException("Prodotto non presente nel database");
+		casee.setProdotto(p.get());
 		
 	}
 	

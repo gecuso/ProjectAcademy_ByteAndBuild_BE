@@ -9,7 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.betacom.bb.dto.SchedaMadreDTO;
 import com.betacom.bb.exception.AcademyException;
+import com.betacom.bb.models.Formato;
+import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.models.SchedaMadre;
+import com.betacom.bb.repositories.ICaseRepository;
+import com.betacom.bb.repositories.IFormatoRepository;
+import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.repositories.ISchedaMadreRepository;
 import com.betacom.bb.requests.SchedaMadreReq;
 import com.betacom.bb.services.interfaces.ISchedaMadreServices;
@@ -23,10 +28,16 @@ public class SchedaMadreImpl extends Utilities implements ISchedaMadreServices{
 
 
 	private ISchedaMadreRepository smR;
-
-	public SchedaMadreImpl(ISchedaMadreRepository smR) {
+	private IFormatoRepository formR;
+	private IProdottoRepository prodR;
+	
+	
+	public SchedaMadreImpl(ISchedaMadreRepository smR, IFormatoRepository formR, IProdottoRepository prodR) {
 		this.smR = smR;
+		this.formR = formR;
+		this.prodR = prodR;
 	}
+	
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -49,13 +60,19 @@ public class SchedaMadreImpl extends Utilities implements ISchedaMadreServices{
 			throw new AcademyException("Consumo non presente, riprova");
 		smadre.setConsumo(req.getConsumo());
 		
-		if(req.getFormato().getId() == null)
+		if(req.getIdFormato() == null)
 			throw new AcademyException("Formato non presebte, ripova");
-		smadre.setFormato(req.getFormato());
+		Optional<Formato> f = formR.findById(req.getIdFormato());
+		if(f.isEmpty())
+			throw new AcademyException("Formato non presente nel database");
+		smadre.setFormato(f.get());
 		
-		if(req.getProdotto().getId() == null)
+		if(req.getIdPc() == null)
 			throw new AcademyException("Prodotto non presente, riprova");
-		smadre.setProdotto(req.getProdotto());
+		Optional<Prodotto> p = prodR.findById(req.getIdProdotto());
+		if(p.isEmpty())
+			throw new AcademyException("Prodotto non presente nel database");
+		smadre.setProdotto(p.get());
 		
 		smR.save(smadre);
 		
