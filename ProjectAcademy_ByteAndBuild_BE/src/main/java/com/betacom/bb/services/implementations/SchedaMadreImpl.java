@@ -33,14 +33,14 @@ public class SchedaMadreImpl extends Utilities implements ISchedaMadreServices{
 	public void create(SchedaMadreReq req) throws AcademyException {
 		log.debug("create: " + req);
 		SchedaMadre smadre = new SchedaMadre();
-//		Optional<SchedaMadre> s = smR.findByDescrizione(req.getDescrizione());
-//		if(s.isPresent())
-//			throw new AcademyException("SchedaMadre già esistente nel database");
-//		
-//		if(req.getDescrizione() == null)
-//			throw new AcademyException("Descrizione non presente, riprova");
-//		smadre.setDescrizione(req.getDescrizione());
-//		
+		Optional<SchedaMadre> s = smR.findByDescrizione(req.getDescrizione());
+		if(s.isPresent())
+			throw new AcademyException("SchedaMadre già esistente nel database");
+		
+		if(req.getDescrizione() == null)
+			throw new AcademyException("Descrizione non presente, riprova");
+		smadre.setDescrizione(req.getDescrizione());
+		
 		if(req.getCompatibilita() == null)
 			throw new AcademyException("Compatibilità non presente, riprova");
 		smadre.setCompatibilita(req.getCompatibilita());
@@ -108,7 +108,7 @@ public class SchedaMadreImpl extends Utilities implements ISchedaMadreServices{
 		
 		return SchedaMadreDTO.builder()
 				.id(s.getId())
-//				.descrizione(s.getDescrizione())
+				.descrizione(s.getDescrizione())
 				.consumo(s.getConsumo())
 				.prodotto(buildProdottoDTO(s.getProdotto()))
 				.formato(buildFormatoDTO(s.getFormato()))
@@ -123,7 +123,7 @@ public class SchedaMadreImpl extends Utilities implements ISchedaMadreServices{
 		return lS.stream()
 				.map(s -> SchedaMadreDTO.builder()
 						.id(s.getId())
-//						.descrizione(s.getDescrizione())
+						.descrizione(s.getDescrizione())
 						.consumo(s.getConsumo())
 						.prodotto(buildProdottoDTO(s.getProdotto()))
 						.formato(buildFormatoDTO(s.getFormato()))

@@ -39,7 +39,7 @@ public class CpuController {
 		return r;
 	}
 	
-	@PutMapping("update")
+	@PutMapping("/update")
 	public ResponseBase update(@RequestBody (required = true)  CpuReq req) {
 		ResponseBase r = new ResponseBase();
 		try {

@@ -32,13 +32,13 @@ public class CpuImpl extends Utilities implements ICpuServices{
 	public void create(CpuReq req) throws AcademyException {
 		log.debug("create: " + req);
 		Cpu cpu = new Cpu();
-//		if(req.getDescrizione()== null)
-//			throw new AcademyException("Descrizione non presente, riprova");
-//		Optional<Cpu> c = cpuR.findByDescrizione(req.getDescrizione());
-//		if(c.isPresent())
-//			throw new AcademyException("Cpu già esistente nel database");
-//		
-//		cpu.setDescrizione(req.getDescrizione());
+		if(req.getDescrizione()== null)
+			throw new AcademyException("Descrizione non presente, riprova");
+		Optional<Cpu> c = cpuR.findByDescrizione(req.getDescrizione());
+		if(c.isPresent())
+			throw new AcademyException("Cpu già esistente nel database");
+		
+		cpu.setDescrizione(req.getDescrizione());
 		
 		if(req.getCompatibilita()== null)
 			throw new AcademyException("Compatibilità nulla");
@@ -104,7 +104,7 @@ public class CpuImpl extends Utilities implements ICpuServices{
 		
 		return CpuDTO.builder()
 				.id(c.getId())
-//				.descrizione(c.getDescrizione())
+				.descrizione(c.getDescrizione())
 				.compatibilita(c.getCompatibilita())
 				.consumo(c.getConsumo())
 				.prodotto(buildProdottoDTO(c.getProdotto()))
@@ -119,7 +119,7 @@ public class CpuImpl extends Utilities implements ICpuServices{
 		return lC.stream()
 				.map(c -> CpuDTO.builder()
 						.id(c.getId())
-//						.descrizione(c.getDescrizione())
+						.descrizione(c.getDescrizione())
 						.compatibilita(c.getCompatibilita())
 						.consumo(c.getConsumo())
 						.prodotto(buildProdottoDTO(c.getProdotto()))

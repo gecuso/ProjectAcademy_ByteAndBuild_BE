@@ -6,7 +6,7 @@ import com.betacom.bb.models.Alimentazione;
 
 public interface IAlimentazioneRepository extends JpaRepository<Alimentazione, Integer>{
 
-//	Optional<Alimentazione> findByDescrizione(String descrizione);
+	Optional<Alimentazione> findByDescrizione(String descrizione);
 	
 	
 }

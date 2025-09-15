@@ -32,14 +32,14 @@ public class CaseImpl extends Utilities implements ICaseServices{
 	public void create(CaseReq req) throws AcademyException {
 		log.debug("create: " + req);
 		Case casee = new Case();
-//		Optional<Case> c = caseR.findByDescrizione(req.getDescrizione());
-//		if(c.isPresent())
-//			throw new AcademyException("Case già esistente nel database");
-//		
-//		if(req.getDescrizione().isEmpty())
-//			throw new AcademyException("Descrizione non presente, riprova");
-//		casee.setDescrizione(req.getDescrizione());
-//		
+		Optional<Case> c = caseR.findByDescrizione(req.getDescrizione());
+		if(c.isPresent())
+			throw new AcademyException("Case già esistente nel database");
+		
+		if(req.getDescrizione().isEmpty())
+			throw new AcademyException("Descrizione non presente, riprova");
+		casee.setDescrizione(req.getDescrizione());
+		
 		if(req.getDimensioni().isEmpty())
 			throw new AcademyException("Dimensione non presente, riprova");
 		casee.setDimensioni(req.getDimensioni());
@@ -82,7 +82,7 @@ public class CaseImpl extends Utilities implements ICaseServices{
 		
 		return CaseDTO.builder()
 				.id(c.getId())
-//				.descrizione(c.getDescrizione())
+				.descrizione(c.getDescrizione())
 				.dimensioni(c.getDimensioni())
 				.prodotto(buildProdottoDTO(c.getProdotto()))
 				.formato(buildFormatoDTO(c.getFormato()))
@@ -97,7 +97,7 @@ public class CaseImpl extends Utilities implements ICaseServices{
 		return lC.stream()
 				.map(c -> CaseDTO.builder()
 				.id(c.getId())
-//				.descrizione(c.getDescrizione())
+				.descrizione(c.getDescrizione())
 				.dimensioni(c.getDimensioni())
 				.prodotto(buildProdottoDTO(c.getProdotto()))
 				.formato(buildFormatoDTO(c.getFormato()))

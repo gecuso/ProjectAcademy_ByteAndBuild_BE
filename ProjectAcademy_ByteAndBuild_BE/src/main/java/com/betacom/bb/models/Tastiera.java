@@ -19,10 +19,10 @@ public class Tastiera {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-//	@Column(length = 100,
-//			name = "descrizione",
-//			nullable = false)
-//	private String descrizione;
+	@Column(length = 100,
+			name = "descrizione",
+			nullable = false)
+	private String descrizione;
 	
 	@Column(length = 100,
 			name = "tipologia",

@@ -8,6 +8,6 @@ import com.betacom.bb.models.Laptop;
 
 public interface ILaptopRepository extends JpaRepository<Laptop, Integer>{
 
-//	Optional<Laptop> findByDescrizione(String descrizione);
+	Optional<Laptop> findByDescrizione(String descrizione);
 	
 }

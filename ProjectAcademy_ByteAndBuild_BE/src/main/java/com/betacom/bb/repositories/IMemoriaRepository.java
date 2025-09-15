@@ -8,6 +8,6 @@ import com.betacom.bb.models.Memoria;
 
 public interface IMemoriaRepository extends JpaRepository<Memoria, Integer>{
 
-//	Optional<Memoria> findByDescrizione(String descrizione);
+	Optional<Memoria> findByDescrizione(String descrizione);
 	
 }

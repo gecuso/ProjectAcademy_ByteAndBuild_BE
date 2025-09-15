@@ -8,5 +8,5 @@ import com.betacom.bb.models.Cpu;
 
 public interface ICpuRepository extends JpaRepository<Cpu, Integer> {
 
-//	Optional<Cpu> findByDescrizione(String descrizione);
+	Optional<Cpu> findByDescrizione(String descrizione);
 }
