@@ -7,10 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.betacom.bb.dto.AlimentazioneDTO;
 import com.betacom.bb.dto.SchedaGraficaDTO;
 import com.betacom.bb.exception.AcademyException;
-import com.betacom.bb.models.Alimentazione;
 import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.models.SchedaGrafica;
 import com.betacom.bb.repositories.IProdottoRepository;

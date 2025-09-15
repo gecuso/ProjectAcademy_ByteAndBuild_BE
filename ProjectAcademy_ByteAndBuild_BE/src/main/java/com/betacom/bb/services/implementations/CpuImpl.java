@@ -56,6 +56,8 @@ public class CpuImpl extends Utilities implements ICpuServices{
 		if(req.getIdPc() == null)
 			throw new AcademyException("Prodotto nullo");
 		Optional<Prodotto> p = prodR.findById(req.getIdProdotto());
+		if(p.isEmpty())
+			throw new AcademyException("Prodotto non presente nel database");
 		cpu.setProdotto(p.get());
 		
 		cpuR.save(cpu);

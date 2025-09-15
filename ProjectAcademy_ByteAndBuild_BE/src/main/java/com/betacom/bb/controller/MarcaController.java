@@ -46,10 +46,10 @@ public class MarcaController {
 	}
 	
 	@PostMapping("/update")
-	public ResponseBase update(@RequestBody (required = true) MarcaReq req,@Request(required = true) List<CategoriaReq> lC) {
+	public ResponseBase update(@RequestBody (required = true) MarcaReq req) {
 		ResponseBase r = new ResponseBase();
 		try {
-			marS.insertCategoriaIntoMarca(req, lC);
+			marS.update(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);

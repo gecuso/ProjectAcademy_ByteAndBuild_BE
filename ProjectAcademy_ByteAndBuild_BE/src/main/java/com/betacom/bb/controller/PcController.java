@@ -149,10 +149,10 @@ public class PcController {
 	}
 	
 	@PostMapping("/aumentaQuantita")
-	public ResponseBase aumentaQuantita(@RequestBody (required = true)Integer n,@RequestBody (required = true)  Pc pc) {
+	public ResponseBase aumentaQuantita(@RequestBody (required = true)Integer n,@RequestBody (required = true)  PcReq pcReq) {
 			ResponseBase r = new ResponseBase();
 			try {
-				pcS.aumentaQuantita(n,pc);
+				pcS.aumentaQuantita(n,pcReq);
 				r.setRc(true);
 			} catch (Exception e) {
 				r.setRc(false);
