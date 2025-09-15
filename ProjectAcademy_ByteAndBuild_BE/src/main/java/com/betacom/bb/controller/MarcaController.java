@@ -1,7 +1,5 @@
 package com.betacom.bb.controller;
 
-import java.util.List;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.betacom.bb.dto.MarcaDTO;
-import com.betacom.bb.requests.CategoriaReq;
 import com.betacom.bb.requests.MarcaReq;
 import com.betacom.bb.response.ResponseBase;
 import com.betacom.bb.response.ResponseList;
@@ -46,10 +43,10 @@ public class MarcaController {
 	}
 	
 	@PostMapping("update")
-	public ResponseBase update(@RequestBody (required = true) MarcaReq req, List<CategoriaReq> lC) {
+	public ResponseBase update(@RequestBody (required = true) MarcaReq req) {
 		ResponseBase r = new ResponseBase();
 		try {
-			marS.insertCategoriaIntoMarca(req, lC);
+			marS.update(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);
