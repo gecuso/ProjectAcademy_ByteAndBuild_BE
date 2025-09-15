@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.betacom.bb.dto.MonitorDTO;
+import com.betacom.bb.dto.ProdottoDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Monitor;
 import com.betacom.bb.models.Prodotto;
@@ -15,22 +16,22 @@ import com.betacom.bb.repositories.IMonitorRepository;
 import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.requests.MonitorReq;
 import com.betacom.bb.services.interfaces.IMonitorService;
-import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Service
-public class MonitorImpl extends Utilities implements IMonitorService{
+public class MonitorImpl implements IMonitorService{
 
 	private IMonitorRepository monR;
 	private IProdottoRepository prodR;
-
+	
+	
 	public MonitorImpl(IMonitorRepository monR, IProdottoRepository prodR) {
 		this.monR = monR;
 		this.prodR = prodR;
 	}
-	
+
 	////////////////////////////////
 
 	@Transactional(rollbackFor = Exception.class)
@@ -58,12 +59,10 @@ public class MonitorImpl extends Utilities implements IMonitorService{
 		
 		if(req.getIdProdotto() == null)
 			throw new AcademyException("Id del prodotto non inserito, riprovare");
-		
-		//controllo se esiste il prodotto
-		Optional<Prodotto> prodotto = prodR.findById(req.getIdProdotto());
-		if(prodotto.isEmpty())
-					throw new AcademyException("Prodotto non presente, riprovare");
-		monitor.setProdotto(prodotto.get());
+		Optional<Prodotto> p = prodR.findById(req.getIdProdotto());
+		if(p.isEmpty())
+			throw new AcademyException("Prodotto non presente nel database");
+		monitor.setProdotto(p.get());
 		
 		//salvo nel database
 		monR.save(monitor);
@@ -121,7 +120,9 @@ public class MonitorImpl extends Utilities implements IMonitorService{
 						.risoluzione(mon.getRisoluzione())
 						.latenza(mon.getLatenza())
 						.frequenza(mon.getFrequenza())
-						.prodotto(buildProdottoDTO(mon.getProdotto()))
+						.prodotto(ProdottoDTO.builder()
+								.id(mon.getProdotto().getId())
+								.build())
 						.build()).collect(Collectors.toList());
 	}
 
@@ -141,7 +142,9 @@ public class MonitorImpl extends Utilities implements IMonitorService{
 				.risoluzione(mon.getRisoluzione())
 				.latenza(mon.getLatenza())
 				.frequenza(mon.getFrequenza())
-				.prodotto(buildProdottoDTO(mon.getProdotto()))
+				.prodotto(ProdottoDTO.builder()
+						.id(mon.getProdotto().getId())
+						.build())
 				.build();
 	}	
 	

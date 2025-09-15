@@ -67,7 +67,7 @@ public class SchedaMadreImpl extends Utilities implements ISchedaMadreServices{
 			throw new AcademyException("Formato non presente nel database");
 		smadre.setFormato(f.get());
 		
-		if(req.getIdPc() == null)
+		if(req.getIdProdotto() == null)
 			throw new AcademyException("Prodotto non presente, riprova");
 		Optional<Prodotto> p = prodR.findById(req.getIdProdotto());
 		if(p.isEmpty())
