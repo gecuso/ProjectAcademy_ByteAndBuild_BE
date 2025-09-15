@@ -32,12 +32,13 @@ import com.betacom.bb.repositories.ISchedaMadreRepository;
 import com.betacom.bb.repositories.ISistemaRaffreddamentoRepository;
 import com.betacom.bb.requests.PcReq;
 import com.betacom.bb.services.interfaces.IPcService;
+import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Service
-public class PcImpl implements IPcService{
+public class PcImpl extends Utilities implements IPcService{
 
 	private IPcRepository pcR;
 	private IAlimentazioneRepository alimR;
@@ -78,7 +79,7 @@ public class PcImpl implements IPcService{
 		if(pcReq.getAlimentazione()==null)throw new AcademyException("Alimentazione nulla");
 		if(pcReq.getCasee()==null)throw new AcademyException("case nulla");
 		if(pcReq.getCpu()==null)throw new AcademyException("cpu nulla");
-		if(pcReq.getDescrizione()==null)throw new AcademyException("descrizione nulla");
+//		if(pcReq.getDescrizione()==null)throw new AcademyException("descrizione nulla");
 		if(pcReq.getMemoria()==null)throw new AcademyException("memoria nulla");
 		if(pcReq.getProdotto()==null)throw new AcademyException("prodotto nulla");
 		if(pcReq.getRam()==null)throw new AcademyException("ram nulla");
@@ -113,8 +114,8 @@ public class PcImpl implements IPcService{
 		Optional<SistemaRaffreddamento> sisRaf = sisRafR.findById(pcReq.getProdotto().getId());
 		if(sisRaf.isEmpty())throw new AcademyException("sistema di raffreddamento non esistente");
 		
-		Optional<Pc> m = pcR.findByDescrizione(pcReq.getDescrizione());
-		if(m.isPresent()) throw new AcademyException("pc con descrizione :"+pcReq.getDescrizione()+" è gia esistente ");
+//		Optional<Pc> m = pcR.findByDescrizione(pcReq.getDescrizione());
+//		if(m.isPresent()) throw new AcademyException("pc con descrizione :"+pcReq.getDescrizione()+" è gia esistente ");
 		
 		Pc c = new Pc();
 		
@@ -147,7 +148,7 @@ public class PcImpl implements IPcService{
 		c.setRam(pcReq.getRam());
 		c.setSchedaGrafica(pcReq.getSchedaGrafica());
 		c.setSchedaMadre(pcReq.getSchedaMadre());
-		c.setDescrizione(pcReq.getDescrizione());
+//		c.setDescrizione(pcReq.getDescrizione());
 		c.setProdotto(pcReq.getProdotto());
 		c.setTotConsumo(consumoTot);
 		
@@ -183,25 +184,42 @@ public class PcImpl implements IPcService{
 			m.get().setId(oldId);
 		} catch (Exception e) {
 			throw new AcademyException(e.getMessage());
-		}
-		
-
-		
-		
+		}	
 		
 	}
 	
 	@Override
+	public PcDTO getById(Integer id) throws AcademyException
+	{
+		log.debug("getPc :" + id);
+		Optional<Pc> pcO = pcR.findById(id);
+		
+		if (pcO.isEmpty())
+			throw new AcademyException("pc non trovato in database :" + id);
+		Pc p = pcO.get();
+	
+		return PcDTO.builder()
+				.id(p.getId())
+//				.descrizione(p.getDescrizione())
+				.totConsumo(p.getTotConsumo())
+				.prodotto(buildProdottoDTO(p.getProdotto()))
+				.schedaMadre(buildSchedaMadreDTO(p.getSchedaMadre()))
+				.schedaGrafica(buildSchedaGraficaDTO(p.getSchedaGrafica()))
+				.cpu(buildCpuDTO(p.getCpu()))
+				.ram(buildRamDTO(p.getRam()))
+				.memoria(buildMemoriaDTO(p.getMemoria()))
+				.casee(buildCaseDTO(p.getCasee()))
+				.sistemaRaffreddamento(buildSistemaRaffreddamentoDTO(p.getSistemaRaffreddamento()))
+				.alimentazione(buildAlimentazioneDTO(p.getAlimentazione()))
+				.build();
+	}
+	
+	@Override
 	public List<PcDTO> listAll() throws AcademyException {
+		List<Pc> lp = pcR.findAll();
 		
-		return null;
+		return buildListPcDTO(lp);
 	}
-	public List<Object> list(String str) throws AcademyException {
-		
-		
-		return null;
-	}
-
 
 	@Override
 	public Boolean controlloFormato(String form1, String form2) {
