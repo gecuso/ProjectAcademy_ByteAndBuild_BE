@@ -33,22 +33,22 @@ public class MonitorImpl implements IMonitorService{
 	@Override
 	public void create(MonitorReq req) throws AcademyException {
 		log.debug("create: " + req);
-		Optional<Monitor> mon = monR.findByDescrizione(req.getDescrizione());
-		if(mon.isPresent())
-			throw new AcademyException("Monitor già presente nel database");
-		
+//		Optional<Monitor> mon = monR.findByDescrizione(req.getDescrizione());
+//		if(mon.isPresent())
+//			throw new AcademyException("Monitor già presente nel database");
+//		
 		//controllo dei dati
 		Monitor monitor = new Monitor();
-		if(req.getDescrizione().isEmpty())
-			throw new AcademyException("Descrizione non presente, riprovare");
-		monitor.setDescrizione(req.getDescrizione());
-		if(req.getRisoluzione().isEmpty())
+//		if(req.getDescrizione()==null)
+//			throw new AcademyException("Descrizione non presente, riprovare");
+//		monitor.setDescrizione(req.getDescrizione());
+		if(req.getRisoluzione()==null)
 			throw new AcademyException("Risoluzione non presente, riprovare");
 		monitor.setRisoluzione(req.getRisoluzione());
-		if(req.getLatenza().isEmpty())
+		if(req.getLatenza()==null)
 			throw new AcademyException("Latenza non presente, riprovare");
 		monitor.setLatenza(req.getLatenza());
-		if(req.getFrequenza().isEmpty())
+		if(req.getFrequenza()==null)
 			throw new AcademyException("Frequenza non presente, riprovare");
 		monitor.setFrequenza(req.getFrequenza());
 		
@@ -69,21 +69,18 @@ public class MonitorImpl implements IMonitorService{
 			throw new AcademyException("Monitor non presente nel database");
 		
 		//controllo dei dati
-		Monitor monitor = new Monitor();
-		monitor.setId(mon.get().getId());
+		Monitor monitor = mon.get();
 		//descrizione non può cambiare
-		monitor.setDescrizione(mon.get().getDescrizione());
-		if(req.getRisoluzione().isEmpty())
+//		monitor.setDescrizione(mon.get().getDescrizione());
+		if(req.getRisoluzione()==null)
 			throw new AcademyException("Risoluzione non presente, riprovare");
-		monitor.setDescrizione(req.getRisoluzione());
-		if(req.getLatenza().isEmpty())
+		monitor.setRisoluzione(req.getRisoluzione());
+		if(req.getLatenza()==null)
 			throw new AcademyException("Latenza non presente, riprovare");
 		monitor.setLatenza(req.getLatenza());
-		if(req.getFrequenza().isEmpty())
+		if(req.getFrequenza()==null)
 			throw new AcademyException("Frequenza non presente, riprovare");
 		monitor.setFrequenza(req.getFrequenza());
-		//id prodotto non deve cambiare
-		monitor.setProdotto(mon.get().getProdotto());
 		
 		//update nel database
 		monR.save(monitor);
@@ -111,7 +108,7 @@ public class MonitorImpl implements IMonitorService{
 		return listMonitor.stream()
 				.map(mon -> MonitorDTO.builder()
 						.id(mon.getId())
-						.descrizione(mon.getDescrizione())
+//						.descrizione(mon.getDescrizione())
 						.risoluzione(mon.getRisoluzione())
 						.latenza(mon.getLatenza())
 						.frequenza(mon.getFrequenza())
@@ -133,7 +130,7 @@ public class MonitorImpl implements IMonitorService{
 		Monitor mon = m.get();
 		return MonitorDTO.builder()
 				.id(mon.getId())
-				.descrizione(mon.getDescrizione())
+//				.descrizione(mon.getDescrizione())
 				.risoluzione(mon.getRisoluzione())
 				.latenza(mon.getLatenza())
 				.frequenza(mon.getFrequenza())

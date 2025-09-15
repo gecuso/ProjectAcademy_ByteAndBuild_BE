@@ -3,7 +3,6 @@
         id integer not null auto_increment,
         id_prodotto integer,
         potenza integer not null,
-        descrizione varchar(100) not null,
         primary key (id)
     ) engine=InnoDB;
 
@@ -11,7 +10,6 @@
         id integer not null auto_increment,
         id_formato integer,
         id_prodotto integer,
-        descrizione varchar(100) not null,
         dimensioni varchar(100),
         primary key (id)
     ) engine=InnoDB;
@@ -32,7 +30,6 @@
         id integer not null auto_increment,
         id_prodotto integer,
         compatibilita varchar(100) not null,
-        descrizione varchar(100) not null,
         primary key (id)
     ) engine=InnoDB;
 
@@ -47,7 +44,6 @@
         id integer not null auto_increment,
         id_prodotto integer,
         caratteristiche varchar(100) not null,
-        descrizione varchar(100) not null,
         primary key (id)
     ) engine=InnoDB;
 
@@ -61,14 +57,12 @@
         id integer not null auto_increment,
         id_prodotto integer,
         spazio integer not null,
-        descrizione varchar(100) not null,
         primary key (id)
     ) engine=InnoDB;
 
     create table monitor (
         id integer not null auto_increment,
         id_prodotto integer,
-        descrizione varchar(100) not null,
         frequenza varchar(100) not null,
         latenza varchar(100) not null,
         risoluzione varchar(100) not null,
@@ -79,7 +73,6 @@
         id integer not null auto_increment,
         id_prodotto integer,
         collegamento varchar(100) not null,
-        descrizione varchar(100) not null,
         primary key (id)
     ) engine=InnoDB;
 
@@ -95,7 +88,6 @@
         id_scheda_madre integer,
         id_sistema_raffreddamento integer,
         tot_consumo integer not null,
-        descrizione varchar(100) not null,
         primary key (id)
     ) engine=InnoDB;
 
@@ -115,7 +107,6 @@
         consumo integer not null,
         id integer not null auto_increment,
         id_prodotto integer,
-        descrizione varchar(100) not null,
         primary key (id)
     ) engine=InnoDB;
 
@@ -123,7 +114,6 @@
         consumo integer not null,
         id integer not null auto_increment,
         id_prodotto integer,
-        descrizione varchar(100) not null,
         primary key (id)
     ) engine=InnoDB;
 
@@ -133,7 +123,6 @@
         id_formato integer,
         id_prodotto integer,
         compatibilita varchar(100) not null,
-        descrizione varchar(100) not null,
         primary key (id)
     ) engine=InnoDB;
 
@@ -141,7 +130,6 @@
         consumo integer not null,
         id integer not null auto_increment,
         id_prodotto integer,
-        descrizione varchar(100) not null,
         primary key (id)
     ) engine=InnoDB;
 
@@ -149,7 +137,6 @@
         id integer not null auto_increment,
         id_prodotto integer,
         collegamento varchar(100) not null,
-        descrizione varchar(100) not null,
         tipologia varchar(100) not null,
         primary key (id)
     ) engine=InnoDB;
@@ -157,74 +144,38 @@
     alter table alimentazione 
        add constraint UKlk1frnhdxn80jtdhyfk1h0s2u unique (id_prodotto);
 
-    alter table alimentazione 
-       add constraint UKq4q9p35gc0lk9518ljake6jvb unique (descrizione);
-
     alter table casee 
        add constraint UKgo3orw0mwdoap3amq50hrn3xk unique (id_prodotto);
-
-    alter table casee 
-       add constraint UKidu4sigetyt75h8alyodh87j6 unique (descrizione);
 
     alter table cpu 
        add constraint UKxqg63nqqlvxg1hdk7jjg24ub unique (id_prodotto);
 
-    alter table cpu 
-       add constraint UKg1aiaqqupjo2gbcltyvm9slc9 unique (descrizione);
-
     alter table laptop 
        add constraint UK6vb7425mmfvc3qg7msiesh870 unique (id_prodotto);
-
-    alter table laptop 
-       add constraint UKi5axgppkogpjo6tnuum1690n unique (descrizione);
 
     alter table memoria 
        add constraint UK3mfynf16daxjhg51ij6qay6rk unique (id_prodotto);
 
-    alter table memoria 
-       add constraint UKlqcx86e85olgw1y81ja4pyjx8 unique (descrizione);
-
     alter table monitor 
        add constraint UKnm8fgsmygwbdo60kc9jvpp1jp unique (id_prodotto);
-
-    alter table monitor 
-       add constraint UKmfhl7b6u2nwg2hmxl6etjyoh9 unique (descrizione);
 
     alter table mouse 
        add constraint UKca4mu82y3bcxhfs0bh5levoun unique (id_prodotto);
 
-    alter table mouse 
-       add constraint UKl70q0if90w8h4kfpndpad41w2 unique (descrizione);
-
     alter table pc 
        add constraint UK3v895ypperu2jjqmnybny9bjx unique (id_prodotto);
-
-    alter table pc 
-       add constraint UKmrm7a858o2e2s6peuqq03j4ou unique (descrizione);
 
     alter table ram 
        add constraint UKmdpuem31yj2niayux36i7amhr unique (id_prodotto);
 
-    alter table ram 
-       add constraint UKhhumuwy8ncwpucoh23aivg3uf unique (descrizione);
-
     alter table scheda_grafica 
        add constraint UK4kobty6sbgcb2pixbhl6jor21 unique (id_prodotto);
-
-    alter table scheda_grafica 
-       add constraint UKixvwm88n6j7bx0smc8g98yexb unique (descrizione);
 
     alter table scheda_madre 
        add constraint UKo1tc77cb9trmka4susru0nti1 unique (id_prodotto);
 
-    alter table scheda_madre 
-       add constraint UKjxmdfmyty2q8ps7ob2imj16pt unique (descrizione);
-
     alter table sistema_raffreddamento 
        add constraint UKop6fxv3rx2fd041aqwqq25pet unique (id_prodotto);
-
-    alter table sistema_raffreddamento 
-       add constraint UKrujo0vi40ppxa89t8qrxchb5q unique (descrizione);
 
     alter table tastiera 
        add constraint UK3g3g9pxvmifucp2m05o5jds77 unique (id_prodotto);

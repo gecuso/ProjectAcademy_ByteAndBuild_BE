@@ -9,6 +9,6 @@ import lombok.Data;
 public class MarcaReq {
 	private Integer id;
 	private String descrizione;
-	private Prodotto prodotto;
-	private Categoria categoria;
+//	private Prodotto prodotto;
+	private Integer idCategoria;
 }

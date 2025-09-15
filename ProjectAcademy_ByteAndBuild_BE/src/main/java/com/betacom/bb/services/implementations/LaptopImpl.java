@@ -33,16 +33,16 @@ public class LaptopImpl implements ILaptopService{
 	@Override
 	public void create(LaptopReq req) throws AcademyException {	
 		log.debug("create: " + req);
-		Optional<Laptop> lap = lapR.findByDescrizione(req.getDescrizione());
-		if(lap.isPresent())
-			throw new AcademyException("Laptop già presente nel database");
+//		Optional<Laptop> lap = lapR.findByDescrizione(req.getDescrizione());
+//		if(lap.isPresent())
+//			throw new AcademyException("Laptop già presente nel database");
 		
 		//controllo dei dati
 		Laptop laptop = new Laptop();
-		if(req.getDescrizione().isEmpty())
-			throw new AcademyException("Descrizione non presente, riprovare");
-		laptop.setDescrizione(req.getDescrizione());
-		if(req.getCaratteristiche().isEmpty())
+//		if(req.getDescrizione() == null)
+//			throw new AcademyException("Descrizione non presente, riprovare");
+//		laptop.setDescrizione(req.getDescrizione());
+		if(req.getCaratteristiche() == null)
 			throw new AcademyException("Caratteristiche non presenti, riprovare");
 		laptop.setCaratteristiche(req.getCaratteristiche());
 		if(req.getConsumo() == null || req.getConsumo()<=0)
@@ -70,8 +70,8 @@ public class LaptopImpl implements ILaptopService{
 		Laptop laptop = new Laptop();
 		laptop.setId(lap.get().getId());
 		//descrizione non può cambiare
-		laptop.setDescrizione(lap.get().getDescrizione());
-		if(req.getCaratteristiche().isEmpty())
+//		laptop.setDescrizione(lap.get().getDescrizione());
+		if(req.getCaratteristiche() == null)
 			throw new AcademyException("Caratteristiche non presenti, riprovare");
 		laptop.setCaratteristiche(req.getCaratteristiche());
 		if(req.getConsumo() == null || req.getConsumo()<=0)
@@ -106,7 +106,7 @@ public class LaptopImpl implements ILaptopService{
 		return listLaptop.stream()
 				.map(lap -> LaptopDTO.builder()
 						.id(lap.getId())
-						.descrizione(lap.getDescrizione())
+//						.descrizione(lap.getDescrizione())
 						.caratteristiche(lap.getCaratteristiche())
 						.consumo(lap.getConsumo())
 						.prodotto(ProdottoDTO.builder()
@@ -128,7 +128,7 @@ public class LaptopImpl implements ILaptopService{
 		Laptop lap = l.get();
 		return LaptopDTO.builder()
 				.id(lap.getId())
-				.descrizione(lap.getDescrizione())
+//				.descrizione(lap.getDescrizione())
 				.caratteristiche(lap.getCaratteristiche())
 				.consumo(lap.getConsumo())
 				.prodotto(ProdottoDTO.builder()

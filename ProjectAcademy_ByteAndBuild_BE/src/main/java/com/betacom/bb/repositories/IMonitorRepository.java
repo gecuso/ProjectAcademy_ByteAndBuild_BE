@@ -8,6 +8,6 @@ import com.betacom.bb.models.Monitor;
 
 public interface IMonitorRepository extends JpaRepository<Monitor, Integer>{
 
-	Optional<Monitor> findByDescrizione(String descrizione);
+//	Optional<Monitor> findByDescrizione(String descrizione);
 	
 }

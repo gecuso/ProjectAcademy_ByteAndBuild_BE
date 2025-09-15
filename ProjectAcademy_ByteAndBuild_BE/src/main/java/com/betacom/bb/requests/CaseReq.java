@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class CaseReq {
 	private Integer id;
-	private String descrizione;
+//	private String descrizione;
 	private String dimensioni;
 	private Formato formato;
 	private Prodotto prodotto;

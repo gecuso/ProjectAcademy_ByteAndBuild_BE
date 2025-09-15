@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class SchedaMadreReq {
 	private Integer id;
-	private String descrizione;
+//	private String descrizione;
 	private String compatibilita;
 	private Integer consumo;
 	private Prodotto prodotto;

@@ -37,13 +37,13 @@ public class SistemaRaffreddamentoImpl extends Utilities implements ISistemaRaff
 	public void create(SistemaRaffreddamentoReq req) throws AcademyException {
 		log.debug("create: " + req);
 		SistemaRaffreddamento sys = new SistemaRaffreddamento();
-		Optional<SistemaRaffreddamento> s = sysR.findByDescrizione(req.getDescrizione());
-		if(s.isPresent())
-			throw new AcademyException("Sistema di raffredamento già esistente nel database");
-		
-		if(req.getDescrizione().isEmpty())
-			throw new AcademyException("Descrizione non presente, riprova");
-		sys.setDescrizione(req.getDescrizione());
+//		Optional<SistemaRaffreddamento> s = sysR.findByDescrizione(req.getDescrizione());
+//		if(s.isPresent())
+//			throw new AcademyException("Sistema di raffredamento già esistente nel database");
+//		
+//		if(req.getDescrizione() == null)
+//			throw new AcademyException("Descrizione non presente, riprova");
+//		sys.setDescrizione(req.getDescrizione());
 		
 		if(req.getConsumo() == null || req.getConsumo()<=0)
 			throw new AcademyException("Consumo non presente, riprova");
@@ -101,7 +101,7 @@ public class SistemaRaffreddamentoImpl extends Utilities implements ISistemaRaff
 
 		return SistemaRaffreddamentoDTO.builder()
 				.id(s.getId())
-				.descrizione(s.getDescrizione())
+//				.descrizione(s.getDescrizione())
 				.consumo(s.getConsumo())
 				.prodotto(buildProdottoDTO(s.getProdotto()))
 				.build();
@@ -115,7 +115,7 @@ public class SistemaRaffreddamentoImpl extends Utilities implements ISistemaRaff
 		return lS.stream()
 				.map(s -> SistemaRaffreddamentoDTO.builder()
 						.id(s.getId())
-						.descrizione(s.getDescrizione())
+//						.descrizione(s.getDescrizione())
 						.consumo(s.getConsumo())
 						.prodotto(buildProdottoDTO(s.getProdotto()))
 						.build())

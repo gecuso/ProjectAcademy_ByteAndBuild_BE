@@ -8,6 +8,6 @@ import com.betacom.bb.models.Mouse;
 
 public interface IMouseRepository extends JpaRepository<Mouse, Integer>{
 
-	Optional<Mouse> findByDescrizione(String descrizione);
+//	Optional<Mouse> findByDescrizione(String descrizione);
 	
 }

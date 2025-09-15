@@ -33,16 +33,16 @@ public class MouseImpl implements IMouseService{
 	@Override
 	public void create(MouseReq req) throws AcademyException {
 		log.debug("create: " + req);
-		Optional<Mouse> mou = mouseR.findByDescrizione(req.getDescrizione());
-		if(mou.isPresent())
-			throw new AcademyException("Mouse già presente nel database");
-		
+//		Optional<Mouse> mou = mouseR.findByDescrizione(req.getDescrizione());
+//		if(mou.isPresent())
+//			throw new AcademyException("Mouse già presente nel database");
+//		
 		//controllo dei dati
 		Mouse mouse = new Mouse();
-		if(req.getDescrizione().isEmpty())
-			throw new AcademyException("Descrizione non presente, riprovare");
-		mouse.setDescrizione(req.getDescrizione());
-		if(req.getCollegamento().isEmpty())
+//		if(req.getDescrizione() == null)
+//			throw new AcademyException("Descrizione non presente, riprovare");
+//		mouse.setDescrizione(req.getDescrizione());
+		if(req.getCollegamento() == null)
 			throw new AcademyException("Collegamento non presente, riprovare");
 		mouse.setCollegamento(req.getCollegamento());
 		
@@ -58,7 +58,7 @@ public class MouseImpl implements IMouseService{
 	@Override
 	public void update(MouseReq req) throws AcademyException {
 		log.debug("create: " + req);
-		Optional<Mouse> mou = mouseR.findByDescrizione(req.getDescrizione());
+		Optional<Mouse> mou = mouseR.findById(req.getId());
 		if(mou.isEmpty())
 			throw new AcademyException("Mouse non presente nel database");
 		
@@ -66,8 +66,8 @@ public class MouseImpl implements IMouseService{
 		Mouse mouse = new Mouse();
 		mouse.setId(mou.get().getId());
 		//descrizione non può cambiare
-		mouse.setDescrizione(mou.get().getDescrizione());
-		if(req.getCollegamento().isEmpty())
+//		mouse.setDescrizione(mou.get().getDescrizione());
+		if(req.getCollegamento() == null)
 			throw new AcademyException("Collegamento non presente, riprovare");
 		mouse.setCollegamento(req.getCollegamento());
 		//id prodotto non deve cambiare
@@ -81,7 +81,7 @@ public class MouseImpl implements IMouseService{
 	@Override
 	public void delete(MouseReq req) throws AcademyException {
 		log.debug("create: " + req);
-		Optional<Mouse> mou = mouseR.findByDescrizione(req.getDescrizione());
+		Optional<Mouse> mou = mouseR.findById(req.getId());
 		if(mou.isEmpty())
 			throw new AcademyException("Mouse non presente nel database");
 		
@@ -99,7 +99,7 @@ public class MouseImpl implements IMouseService{
 		return listMouse.stream()
 				.map(mou -> MouseDTO.builder()
 						.id(mou.getId())
-						.descrizione(mou.getDescrizione())
+//						.descrizione(mou.getDescrizione())
 						.collegamento(mou.getCollegamento())
 						.prodotto(ProdottoDTO.builder()
 								.id(mou.getProdotto().getId())
@@ -120,7 +120,7 @@ public class MouseImpl implements IMouseService{
 		Mouse mou = m.get();
 		return MouseDTO.builder()
 				.id(mou.getId())
-				.descrizione(mou.getDescrizione())
+//				.descrizione(mou.getDescrizione())
 				.collegamento(mou.getCollegamento())
 				.prodotto(ProdottoDTO.builder()
 						.id(mou.getProdotto().getId())
