@@ -339,5 +339,25 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 						.build())
 				.collect(Collectors.toList());
 	}
+	
+	
+	@Override
+	public List<ProdottoDTO> listAllByIdCategoria(Integer idCategoria) {
+		log.debug("list all by id categoria: " + idCategoria);
+		List<Prodotto> lP = prodR.findAllByCategoria(idCategoria);
+		
+		return lP.stream()
+				.map(p -> ProdottoDTO.builder()
+						.id(p.getId())
+						.descrizione(p.getDescrizione())
+						.costo(p.getCosto())
+						.prezzo(p.getPrezzo())
+						.quantita(p.getQuantita())
+						.img(p.getImg())
+						.categoria(buildCategoriaDTO(p.getCategoria()))
+						.marca(buildMarcaDTO(p.getMarca()))
+						.build())
+				.collect(Collectors.toList());
+	}
 }
 	

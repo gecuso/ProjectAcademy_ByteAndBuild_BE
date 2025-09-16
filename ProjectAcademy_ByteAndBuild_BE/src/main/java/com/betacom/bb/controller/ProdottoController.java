@@ -1,5 +1,6 @@
 package com.betacom.bb.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import com.betacom.bb.response.ResponseList;
 import com.betacom.bb.response.ResponseObject;
 import com.betacom.bb.services.interfaces.IProdottoServices;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/rest/prodotto")
 public class ProdottoController {
@@ -83,6 +85,18 @@ public class ProdottoController {
 		ResponseList<ProdottoDTO> r = new ResponseList<ProdottoDTO>();
 		try {
 			r.setDati(prodS.listAll());
+		}catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	@GetMapping("/listAllByIdCategoria")
+	public ResponseList<ProdottoDTO> listAllByIdCategoria(@RequestParam (required = true) Integer id ){
+		ResponseList<ProdottoDTO> r = new ResponseList<ProdottoDTO>();
+		try {
+			r.setDati(prodS.listAllByIdCategoria(id));
 		}catch (Exception e) {
 			r.setRc(false);
 			r.setMsg(e.getMessage());

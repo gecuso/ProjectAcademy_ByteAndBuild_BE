@@ -15,6 +15,8 @@ public interface IProdottoServices {
 	ProdottoDTO getById(Integer id) throws AcademyException;
 
 	List<ProdottoDTO> listAll();
+	
+	List<ProdottoDTO> listAllByIdCategoria(Integer id);
 
 	
 
