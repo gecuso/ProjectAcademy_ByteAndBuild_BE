@@ -142,3 +142,5 @@
     drop table if exists sistema_raffreddamento;
 
     drop table if exists tastiera;
+
+    drop table if exists utente_jpa;

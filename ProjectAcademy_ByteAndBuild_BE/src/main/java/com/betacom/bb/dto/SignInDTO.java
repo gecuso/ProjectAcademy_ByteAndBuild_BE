@@ -14,4 +14,5 @@ public class SignInDTO {
 	private Integer id;
 	private Boolean logged;
 	private String  role;
+	private UtenteDTO utente;  
 }

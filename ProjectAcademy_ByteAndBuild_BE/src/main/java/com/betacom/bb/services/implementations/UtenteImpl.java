@@ -38,6 +38,8 @@ public class UtenteImpl implements IUtenteServices{
 		ut.setUserName(req.getUserName());
 		ut.setPwd(req.getPwd());
 		ut.setEmail(req.getEmail());
+		ut.setIndirizzo(req.getIndirizzo());
+		ut.setTelefono(req.getTelefono());
 		ut.setRole(Roles.valueOf(req.getRole()));
 		
 		utenR.save(ut);
@@ -56,6 +58,10 @@ public class UtenteImpl implements IUtenteServices{
 			u.get().setRole(Roles.valueOf(req.getRole()));
 		if (req.getEmail() != null)
 			u.get().setEmail(req.getEmail());
+		if (req.getIndirizzo() != null)
+			u.get().setIndirizzo(req.getIndirizzo());
+		if (req.getTelefono() != null)
+			u.get().setTelefono(req.getTelefono());
 
 		utenR.save(u.get());
 	}
@@ -73,6 +79,8 @@ public class UtenteImpl implements IUtenteServices{
 				.userName(u.get().getUserName())
 				.pwd(u.get().getPwd())
 				.email(u.get().getEmail())
+				.indirizzo(u.get().getIndirizzo())
+				.telefono(u.get().getTelefono())
 				.role(u.get().getRole().toString())
 				.build();
 	}
@@ -87,6 +95,8 @@ public class UtenteImpl implements IUtenteServices{
 						.userName(u.getUserName())
 						.pwd(u.getPwd())
 						.email(u.getEmail())
+						.indirizzo(u.getIndirizzo())
+						.telefono(u.getTelefono())
 						.role(u.getRole().toString())
 						.build())
 				.collect(Collectors.toList());
@@ -105,6 +115,8 @@ public class UtenteImpl implements IUtenteServices{
 				.userName(u.get().getUserName())
 				.pwd(u.get().getPwd())
 				.email(u.get().getEmail())
+				.indirizzo(u.get().getIndirizzo())
+				.telefono(u.get().getTelefono())
 				.role(u.get().getRole().toString())
 				.build();
 	}
@@ -112,19 +124,33 @@ public class UtenteImpl implements IUtenteServices{
 
 	@Override
 	public SignInDTO signIn(SignInReq req) {
-		log.debug("signIn:" + req);
-		SignInDTO r = new SignInDTO();
-		Optional<Utente> u = utenR.findByUserNameAndPwd(req.getUser(), req.getPwd());
-		if (u.isEmpty()) {
-			r.setLogged(false);
-		} else {
-			r.setId(u.get().getId());
-			r.setLogged(true);
-			r.setRole(u.get().getRole().toString());
-		}
-		
-		return r;
+	    log.debug("signIn:" + req);
+	    SignInDTO r = new SignInDTO();
+	    Optional<Utente> u = utenR.findByUserNameAndPwd(req.getUser(), req.getPwd());
+	    if (u.isEmpty()) {
+	        r.setLogged(false);
+	    } else {
+	        Utente utenteEntity = u.get();
+	        r.setId(utenteEntity.getId());
+	        r.setLogged(true);
+	        r.setRole(utenteEntity.getRole().toString());
+
+	        UtenteDTO utenteDTO = UtenteDTO.builder()
+	            .id(utenteEntity.getId())
+	            .userName(utenteEntity.getUserName())
+	            .pwd(utenteEntity.getPwd())
+	            .email(utenteEntity.getEmail())
+	            .indirizzo(utenteEntity.getIndirizzo())
+	            .telefono(utenteEntity.getTelefono())
+	            .role(utenteEntity.getRole().toString())
+	            .build();
+
+	        r.setUtente(utenteDTO);
+	    }
+
+	    return r;
 	}
+
 
 
 }

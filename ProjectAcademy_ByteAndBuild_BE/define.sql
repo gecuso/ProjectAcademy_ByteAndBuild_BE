@@ -154,6 +154,17 @@
         primary key (id)
     ) engine=InnoDB;
 
+    create table utente_jpa (
+        id integer not null auto_increment,
+        role tinyint check (role between 0 and 2),
+        email varchar(255),
+        indirizzo varchar(255),
+        pwd varchar(255),
+        telefono varchar(255),
+        user_name varchar(255),
+        primary key (id)
+    ) engine=InnoDB;
+
     alter table alimentazione 
        add constraint UKlk1frnhdxn80jtdhyfk1h0s2u unique (id_prodotto);
 
