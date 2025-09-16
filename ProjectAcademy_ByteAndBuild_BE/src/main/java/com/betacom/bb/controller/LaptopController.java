@@ -94,6 +94,20 @@ public class LaptopController {
 			r.setMsg(e.getMessage());
 		}
 		return r;	
-	}	
+	}
+	
+	@GetMapping("/listLaptops")
+	public ResponseList<String> findAllLaptops() {
+		ResponseList<String> r = new ResponseList<String>();
+		try {
+			r.setDati(laptS.listaDescrizioniLaptop());
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
 
 }

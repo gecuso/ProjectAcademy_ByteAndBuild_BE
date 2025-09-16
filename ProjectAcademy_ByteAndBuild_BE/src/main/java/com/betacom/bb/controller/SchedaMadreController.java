@@ -88,4 +88,19 @@ public class SchedaMadreController {
 		}
 		return r;
 	}
+	
+	@GetMapping("/listSchedeMadri")
+	public ResponseList<String> findAllSchedeMadri() {
+		ResponseList<String> r = new ResponseList<String>();
+		try {
+			r.setDati(smS.listaDescrizioniSchedeMadri());
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	
 }

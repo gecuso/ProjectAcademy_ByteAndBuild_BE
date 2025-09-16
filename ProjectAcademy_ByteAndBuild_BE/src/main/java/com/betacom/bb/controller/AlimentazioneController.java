@@ -88,4 +88,19 @@ public class AlimentazioneController {
 		}
 		return r;
 	}
+	
+	@GetMapping("/listAlimentazioni")
+	public ResponseList<String> findAllAlimentazioni() {
+		ResponseList<String> r = new ResponseList<String>();
+		try {
+			r.setDati(alimS.listaDescrizioniAlimentazioni());
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+
 }

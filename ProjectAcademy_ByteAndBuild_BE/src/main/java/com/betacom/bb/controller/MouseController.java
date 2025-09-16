@@ -95,4 +95,17 @@ public class MouseController {
 		return r;	
 	}
 	
+	@GetMapping("/listMouses")
+	public ResponseList<String> findAllMouses() {
+		ResponseList<String> r = new ResponseList<String>();
+		try {
+			r.setDati(mouS.listaDescrizioniMouse());
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
 }

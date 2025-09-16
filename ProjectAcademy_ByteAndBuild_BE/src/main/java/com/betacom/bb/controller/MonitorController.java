@@ -94,5 +94,18 @@ public class MonitorController {
 		}
 		return r;	
 	}
+	
+	@GetMapping("/listMonitors")
+	public ResponseList<String> findAllMonitors() {
+		ResponseList<String> r = new ResponseList<String>();
+		try {
+			r.setDati(monS.listaDescrizioniMonitors());
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 		
 }

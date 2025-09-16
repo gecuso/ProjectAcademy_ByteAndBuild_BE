@@ -94,5 +94,18 @@ public class MemoriaController {
 		}
 		return r;	
 	}
+	
+	@GetMapping("/listMemorie")
+	public ResponseList<String> findAllMemorie() {
+		ResponseList<String> r = new ResponseList<String>();
+		try {
+			r.setDati(memS.listaDescrizioniMemorie());
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 		
 }

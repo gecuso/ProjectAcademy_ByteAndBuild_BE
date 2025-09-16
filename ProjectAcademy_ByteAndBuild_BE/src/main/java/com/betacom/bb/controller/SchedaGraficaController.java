@@ -89,4 +89,19 @@ public class SchedaGraficaController {
 		}
 		return r;
 	}
+	
+	@GetMapping("/listSchedeGrafiche")
+	public ResponseList<String> findAllSchedeGrafiche() {
+		ResponseList<String> r = new ResponseList<String>();
+		try {
+			r.setDati(sgS.listaDescrizioniSchedeGrafiche());
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	
 }

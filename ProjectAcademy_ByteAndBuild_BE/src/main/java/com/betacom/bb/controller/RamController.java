@@ -88,4 +88,19 @@ public class RamController {
 		}
 		return r;
 	}
+	
+	@GetMapping("/listRams")
+	public ResponseList<String> findAllRams() {
+		ResponseList<String> r = new ResponseList<String>();
+		try {
+			r.setDati(ramS.listaDescrizioniRam());
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	
 }

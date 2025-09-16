@@ -90,4 +90,18 @@ public class TastieraController {
 		}
 		return r;	
 	}
+	
+	@GetMapping("/listTastiere")
+	public ResponseList<String> findAllTastiere() {
+		ResponseList<String> r = new ResponseList<String>();
+		try {
+			r.setDati(tS.listaDescrizioniTastiere());
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
 }

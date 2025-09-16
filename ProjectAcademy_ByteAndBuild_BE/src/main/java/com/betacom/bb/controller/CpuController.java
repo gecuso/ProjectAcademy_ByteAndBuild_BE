@@ -88,4 +88,20 @@ public class CpuController {
 		}
 		return r;
 	}
+	
+	@GetMapping("/listCpus")
+	public ResponseList<String> findAllCpus() {
+		ResponseList<String> r = new ResponseList<String>();
+		try {
+			r.setDati(cpuS.listaDescrizioniCpus());
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	
+	
 }

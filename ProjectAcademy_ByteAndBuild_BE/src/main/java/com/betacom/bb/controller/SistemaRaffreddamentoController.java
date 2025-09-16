@@ -88,4 +88,18 @@ public class SistemaRaffreddamentoController {
 		}
 		return r;
 	}
+	
+	@GetMapping("/listRaffreddamenti")
+	public ResponseList<String> findAllRaffreddamenti() {
+		ResponseList<String> r = new ResponseList<String>();
+		try {
+			r.setDati(srS.listaDescrizioniSistemiRaffreddamento());
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
 }
