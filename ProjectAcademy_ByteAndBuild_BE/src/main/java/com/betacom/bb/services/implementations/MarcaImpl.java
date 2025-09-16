@@ -98,21 +98,27 @@ public class MarcaImpl extends Utilities implements IMarcaService{
 		if(categoria.isEmpty())
 			throw new AcademyException("Categoria non presente o non accettabile, riprovare");
 
-		//controllo se esiste già la marca uguale
-		Optional<List<Marca>> marcheUsate = marcaR.findAllByDescrizione(req.getDescrizione());
-		if(!marcheUsate.isEmpty()) {
-			//controllo se usate gia quella categoria
-			for(int i=0; i<marcheUsate.get().size(); i++) {
-				//controllo se la marca(i) ha categoria già usata
-				if(marcheUsate.get().get(i).getCategoria().get(0).getId().equals(req.getIdCategoria())) {
-					throw new AcademyException("Categoria già usata con questa marca, evita duplicati...");
-				}
-			}
-		}
-		
 		//CONTROLLA CHE FUNZIONI QUESTA PARTE
-		List<Categoria> salvaCategoria = new ArrayList<Categoria>();
-		salvaCategoria.add(cateR.findById(req.getIdCategoria()).get()); //già controllato sopra
+		List<Categoria> salvaCategoria = mar.get().getCategoria();
+		
+		if(salvaCategoria.contains(categoria.get()))
+			throw new AcademyException("Categoria già usata con questa marca, evita duplicati...");
+		salvaCategoria.add(categoria.get()); //già controllato sopra
+		
+		
+//		//controllo se esiste già la marca uguale
+//		Optional<List<Marca>> marcheUsate = marcaR.findAllByDescrizione(req.getDescrizione());
+//		if(!marcheUsate.isEmpty()) {
+//			//controllo se usate gia quella categoria
+//			for(int i=0; i<marcheUsate.get().size(); i++) {
+//				//controllo se la marca(i) ha categoria già usata
+//				if(marcheUsate.get().get(i).getCategoria().get(0).getId().equals(req.getIdCategoria())) {
+//					throw new AcademyException("Categoria già usata con questa marca, evita duplicati...");
+//				}
+//				salvaCategoria.add(marcheUsate.get().get(i).getCategoria().get(0));
+//			}
+//		}
+		
 		marca.setCategoria(salvaCategoria);
 		
 		//update nel database

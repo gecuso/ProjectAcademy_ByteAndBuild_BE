@@ -111,7 +111,7 @@ public class PcImpl extends Utilities implements IPcService{
 		Optional<SchedaMadre> schmdr = schMdrR.findById(pcReq.getIdSchedaMadre());
 		if(schmdr.isEmpty())throw new AcademyException("scheda madre non esistente");
 
-		Optional<SistemaRaffreddamento> sisRaf = sisRafR.findById(pcReq.getIdProdotto());
+		Optional<SistemaRaffreddamento> sisRaf = sisRafR.findById(pcReq.getIdSistemaRaffreddamento());
 		if(sisRaf.isEmpty())throw new AcademyException("sistema di raffreddamento non esistente");
 		
 		Optional<Pc> m = pcR.findByDescrizione(pcReq.getDescrizione());
@@ -119,15 +119,15 @@ public class PcImpl extends Utilities implements IPcService{
 		
 		Pc c = new Pc();
 		
-		if(!controlloFormato(schMdrR.getById(pcReq.getIdSchedaMadre()).getDescrizione(), caseR.getById(pcReq.getIdCase()).getDescrizione()))
+		if(!controlloFormato(schMdrR.getById(pcReq.getIdSchedaMadre()).getFormato().getDescrizione(), caseR.getById(pcReq.getIdCase()).getFormato().getDescrizione()))
 		{
 			throw new AcademyException("case e scheda madre incompatibili, formati diversi");
 		}
-		if(!controlloCompatibilita(schMdrR.getById(pcReq.getIdSchedaMadre()).getDescrizione(), cpuR.getById(pcReq.getIdCpu()).getDescrizione()))
+		if(!controlloCompatibilita(schMdrR.getById(pcReq.getIdSchedaMadre()).getCompatibilita(), cpuR.getById(pcReq.getIdCpu()).getCompatibilita()))
 		{
 			throw new AcademyException("Processore e scheda madre incompatibili, compatibilità diverse");
 		}
-		if(!controlloAlimentazione(pcReq))
+		if(controlloAlimentazione(pcReq))
 		{
 			throw new AcademyException("gli elementi consumano troppa potenza, scegliere un alimentatore piu potente");
 		}
@@ -152,10 +152,17 @@ public class PcImpl extends Utilities implements IPcService{
 		c.setProdotto(prod.get());
 		c.setTotConsumo(consumoTot);
 		
+		Integer costoTot= alim.get().getProdotto().getCosto() + casee.get().getProdotto().getCosto() + cpu.get().getProdotto().getCosto() +
+						  mem.get().getProdotto().getCosto() + sisRaf.get().getProdotto().getCosto() + ram.get().getProdotto().getCosto() +
+						  schgraf.get().getProdotto().getCosto() + schmdr.get().getProdotto().getCosto();
+
+
+		prod.get().setCosto(consumoTot);
 		
 		return pcR.save(c).getId();
 	}
-
+	
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void delete(PcReq pcReq) throws AcademyException {
 		Optional<Pc> m = pcR.findById(pcReq.getId());
@@ -169,6 +176,7 @@ public class PcImpl extends Utilities implements IPcService{
 		pcR.delete(m.get());	
 	}
 	
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void update(PcReq pcReq) throws AcademyException {
 		if(pcReq.getId()==null) throw new AcademyException("necessario l'id del pc per modificarlo");
@@ -176,12 +184,75 @@ public class PcImpl extends Utilities implements IPcService{
 		Integer oldId=pcReq.getId();
 		if(!m.isPresent()) throw new AcademyException("pc non esistente");
 		
+		if(pcReq.getIdAlimentazione()==null)throw new AcademyException("Alimentazione nulla");
+		if(pcReq.getIdCase()==null)throw new AcademyException("case nulla");
+		if(pcReq.getIdCpu()==null)throw new AcademyException("cpu nulla");
+		if(pcReq.getDescrizione()==null)throw new AcademyException("descrizione nulla");
+		if(pcReq.getIdMemoria()==null)throw new AcademyException("memoria nulla");
+		if(pcReq.getIdProdotto()==null)throw new AcademyException("prodotto nulla");
+		if(pcReq.getIdRam()==null)throw new AcademyException("ram nulla");
+		if(pcReq.getIdSchedaGrafica()==null)throw new AcademyException("scheda grafica nulla");
+		if(pcReq.getIdSchedaMadre()==null)throw new AcademyException("scheda madre nulla");
+		if(pcReq.getIdSistemaRaffreddamento()==null)throw new AcademyException("sistema di raffreddamento nulla");
+		
+		Optional<Alimentazione> alim = alimR.findById(pcReq.getIdAlimentazione());
+		if(alim.isEmpty())throw new AcademyException("alimentazione non esistente");
+		
+		Optional<Case> casee = caseR.findById(pcReq.getIdCase());
+		if(casee.isEmpty())throw new AcademyException("case non esistente");
+		
+		Optional<Cpu> cpu = cpuR.findById(pcReq.getIdCpu());
+		if(cpu.isEmpty())throw new AcademyException("cpu non esistente");
+		
+		Optional<Memoria> mem = memR.findById(pcReq.getIdMemoria());
+		if(mem.isEmpty())throw new AcademyException("memoria non esistente");
+		
+		Optional<Prodotto> prod = prodR.findById(pcReq.getIdProdotto());
+		if(prod.isEmpty())throw new AcademyException("prodotto non esistente");
+
+		Optional<Ram> ram = ramR.findById(pcReq.getIdRam());
+		if(ram.isEmpty())throw new AcademyException("ram non esistente");
+
+		Optional<SchedaGrafica> schgraf = schgrfR.findById(pcReq.getIdSchedaGrafica());
+		if(schgraf.isEmpty())throw new AcademyException("scheda grafica non esistente");
+
+		Optional<SchedaMadre> schmdr = schMdrR.findById(pcReq.getIdSchedaMadre());
+		if(schmdr.isEmpty())throw new AcademyException("scheda madre non esistente");
+
+		Optional<SistemaRaffreddamento> sisRaf = sisRafR.findById(pcReq.getIdSistemaRaffreddamento());
+		if(sisRaf.isEmpty())throw new AcademyException("sistema di raffreddamento non esistente");
+		
+		if(!controlloFormato(schMdrR.getById(pcReq.getIdSchedaMadre()).getFormato().getDescrizione(), caseR.getById(pcReq.getIdCase()).getFormato().getDescrizione()))
+		{
+			throw new AcademyException("case e scheda madre incompatibili, formati diversi");
+		}
+		if(!controlloCompatibilita(schMdrR.getById(pcReq.getIdSchedaMadre()).getCompatibilita(), cpuR.getById(pcReq.getIdCpu()).getCompatibilita()))
+		{
+			throw new AcademyException("Processore e scheda madre incompatibili, compatibilità diverse");
+		}
+		if(controlloAlimentazione(pcReq))
+		{
+			throw new AcademyException("gli elementi consumano troppa potenza, scegliere un alimentatore piu potente");
+		}
+		if(controlloQuantita(prodR.getById(pcReq.getIdProdotto()).getQuantita(),pcReq))
+		{
+			riduciQuantita(prodR.getById(pcReq.getIdProdotto()).getQuantita(),pcReq);
+		}
+		else throw new AcademyException("elementi non sufficienti");
+
+		
 		try {
 			aumentaQuantita(m.get().getProdotto().getQuantita(), pcReq);
-			Integer newId = create(pcReq);
+			List<Pc> lp = pcR.findAll();
+			for (Pc pc : lp) {
+				if(pc.getDescrizione().equalsIgnoreCase(pcReq.getDescrizione()) && pc.getId() != oldId)
+					throw new AcademyException("Esiste già un PC con questa descrione");
+			}
 			pcR.delete(m.get());
+			Integer newId = create(pcReq);
 			m = pcR.findById(newId);
 			m.get().setId(oldId);
+			pcR.save(m.get());
 		} catch (Exception e) {
 			throw new AcademyException(e.getMessage());
 		}	
@@ -278,7 +349,9 @@ public class PcImpl extends Utilities implements IPcService{
 		
 		consumoTot=(int) (consumoTot*1.5);
 		
-		return consumoTot<alimR.getById(pcReq.getIdAlimentazione()).getPotenza();
+		log.debug("consumotot: "+consumoTot);
+		
+		return consumoTot>alimR.getById(pcReq.getIdAlimentazione()).getPotenza();
 	} 
 	@Override
 	public void riduciQuantita(Integer n,PcReq pcReq)

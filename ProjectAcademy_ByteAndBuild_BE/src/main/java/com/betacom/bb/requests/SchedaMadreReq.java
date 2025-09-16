@@ -10,6 +10,6 @@ public class SchedaMadreReq {
 	private Integer consumo;
 	private Integer idProdotto;
 	private Integer idFormato;
-	private Integer idPc;
+//	private Integer idPc;
 
 }

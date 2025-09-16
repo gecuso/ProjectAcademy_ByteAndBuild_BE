@@ -7,7 +7,7 @@ public class PcReq {
 
 	private Integer id;
 	private String descrizione;
-	private Integer totConsumo;
+//	private Integer totConsumo;
 	private Integer idProdotto;
 	////////////////////////////////
 	

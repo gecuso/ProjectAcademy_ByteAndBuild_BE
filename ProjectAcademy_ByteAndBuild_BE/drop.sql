@@ -13,11 +13,11 @@
 
     alter table categoria_marca 
        drop 
-       foreign key FKnhfxbxnxb54pr4edrldnj9vmr;
+       foreign key FKj75t71e5l5xa8shw2emf7wuf2;
 
     alter table categoria_marca 
        drop 
-       foreign key FKdd7nib3ab5xa5elnwl75279ui;
+       foreign key FKctbxfahjgsv3qndcb8xrsrtis;
 
     alter table cpu 
        drop 

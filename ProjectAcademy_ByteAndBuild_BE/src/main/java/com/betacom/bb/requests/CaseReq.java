@@ -9,6 +9,6 @@ public class CaseReq {
 	private String dimensioni;
 	private Integer idFormato;
 	private Integer idProdotto;
-	private Integer idPc;
+//	private Integer idPc;
 
 }
