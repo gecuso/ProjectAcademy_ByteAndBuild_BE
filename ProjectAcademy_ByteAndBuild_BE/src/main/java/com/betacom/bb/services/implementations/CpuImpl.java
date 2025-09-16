@@ -1,5 +1,6 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -134,4 +135,25 @@ public class CpuImpl extends Utilities implements ICpuServices{
 						.build())
 				.collect(Collectors.toList());
 	}
+
+	@Override
+	public List<String> listaDescrizioniCpus() throws AcademyException {
+		log.debug("listaDescrizioniCpus, no duplicati");
+		
+		//recupero tutte le alimentazioni
+		List<Cpu> cpus= cpuR.findAll();
+		
+		//inserisco tutte le alimetazioni in una lista
+		List<String> tutteLeCpu = new ArrayList<String>();
+		for (Cpu cpu : cpus) {
+			if(!tutteLeCpu.contains(cpu.getDescrizione())){
+				tutteLeCpu.add(cpu.getDescrizione());
+			}
+		}
+		
+		//mando in output
+		return tutteLeCpu;	
+	}
+	
+	
 }

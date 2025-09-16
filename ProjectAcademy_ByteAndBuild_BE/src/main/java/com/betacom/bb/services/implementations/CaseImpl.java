@@ -1,5 +1,6 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -122,4 +123,25 @@ public class CaseImpl extends Utilities implements ICaseServices{
 				.build())
 				.collect(Collectors.toList());
 	}
+	
+	@Override
+	public List<String> listaDescrizioniCases() throws AcademyException {
+		log.debug("listaDescrizioniCase, no duplicati");
+		
+		//recupero tutte le alimentazioni
+		List<Case> cases = caseR.findAll();
+		
+		//inserisco tutte le alimetazioni in una lista
+		List<String> tutteICase = new ArrayList<String>();
+		for (Case casee : cases) {
+			if(!tutteICase.contains(casee.getDescrizione())){
+				tutteICase.add(casee.getDescrizione());
+			}
+		}
+		
+		//mando in output
+		return tutteICase;
+	}
+		
+	
 }

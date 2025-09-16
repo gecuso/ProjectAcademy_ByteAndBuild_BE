@@ -14,4 +14,7 @@ public interface IRamServices {
 	
 	RamDTO getById(Integer id) throws AcademyException;
 	List<RamDTO> listAll();
+	
+	List<String> listaDescrizioniRam() throws AcademyException;
+	
 }

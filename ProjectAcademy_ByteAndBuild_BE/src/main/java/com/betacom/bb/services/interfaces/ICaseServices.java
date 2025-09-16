@@ -14,4 +14,7 @@ public interface ICaseServices {
 	
 	CaseDTO getById(Integer id) throws AcademyException;
 	List<CaseDTO> listAll();
+	
+	List<String> listaDescrizioniCases() throws AcademyException;
+	
 }

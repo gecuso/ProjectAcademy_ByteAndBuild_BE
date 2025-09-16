@@ -1,5 +1,6 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -124,4 +125,25 @@ public class AlimentazioneImpl extends Utilities implements IAlimentazioneServic
 						.build())
 				.collect(Collectors.toList());
 	}
+	
+	@Override
+	public List<String> listaDescrizioniAlimentazioni() throws AcademyException {
+		log.debug("listaDescrizioniAlimentazione, no duplicati");
+		
+		//recupero tutte le alimentazioni
+		List<Alimentazione> alimentazioni = alimR.findAll();
+		
+		//inserisco tutte le alimetazioni in una lista
+		List<String> tutteLeAlimentazioni = new ArrayList<String>();
+		for (Alimentazione alimentazione : alimentazioni) {
+			if(!tutteLeAlimentazioni.contains(alimentazione.getDescrizione())){
+				tutteLeAlimentazioni.add(alimentazione.getDescrizione());
+			}
+		}
+		
+		//mando in output
+		return tutteLeAlimentazioni;
+	}
+		
+	
 }

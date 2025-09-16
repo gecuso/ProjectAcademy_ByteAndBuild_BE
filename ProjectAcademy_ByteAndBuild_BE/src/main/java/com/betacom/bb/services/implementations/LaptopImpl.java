@@ -1,5 +1,6 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -142,7 +143,24 @@ public class LaptopImpl extends Utilities implements ILaptopService{
 				.build();
 	}
 	
-	
+	@Override
+	public List<String> listaDescrizioniLaptop() throws AcademyException {
+		log.debug("listaDescrizioniLaptops, no duplicati");
+		
+		//recupero tutte le alimentazioni
+		List<Laptop> laptops= lapR.findAll();
+		
+		//inserisco tutte le alimetazioni in una lista
+		List<String> tutteILaptop = new ArrayList<String>();
+		for (Laptop laptop : laptops) {
+			if(!tutteILaptop.contains(laptop.getDescrizione())){
+				tutteILaptop.add(laptop.getDescrizione());
+			}
+		}
+		
+		//mando in output
+		return tutteILaptop;	
+	}
 	
 	
 	

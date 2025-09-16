@@ -1,5 +1,6 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -7,13 +8,9 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.betacom.bb.dto.AlimentazioneDTO;
-import com.betacom.bb.dto.SchedaMadreDTO;
 import com.betacom.bb.dto.SistemaRaffreddamentoDTO;
 import com.betacom.bb.exception.AcademyException;
-import com.betacom.bb.models.Alimentazione;
 import com.betacom.bb.models.Prodotto;
-import com.betacom.bb.models.SchedaMadre;
 import com.betacom.bb.models.SistemaRaffreddamento;
 import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.repositories.ISistemaRaffreddamentoRepository;
@@ -128,4 +125,25 @@ public class SistemaRaffreddamentoImpl extends Utilities implements ISistemaRaff
 						.build())
 				.collect(Collectors.toList());
 	}
+	
+	@Override
+	public List<String> listaDescrizioniSistemiRaffreddamento() throws AcademyException {
+		log.debug("listaDescrizioniSistemiDiRaffreddamento, no duplicati");
+		
+		//recupero tutte le alimentazioni
+		List<SistemaRaffreddamento> raffreddamenti = sysR.findAll();
+		
+		//inserisco tutte le alimetazioni in una lista
+		List<String> tuttiIRaffreddamenti = new ArrayList<String>();
+		for (SistemaRaffreddamento raffreddamento : raffreddamenti) {
+			if(!tuttiIRaffreddamenti.contains(raffreddamento.getDescrizione())){
+				tuttiIRaffreddamenti.add(raffreddamento.getDescrizione());
+			}
+		}
+		
+		//mando in output
+		return tuttiIRaffreddamenti;	
+	}
+	
+	
 }

@@ -1,5 +1,6 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -123,4 +124,25 @@ public class RamImpl extends Utilities implements IRamServices{
 						.build())
 				.collect(Collectors.toList());
 	}
+	
+	@Override
+	public List<String> listaDescrizioniRam() throws AcademyException {
+		log.debug("listaDescrizioniRams, no duplicati");
+		
+		//recupero tutte le alimentazioni
+		List<Ram> rams = ramR.findAll();
+		
+		//inserisco tutte le alimetazioni in una lista
+		List<String> tuttiLeRam = new ArrayList<String>();
+		for (Ram ram : rams) {
+			if(!tuttiLeRam.contains(ram.getDescrizione())){
+				tuttiLeRam.add(ram.getDescrizione());
+			}
+		}
+		
+		//mando in output
+		return tuttiLeRam;	
+	}
+	
+	
 }

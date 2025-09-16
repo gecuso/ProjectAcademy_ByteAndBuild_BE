@@ -1,5 +1,6 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -147,5 +148,25 @@ public class MonitorImpl implements IMonitorService{
 						.build())
 				.build();
 	}	
+	
+	@Override
+	public List<String> listaDescrizioniMonitors() throws AcademyException {
+		log.debug("listaDescrizioniMonitors, no duplicati");
+		
+		//recupero tutte le alimentazioni
+		List<Monitor> monitors = monR.findAll();
+		
+		//inserisco tutte le alimetazioni in una lista
+		List<String> tuttiIMonitor = new ArrayList<String>();
+		for (Monitor monitor : monitors) {
+			if(!tuttiIMonitor.contains(monitor.getDescrizione())){
+				tuttiIMonitor.add(monitor.getDescrizione());
+			}
+		}
+		
+		//mando in output
+		return tuttiIMonitor;	
+	}	
+	
 	
 }

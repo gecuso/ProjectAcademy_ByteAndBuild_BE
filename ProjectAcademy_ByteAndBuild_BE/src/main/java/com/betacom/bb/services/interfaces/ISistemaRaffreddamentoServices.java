@@ -14,4 +14,7 @@ public interface ISistemaRaffreddamentoServices {
 	
 	SistemaRaffreddamentoDTO getById(Integer id) throws AcademyException;
 	List<SistemaRaffreddamentoDTO> listAll();
+	
+	List<String> listaDescrizioniSistemiRaffreddamento() throws AcademyException;
+	
 }

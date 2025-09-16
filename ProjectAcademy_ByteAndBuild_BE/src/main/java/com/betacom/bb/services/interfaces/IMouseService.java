@@ -15,4 +15,6 @@ public interface IMouseService {
 	List<MouseDTO> findAll() throws AcademyException;
 	MouseDTO getById(Integer id) throws AcademyException;
 	
+	List<String> listaDescrizioniMouse() throws AcademyException;
+	
 }

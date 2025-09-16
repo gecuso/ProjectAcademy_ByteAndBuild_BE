@@ -14,4 +14,7 @@ public interface ICpuServices{
 	
 	CpuDTO getById(Integer id) throws AcademyException;
 	List<CpuDTO> listAll();
+	
+	List<String> listaDescrizioniCpus() throws AcademyException;
+	
 }

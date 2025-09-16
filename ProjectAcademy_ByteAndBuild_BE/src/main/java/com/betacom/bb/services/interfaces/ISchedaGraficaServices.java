@@ -14,4 +14,7 @@ public interface ISchedaGraficaServices {
 	
 	SchedaGraficaDTO getById(Integer id) throws AcademyException;
 	List<SchedaGraficaDTO> listAll();
+	
+	List<String> listaDescrizioniSchedeGrafiche() throws AcademyException;
+	
 }

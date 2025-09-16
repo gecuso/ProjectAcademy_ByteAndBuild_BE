@@ -1,5 +1,6 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -136,5 +137,25 @@ public class MemoriaImpl extends Utilities implements IMemoriaService{
 				.prodotto(buildProdottoDTO(mem.getProdotto()))
 				.build();		
 	}
+	
+	@Override
+	public List<String> listaDescrizioniMemorie() throws AcademyException {
+		log.debug("listaDescrizioniMemorie, no duplicati");
+		
+		//recupero tutte le alimentazioni
+		List<Memoria> memorie = memR.findAll();
+		
+		//inserisco tutte le alimetazioni in una lista
+		List<String> tutteLeMemorie = new ArrayList<String>();
+		for (Memoria memoria : memorie) {
+			if(!tutteLeMemorie.contains(memoria.getDescrizione())){
+				tutteLeMemorie.add(memoria.getDescrizione());
+			}
+		}
+		
+		//mando in output
+		return tutteLeMemorie;	
+	}
+	
 	
 }

@@ -14,4 +14,7 @@ public interface ISchedaMadreServices {
 	
 	SchedaMadreDTO getById(Integer id) throws AcademyException;
 	List<SchedaMadreDTO> listAll();
+	
+	List<String> listaDescrizioniSchedeMadri() throws AcademyException;
+	
 }

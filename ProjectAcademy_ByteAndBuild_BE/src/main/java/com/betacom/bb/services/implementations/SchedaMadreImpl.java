@@ -1,5 +1,6 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,7 +13,6 @@ import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Formato;
 import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.models.SchedaMadre;
-import com.betacom.bb.repositories.ICaseRepository;
 import com.betacom.bb.repositories.IFormatoRepository;
 import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.repositories.ISchedaMadreRepository;
@@ -147,4 +147,24 @@ public class SchedaMadreImpl extends Utilities implements ISchedaMadreServices{
 						.build())
 				.collect(Collectors.toList());
 	}
+	
+	@Override
+	public List<String> listaDescrizioniSchedeMadri() throws AcademyException {
+		log.debug("listaDescrizioniSchedeMadri, no duplicati");
+		
+		//recupero tutte le alimentazioni
+		List<SchedaMadre> madres = smR.findAll();
+		
+		//inserisco tutte le alimetazioni in una lista
+		List<String> tuttiLeMB = new ArrayList<String>();
+		for (SchedaMadre mb : madres) {
+			if(!tuttiLeMB.contains(mb.getDescrizione())){
+				tuttiLeMB.add(mb.getDescrizione());
+			}
+		}
+		
+		//mando in output
+		return tuttiLeMB;	
+	}
+	
 }

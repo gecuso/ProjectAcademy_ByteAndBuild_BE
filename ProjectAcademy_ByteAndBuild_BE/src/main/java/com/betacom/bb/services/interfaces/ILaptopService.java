@@ -15,4 +15,6 @@ public interface ILaptopService {
 	List<LaptopDTO> findAll() throws AcademyException;
 	LaptopDTO getById(Integer id) throws AcademyException;
 	
+	List<String> listaDescrizioniLaptop() throws AcademyException;
+	
 }

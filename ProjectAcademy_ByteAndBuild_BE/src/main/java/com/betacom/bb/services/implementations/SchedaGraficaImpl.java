@@ -1,5 +1,6 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -120,6 +121,25 @@ public class SchedaGraficaImpl extends Utilities implements ISchedaGraficaServic
 						.prodotto(buildProdottoDTO(s.getProdotto()))
 						.build())
 				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<String> listaDescrizioniSchedeGrafiche() throws AcademyException {
+		log.debug("listaDescrizioniSchedeGrafiche, no duplicati");
+		
+		//recupero tutte le alimentazioni
+		List<SchedaGrafica> gpus = sgR.findAll();
+		
+		//inserisco tutte le alimetazioni in una lista
+		List<String> tuttiLeGpu = new ArrayList<String>();
+		for (SchedaGrafica gpu : gpus) {
+			if(!tuttiLeGpu.contains(gpu.getDescrizione())){
+				tuttiLeGpu.add(gpu.getDescrizione());
+			}
+		}
+		
+		//mando in output
+		return tuttiLeGpu;	
 	}
 	
 	

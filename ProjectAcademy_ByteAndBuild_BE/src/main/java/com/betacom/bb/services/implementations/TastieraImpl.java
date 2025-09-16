@@ -1,5 +1,6 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -116,6 +117,25 @@ public class TastieraImpl extends Utilities implements ITastieraService{
 	public TastieraDTO getById(Integer id) throws AcademyException {
 		Tastiera m = tastR.getById(id);
 		return buildTastieraDTO(m);
+	}
+	
+	@Override
+	public List<String> listaDescrizioniTastiere() throws AcademyException {
+		log.debug("listaDescrizioniTastiere, no duplicati");
+		
+		//recupero tutte le alimentazioni
+		List<Tastiera> tastiere = tastR.findAll();
+		
+		//inserisco tutte le alimetazioni in una lista
+		List<String> tuttiLeTastiere = new ArrayList<String>();
+		for (Tastiera tastiera : tastiere) {
+			if(!tuttiLeTastiere.contains(tastiera.getDescrizione())){
+				tuttiLeTastiere.add(tastiera.getDescrizione());
+			}
+		}
+		
+		//mando in output
+		return tuttiLeTastiere;	
 	}
 
 }

@@ -2,7 +2,6 @@ package com.betacom.bb.services.interfaces;
 
 import java.util.List;
 
-import com.betacom.bb.dto.MarcaDTO;
 import com.betacom.bb.dto.TastieraDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.requests.TastieraReq;
@@ -14,4 +13,7 @@ public interface ITastieraService {
 	
 	List<TastieraDTO> findAll() throws AcademyException;
 	TastieraDTO getById(Integer id) throws AcademyException;
+	
+	List<String> listaDescrizioniTastiere() throws AcademyException;
+	
 }

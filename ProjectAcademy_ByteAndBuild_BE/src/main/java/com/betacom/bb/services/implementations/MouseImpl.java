@@ -1,5 +1,6 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -136,6 +137,24 @@ public class MouseImpl implements IMouseService{
 				.build();		
 	}
 
+	@Override
+	public List<String> listaDescrizioniMouse() throws AcademyException {
+		log.debug("listaDescrizioniMouse, no duplicati");
+		
+		//recupero tutte le alimentazioni
+		List<Mouse> mouses = mouseR.findAll();
+		
+		//inserisco tutte le alimetazioni in una lista
+		List<String> tuttiIMouse = new ArrayList<String>();
+		for (Mouse mouse : mouses) {
+			if(!tuttiIMouse.contains(mouse.getDescrizione())){
+				tuttiIMouse.add(mouse.getDescrizione());
+			}
+		}
+		
+		//mando in output
+		return tuttiIMouse;	
+	}
 
 	
 }

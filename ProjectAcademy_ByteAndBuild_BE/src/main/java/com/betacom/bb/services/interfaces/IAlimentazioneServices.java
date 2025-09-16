@@ -15,4 +15,6 @@ public interface IAlimentazioneServices {
 	AlimentazioneDTO getById(Integer id) throws AcademyException;
 	List<AlimentazioneDTO> listAll();
 	
+	List<String> listaDescrizioniAlimentazioni() throws AcademyException;
+	
 }

@@ -15,4 +15,6 @@ public interface IMonitorService {
 	List<MonitorDTO> findAll() throws AcademyException;
 	MonitorDTO getById(Integer id) throws AcademyException;
 	
+	List<String> listaDescrizioniMonitors() throws AcademyException;
+	
 }

@@ -15,4 +15,6 @@ public interface IMemoriaService {
 	List<MemoriaDTO> findAll() throws AcademyException;
 	MemoriaDTO getById(Integer id) throws AcademyException;
 	
+	List<String> listaDescrizioniMemorie() throws AcademyException;
+	
 }
