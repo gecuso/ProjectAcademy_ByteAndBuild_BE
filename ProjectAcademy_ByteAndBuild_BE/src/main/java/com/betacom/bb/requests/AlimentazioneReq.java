@@ -8,5 +8,5 @@ public class AlimentazioneReq {
 	private String descrizione;
 	private Integer potenza;
 	private Integer idProdotto;
-	private Integer idPc;
+//	private Integer idPc;
 }

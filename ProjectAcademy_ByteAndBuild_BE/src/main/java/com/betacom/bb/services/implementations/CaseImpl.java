@@ -68,6 +68,8 @@ public class CaseImpl extends Utilities implements ICaseServices{
 			throw new AcademyException("Prodotto non presente nel database");
 		casee.setProdotto(p.get());
 		
+		caseR.save(casee);
+		
 	}
 	
 

@@ -48,6 +48,7 @@ public class MemoriaImpl extends Utilities implements IMemoriaService{
 		memoria.setDescrizione(req.getDescrizione());
 		if(req.getSpazio() == null || req.getSpazio()<=0)
 			throw new AcademyException("Spazio non presente o non valido, riprovare");
+		memoria.setSpazio(req.getSpazio());
 		
 		if(req.getIdProdotto() == null)
 			throw new AcademyException("Id del prodotto non inserito, riprovare");

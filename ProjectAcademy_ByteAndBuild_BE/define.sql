@@ -245,13 +245,13 @@
        references prodotto (id);
 
     alter table categoria_marca 
-       add constraint FKnhfxbxnxb54pr4edrldnj9vmr 
-       foreign key (id_marca) 
+       add constraint FKj75t71e5l5xa8shw2emf7wuf2 
+       foreign key (id_categoria) 
        references categoria (id);
 
     alter table categoria_marca 
-       add constraint FKdd7nib3ab5xa5elnwl75279ui 
-       foreign key (id_categoria) 
+       add constraint FKctbxfahjgsv3qndcb8xrsrtis 
+       foreign key (id_marca) 
        references marca (id);
 
     alter table cpu 

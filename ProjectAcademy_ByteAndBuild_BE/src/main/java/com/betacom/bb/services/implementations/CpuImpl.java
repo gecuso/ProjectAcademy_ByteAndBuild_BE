@@ -53,7 +53,7 @@ public class CpuImpl extends Utilities implements ICpuServices{
 			throw new AcademyException("Consumo nullo");
 		cpu.setConsumo(req.getConsumo());
 		
-		if(req.getIdPc() == null)
+		if(req.getIdProdotto() == null)
 			throw new AcademyException("Prodotto nullo");
 		Optional<Prodotto> p = prodR.findById(req.getIdProdotto());
 		if(p.isEmpty())

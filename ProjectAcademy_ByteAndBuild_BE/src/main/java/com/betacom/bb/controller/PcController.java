@@ -3,20 +3,29 @@ package com.betacom.bb.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.betacom.bb.dto.PcDTO;
 import com.betacom.bb.exception.AcademyException;
-import com.betacom.bb.models.Pc;
 import com.betacom.bb.requests.PcReq;
 import com.betacom.bb.response.ResponseBase;
 import com.betacom.bb.response.ResponseList;
 import com.betacom.bb.response.ResponseObject;
 import com.betacom.bb.services.interfaces.IPcService;
 
+@RestController
+@RequestMapping("/rest/controller")
 public class PcController {
 
 	private IPcService pcS;
 	
+
+	public PcController(IPcService pcS) {
+		this.pcS = pcS;
+	}
+
+
 	@PostMapping("/create")
 	public ResponseBase create(@RequestBody (required = true)  PcReq req) {
 		ResponseBase r = new ResponseBase();

@@ -8,5 +8,5 @@ public class SchedaGraficaReq {
 	private String descrizione;
 	private Integer consumo;
 	private Integer idProdotto;
-	private Integer idPc;
+//	private Integer idPc;
 }

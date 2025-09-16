@@ -37,7 +37,7 @@ public class Marca {
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "categoria_marca",
-			   joinColumns = @JoinColumn(name = "id_categoria"),
-			   inverseJoinColumns = @JoinColumn(name = "id_marca"))
+			   joinColumns = @JoinColumn(name = "id_marca"),
+			   inverseJoinColumns = @JoinColumn(name = "id_categoria"))
 	List<Categoria> categoria;
 }

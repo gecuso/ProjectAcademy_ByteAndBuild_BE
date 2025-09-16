@@ -8,5 +8,5 @@ public class MemoriaReq {
 	private String descrizione;
 	private Integer spazio;
 	private Integer idProdotto;
-	private Integer idPc;
+//	private Integer idPc;
 }

@@ -7,22 +7,17 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.betacom.bb.dto.FormatoDTO;
 import com.betacom.bb.dto.ProdottoDTO;
 import com.betacom.bb.exception.AcademyException;
-import com.betacom.bb.models.Alimentazione;
 import com.betacom.bb.models.Categoria;
-import com.betacom.bb.models.Formato;
 import com.betacom.bb.models.Marca;
 import com.betacom.bb.models.Prodotto;
-import com.betacom.bb.repositories.IAlimentazioneRepository;
 import com.betacom.bb.repositories.ICategoriaRepository;
 import com.betacom.bb.repositories.IMarcaRepository;
 import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.requests.AlimentazioneReq;
 import com.betacom.bb.requests.CaseReq;
 import com.betacom.bb.requests.CpuReq;
-import com.betacom.bb.requests.FormatoReq;
 import com.betacom.bb.requests.LaptopReq;
 import com.betacom.bb.requests.MemoriaReq;
 import com.betacom.bb.requests.MonitorReq;
@@ -107,6 +102,10 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 			throw new AcademyException("Marca non presente, riprova");
 		prod.setMarca(m.get());
 		
+		if(req.getImg() == null)
+			throw new AcademyException("Immagine non presente, riprova");
+		prod.setImg(req.getImg());
+		
 		if(req.getCosto() == null || req.getCosto()<0)
 			throw new AcademyException("Costo non presente, riprova");
 		prod.setCosto(req.getCosto());
@@ -156,6 +155,10 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 		if(m.isEmpty())
 			throw new AcademyException("Marca non presente, riprova");
 		prod.setMarca(m.get());
+		
+		if(req.getImg() == null)
+			throw new AcademyException("Immagine non presente, riprova");
+		prod.setImg(req.getImg());
 		
 		if(req.getCosto() == null || req.getCosto()<0)
 			throw new AcademyException("Costo non presente, riprova");
