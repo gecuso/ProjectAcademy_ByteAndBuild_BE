@@ -14,6 +14,8 @@ public class UtenteReq {
 	private String userName;
 	private String pwd;
 	private String email;
+	private String indirizzo;
+	private String telefono;
 	private String role;
 
 }
