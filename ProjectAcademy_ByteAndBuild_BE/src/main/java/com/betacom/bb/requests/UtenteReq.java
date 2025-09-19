@@ -19,3 +19,4 @@ public class UtenteReq {
 	private String role;
 
 }
+
