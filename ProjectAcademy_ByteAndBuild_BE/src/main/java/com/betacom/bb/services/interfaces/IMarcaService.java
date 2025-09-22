@@ -18,4 +18,5 @@ public interface IMarcaService {
 	//questo metodo non avrà duplicati
 	List<String> findAllMarche() throws AcademyException;
 	
+	List<MarcaDTO>findByCategoria(Integer idCategoria) throws AcademyException;
 }
