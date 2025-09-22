@@ -17,7 +17,7 @@ public interface IProdottoServices {
 	List<ProdottoDTO> listAll();
 	
 	List<ProdottoDTO> listAllByIdCategoria(Integer id);
-
+	List<ProdottoDTO> list(String descrizione);
 	
 
 }

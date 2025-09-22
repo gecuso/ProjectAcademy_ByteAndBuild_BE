@@ -17,4 +17,9 @@ public interface IProdottoRepository extends JpaRepository<Prodotto,Integer>{
 	
 	 @Query("SELECT p FROM Prodotto p WHERE p.categoria.id = :idCategoria")
 	 List<Prodotto> findAllByCategoria(@Param("idCategoria") Integer idCategoria);
+	 
+	@Query(name = "prodotto.selectByFilter")
+	List<Prodotto> searchByFilter(@Param("descrizione") String descrizione);
+	
+	
 }
