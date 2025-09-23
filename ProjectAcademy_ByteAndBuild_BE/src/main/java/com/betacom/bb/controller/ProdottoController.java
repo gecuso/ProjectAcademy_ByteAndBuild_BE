@@ -91,8 +91,7 @@ public class ProdottoController {
 			descrizione = null;
 		
 		try {
-			p.setDati(prodottoImpl.list(descrizione));
-			p.setRc(true);
+			p.setDati(prodS.list(descrizione));
 		} catch(Exception e) {
 			p.setRc(false);
 			p.setMsg(e.getMessage());
