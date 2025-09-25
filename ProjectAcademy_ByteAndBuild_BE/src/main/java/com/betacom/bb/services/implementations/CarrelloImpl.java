@@ -141,14 +141,54 @@ public class CarrelloImpl extends Utilities implements ICarrelloService{
 
 	@Override
 	public CarrelloDTO getById(Integer id) throws AcademyException {
-		// TODO Auto-generated method stub
-		return null;
+		log.debug("findById carrello");
+		
+		//controllo se esiste il carrello
+		Optional<Carrello> carrello = carrR.findById(id);
+		if(carrello.isEmpty())
+			throw new AcademyException("Carrello non presente nel database");
+		
+		//lo restituisco
+		return CarrelloDTO.builder()
+				.id(carrello.get().getId())
+				.numeroProdotti(carrello.get().getNumeroProdotti())
+				.prezzoTotale(carrello.get().getPrezzoTotale())
+				.utente(UtenteDTO.builder()
+						.id(carrello.get().getUtente().getId())
+						.userName(carrello.get().getUtente().getUserName())
+						.pwd(carrello.get().getUtente().getPwd())
+						.email(carrello.get().getUtente().getEmail())
+						.indirizzo(carrello.get().getUtente().getIndirizzo())
+						.telefono(carrello.get().getUtente().getTelefono())
+						.role(carrello.get().getUtente().getRole().toString())
+						.build())
+				.build();	
 	}
 
 	@Override
 	public CarrelloDTO getByIdUtente(Integer id) throws AcademyException {
-		// TODO Auto-generated method stub
-		return null;
+		log.debug("findByIdUtente carrello");
+		
+		//controllo se esiste il carrello
+		Optional<Carrello> carrello = carrR.findByIdUtente(id);
+		if(carrello.isEmpty())
+			throw new AcademyException("Carrello non presente nel database");
+		
+		//lo restituisco
+		return CarrelloDTO.builder()
+				.id(carrello.get().getId())
+				.numeroProdotti(carrello.get().getNumeroProdotti())
+				.prezzoTotale(carrello.get().getPrezzoTotale())
+				.utente(UtenteDTO.builder()
+						.id(carrello.get().getUtente().getId())
+						.userName(carrello.get().getUtente().getUserName())
+						.pwd(carrello.get().getUtente().getPwd())
+						.email(carrello.get().getUtente().getEmail())
+						.indirizzo(carrello.get().getUtente().getIndirizzo())
+						.telefono(carrello.get().getUtente().getTelefono())
+						.role(carrello.get().getUtente().getRole().toString())
+						.build())
+				.build();
 	}
 	
 	////////////////////////////////

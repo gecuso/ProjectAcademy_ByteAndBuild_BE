@@ -1,5 +1,6 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -150,14 +151,39 @@ public class OggettoNelCarrelloImpl extends Utilities implements IOggettoNelCarr
 
 	@Override
 	public OggettoNelCarrelloDTO getById(Integer id) throws AcademyException {
-		// TODO Auto-generated method stub
-		return null;
+		log.debug("findById OggettoNelCarrello");
+		
+		//controllo se esiste l'oggetto
+		Optional<OggettoNelCarrello> oggetto = oncR.findById(id);
+		if(oggetto.isEmpty())
+			throw new AcademyException("Oggetto del sium non presente nel database");
+		
+		return OggettoNelCarrelloDTO.builder()
+				.id(oggetto.get().getId())
+				.quantita(oggetto.get().getQuantita())
+				.carrello(buildCarrelloDTO(oggetto.get().getCarrello()))
+				.prodotto(buildProdottoDTO(oggetto.get().getProdotto()))
+				.build();
 	}
 
 	@Override
 	public List<OggettoNelCarrelloDTO> getByIdCarrello(Integer id) throws AcademyException {
-		// TODO Auto-generated method stub
-		return null;
+		log.debug("findByIdCarrello OggettoNelCarrello");
+		List<Optional<OggettoNelCarrello>> oggettiO = oncR.findByIdCarrello(id);
+		
+		//inserisco i dati dentro una lista normale
+		List<OggettoNelCarrello> oggetti = new ArrayList<OggettoNelCarrello>();
+		for (Optional<OggettoNelCarrello> oggetto : oggettiO) {
+			oggetti.add(oggetto.get());		}
+		
+		//restituisco i dati
+		return oggetti.stream()
+				.map(ogg -> OggettoNelCarrelloDTO.builder()
+						.id(ogg.getId())
+						.quantita(ogg.getQuantita())
+						.carrello(buildCarrelloDTO(ogg.getCarrello()))
+						.prodotto(buildProdottoDTO(ogg.getProdotto()))
+						.build()).collect(Collectors.toList());
 	}
 	
 	////////////////////////////////
