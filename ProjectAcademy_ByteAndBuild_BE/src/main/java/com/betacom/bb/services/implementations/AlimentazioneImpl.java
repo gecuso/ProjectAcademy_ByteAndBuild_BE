@@ -73,7 +73,6 @@ public class AlimentazioneImpl extends Utilities implements IAlimentazioneServic
 		req.getAlimReq().setIdProdotto(idprod);
 		
 		create(req.getAlimReq());
-		throw new AcademyException("fatto");
 	}
 	
 	@Transactional(rollbackFor = Exception.class)

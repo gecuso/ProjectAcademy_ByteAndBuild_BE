@@ -14,8 +14,10 @@ import com.betacom.bb.models.Monitor;
 import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.repositories.IMonitorRepository;
 import com.betacom.bb.repositories.IProdottoRepository;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.requests.MonitorReq;
 import com.betacom.bb.services.interfaces.IMonitorService;
+import com.betacom.bb.services.interfaces.IProdottoServices;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -25,14 +27,16 @@ public class MonitorImpl implements IMonitorService{
 
 	private IMonitorRepository monR;
 	private IProdottoRepository prodR;
+	private IProdottoServices prodS;
 	
-	
-	public MonitorImpl(IMonitorRepository monR, IProdottoRepository prodR) {
+	////////////////////////////////
+
+	public MonitorImpl(IMonitorRepository monR, IProdottoRepository prodR, IProdottoServices prodS) {
+		super();
 		this.monR = monR;
 		this.prodR = prodR;
+		this.prodS = prodS;
 	}
-
-	////////////////////////////////
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -66,6 +70,18 @@ public class MonitorImpl implements IMonitorService{
 		
 		//salvo nel database
 		monR.save(monitor);
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void createMonitorProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		Integer idprod = prodS.create(req.getProdReq());
+		
+		req.getMonitorReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getMonitorReq().setIdProdotto(idprod);
+		
+		create(req.getMonitorReq());
 	}
 
 	@Transactional(rollbackFor = Exception.class)

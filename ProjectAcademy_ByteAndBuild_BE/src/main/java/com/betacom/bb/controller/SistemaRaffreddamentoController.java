@@ -1,5 +1,6 @@
 package com.betacom.bb.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -9,14 +10,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.betacom.bb.dto.SistemaRaffreddamentoDTO;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.requests.SistemaRaffreddamentoReq;
 import com.betacom.bb.response.ResponseBase;
 import com.betacom.bb.response.ResponseList;
 import com.betacom.bb.response.ResponseObject;
 import com.betacom.bb.services.interfaces.ISistemaRaffreddamentoServices;
 
+import lombok.extern.log4j.Log4j2;
+
 @RestController
 @RequestMapping("/rest/sistemaRaffreddamento")
+@CrossOrigin(origins = "*")
+@Log4j2
 public class SistemaRaffreddamentoController {
 
 	private ISistemaRaffreddamentoServices srS;
@@ -36,6 +42,20 @@ public class SistemaRaffreddamentoController {
 			r.setMsg(e.getMessage());
 		}
 		
+		return r;
+	}
+	
+	@PostMapping("/createSisRafProd")
+	public ResponseBase createSisRafProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("controller alim : "+req);
+		try {
+			srS.createSisRafProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
 		return r;
 	}
 	

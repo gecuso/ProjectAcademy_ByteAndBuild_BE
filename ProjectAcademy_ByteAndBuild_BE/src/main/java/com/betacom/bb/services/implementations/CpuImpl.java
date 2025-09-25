@@ -14,7 +14,9 @@ import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.repositories.ICpuRepository;
 import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.requests.CpuReq;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.services.interfaces.ICpuServices;
+import com.betacom.bb.services.interfaces.IProdottoServices;
 import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
@@ -23,13 +25,17 @@ import lombok.extern.log4j.Log4j2;
 @Service
 public class CpuImpl extends Utilities implements ICpuServices{
 
+    private final MemoriaImpl memoriaImpl;
+
 	private ICpuRepository cpuR;
 	private IProdottoRepository prodR;
+	private IProdottoServices prodS;
 
 	
-	public CpuImpl(ICpuRepository cpuR,IProdottoRepository prodR) {
+	public CpuImpl(ICpuRepository cpuR,IProdottoRepository prodR, MemoriaImpl memoriaImpl) {
 		this.cpuR = cpuR;
 		this.prodR = prodR;
+		this.memoriaImpl = memoriaImpl;
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
@@ -61,6 +67,17 @@ public class CpuImpl extends Utilities implements ICpuServices{
 		cpu.setProdotto(p.get());
 		
 		cpuR.save(cpu);
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void createCpuProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		Integer idprod = prodS.create(req.getProdReq());
+		
+		req.getCpuReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getCpuReq().setIdProdotto(idprod);
+		
+		create(req.getCpuReq());
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
