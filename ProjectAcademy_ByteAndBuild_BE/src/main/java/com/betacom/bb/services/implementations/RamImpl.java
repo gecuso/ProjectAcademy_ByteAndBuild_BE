@@ -13,7 +13,9 @@ import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.models.Ram;
 import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.repositories.IRamRepository;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.requests.RamReq;
+import com.betacom.bb.services.interfaces.IProdottoServices;
 import com.betacom.bb.services.interfaces.IRamServices;
 import com.betacom.bb.utilis.Utilities;
 
@@ -25,7 +27,7 @@ public class RamImpl extends Utilities implements IRamServices{
 
 	private IRamRepository ramR;
 	private IProdottoRepository prodR;
-	
+	private IProdottoServices prodS;
 	
 	public RamImpl(IRamRepository ramR, IProdottoRepository prodR) {
 		this.ramR = ramR;
@@ -57,6 +59,18 @@ public class RamImpl extends Utilities implements IRamServices{
 		ram.setProdotto(p.get());
 		
 		ramR.save(ram);
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void createRamProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		Integer idprod = prodS.create(req.getProdReq());
+		
+		req.getRamReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getRamReq().setIdProdotto(idprod);
+		
+		create(req.getRamReq());
 	}
 	
 	@Transactional(rollbackFor = Exception.class)

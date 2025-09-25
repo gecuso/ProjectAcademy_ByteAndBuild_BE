@@ -52,6 +52,8 @@ public class UtenteImpl implements IUtenteServices{
 		Optional<Utente> u = utenR.findById(req.getId());
 		if (u.isEmpty())
 			throw new AcademyException("Username inesistente");
+		if (req.getUserName() != null)
+		    u.get().setUserName(req.getUserName());
 		if (req.getPwd() != null)
 			u.get().setPwd(req.getPwd());
 		if (req.getRole() != null)

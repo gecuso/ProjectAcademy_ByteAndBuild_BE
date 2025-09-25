@@ -109,4 +109,16 @@ public class MarcaController {
 		return r;
 	}
 	
+	@GetMapping("/byCategoria")
+	public ResponseList<MarcaDTO> getMarcaByCategoria(@RequestParam Integer idCategoria) {
+	    ResponseList<MarcaDTO> r = new ResponseList<>();
+	    try {
+	        r.setDati(marS.findByCategoria(idCategoria));
+	        r.setRc(true);
+	    } catch (Exception e) {
+	        r.setRc(false);
+	        r.setMsg(e.getMessage());
+	    }
+	    return r;
+	}
 }
