@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.betacom.bb.dto.OggettoNelCarrelloDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Carrello;
@@ -68,9 +67,10 @@ public class OggettoNelCarrelloImpl extends Utilities implements IOggettoNelCarr
 		Optional<Prodotto> prodottoRispettivo = prodR.findById(req.getIdProdotto());
 		if(prodottoRispettivo.isEmpty())
 			throw new AcademyException("L'id_prodotto non corrisponde a nessun prodotto nel database");
-		//controllo se ci sono abbastanza prodotti di quel tipo
-		if(prodottoRispettivo.get().getQuantita() < req.getQuantita())
-			throw new AcademyException("Non ci sono abbastanza prodotti di quel tipo per la richiesta");
+
+		//controllo se la quantita nel db va bene per il prodotto
+		if(req.getQuantita() > prodottoRispettivo.get().getQuantita())
+			throw new AcademyException("La quantita richiesta non è disponibile");
 		
 		//salvo nel database
 		OggettoNelCarrello oggetto = new OggettoNelCarrello();
@@ -78,8 +78,11 @@ public class OggettoNelCarrelloImpl extends Utilities implements IOggettoNelCarr
 		oggetto.setCarrello(carrelloRispettivo.get());
 		oggetto.setProdotto(prodottoRispettivo.get());
 		
-		oncR.save(oggetto);
+		//devo cambiare il prezzo del carrello
+		boolean menoOpiu = true;
+		AggiornaPrezzoTotaleCarrelloByIdProdotto(prodottoRispettivo.get().getId(), carrelloRispettivo.get().getId(), menoOpiu);
 		
+		oncR.save(oggetto);
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
@@ -105,9 +108,9 @@ public class OggettoNelCarrelloImpl extends Utilities implements IOggettoNelCarr
 		Optional<Prodotto> prodottoRispettivo = prodR.findById(req.getIdProdotto());
 		if(prodottoRispettivo.isEmpty())
 			throw new AcademyException("L'id_prodotto non corrisponde a nessun prodotto nel database");
-		//controllo se ci sono abbastanza prodotti di quel tipo
-		if(prodottoRispettivo.get().getQuantita() < req.getQuantita())
-			throw new AcademyException("Non ci sono abbastanza prodotti di quel tipo per la richiesta");		
+		//controllo se la quantita nel db va bene per il prodotto
+		if(req.getQuantita() > prodottoRispettivo.get().getQuantita())
+			throw new AcademyException("La quantita richiesta non è disponibile");		
 		
 		//l'unica cosa che puo' variare è la quantità
 		//salvo nel database
@@ -115,6 +118,15 @@ public class OggettoNelCarrelloImpl extends Utilities implements IOggettoNelCarr
 		oggetto.setQuantita(req.getQuantita());
 		oggetto.setCarrello(carrelloRispettivo.get());
 		oggetto.setProdotto(prodottoRispettivo.get());
+		
+		//devo cambiare il prezzo del carrello
+		boolean menoOpiu;
+		if(oggNelCarr.get().getQuantita() > req.getQuantita()) {
+			menoOpiu = false;
+		}else {
+			menoOpiu = true;
+		}
+		AggiornaPrezzoTotaleCarrelloByIdProdotto(prodottoRispettivo.get().getId(), carrelloRispettivo.get().getId(), menoOpiu);
 		
 		oncR.save(oggetto);		
 	}
@@ -128,6 +140,10 @@ public class OggettoNelCarrelloImpl extends Utilities implements IOggettoNelCarr
 		Optional<OggettoNelCarrello> oggNelCarr = oncR.findById(req.getId());
 		if(oggNelCarr.isEmpty())
 			throw new AcademyException("Oggetto non presente nel database");		
+		
+		//devo cambiare il prezzo del carrello
+		boolean menoOpiu = false;
+		AggiornaPrezzoTotaleCarrelloByIdProdotto(req.getIdProdotto(), req.getIdCarrello(), menoOpiu);
 		
 		//elimino dal database
 		oncR.delete(oggNelCarr.get());		
@@ -174,7 +190,8 @@ public class OggettoNelCarrelloImpl extends Utilities implements IOggettoNelCarr
 		//inserisco i dati dentro una lista normale
 		List<OggettoNelCarrello> oggetti = new ArrayList<OggettoNelCarrello>();
 		for (Optional<OggettoNelCarrello> oggetto : oggettiO) {
-			oggetti.add(oggetto.get());		}
+			oggetti.add(oggetto.get());		
+		}
 		
 		//restituisco i dati
 		return oggetti.stream()
@@ -189,12 +206,74 @@ public class OggettoNelCarrelloImpl extends Utilities implements IOggettoNelCarr
 	////////////////////////////////
 
 	
+	//aggiorna prezzo nel carrello ++ o --
+	@Transactional(rollbackFor = Exception.class)
+	public void AggiornaPrezzoTotaleCarrelloByIdProdotto(Integer idProdotto, Integer idCarrello, boolean menoOpiu) throws AcademyException{
+		log.debug("Start Aggiornamento prezzoTotale");
+		
+		//controllo se esiste il carrello
+		Optional<Carrello> carrelloO = carrR.findById(idCarrello);
+		if(carrelloO.isEmpty())
+			throw new AcademyException("Non esiste il carrello da te inserito");
+		
+		//controllo se esiste quel prodotto
+		Optional<Prodotto> prodottoO = prodR.findById(idProdotto);
+		if(prodottoO.isEmpty())
+			throw new AcademyException("L'id_prodotto non corrisponde a nessun prodotto nel database");
+		
+		//salviamo i dati nel database
+		Carrello carrello = carrelloO.get();
+		int prezzo = 0;
+		if(menoOpiu) {
+			prezzo = carrello.getPrezzoTotale() + prodottoO.get().getPrezzo();
+		}else {
+			prezzo = carrello.getPrezzoTotale() - prodottoO.get().getPrezzo();
+		}
+		carrello.setPrezzoTotale(prezzo);
+		
+		carrR.save(carrello);
+	}
 	
+	//aggiorna numero pezzi nel carrello UNO ALLA VOLTA
+	@Transactional(rollbackFor = Exception.class)
+	public void AggiornaNumeroProdotti(Integer idProdotto, Integer idCarrello, int quantiti) throws AcademyException{
+		log.debug("Start Aggiornamento numeroProdotti");
+		
+		//controllo se esiste il carrello
+		Optional<Carrello> carrelloO = carrR.findById(idCarrello);
+		if(carrelloO.isEmpty())
+			throw new AcademyException("Non esiste il carrello da te inserito");
+		
+		//controllo se esiste quel prodotto
+		Optional<Prodotto> prodottoO = prodR.findById(idProdotto);
+		if(prodottoO.isEmpty())
+			throw new AcademyException("L'id_prodotto non corrisponde a nessun prodotto nel database");
+		
+		//controllo se la quantita nel db va bene per il prodotto
+		if(quantiti > prodottoO.get().getQuantita())
+			throw new AcademyException("La quantita richiesta non è disponibile");
+		
+		//salviamo i dati nel database
+		Carrello carrello = carrelloO.get();
+		carrello.setNumeroProdotti(quantiti);
+		
+		carrR.save(carrello);	
+	}
 	
-	
-	
-	
-	
+	/*
+	//controllo disponibilità prodotto
+	public Integer ControlloDisponibilita(Integer idProdotto) throws AcademyException{
+		log.debug("Start controllo disponibilità Prodotti");
+		
+		//controllo se esiste quel prodotto
+		Optional<Prodotto> prodottoO = prodR.findById(idProdotto);
+		if(prodottoO.isEmpty())
+			throw new AcademyException("L'id_prodotto non corrisponde a nessun prodotto nel database");
+		
+		//returno la quantità la uso dopo
+		return prodottoO.get().getQuantita();
+	}
+	*/
 	
 	
 	

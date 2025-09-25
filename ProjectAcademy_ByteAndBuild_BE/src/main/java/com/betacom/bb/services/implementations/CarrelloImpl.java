@@ -1,5 +1,6 @@
 package com.betacom.bb.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -193,7 +194,31 @@ public class CarrelloImpl extends Utilities implements ICarrelloService{
 	
 	////////////////////////////////
 
-	
+	//svuota carrello
+	public void SvuotaCarrello(Integer id) throws AcademyException {
+		log.debug("Start svuota carrello");
+		
+		//controllo se esiste il carrello
+		Optional<Carrello> carrello = carrR.findByIdUtente(id);
+		if(carrello.isEmpty())
+			throw new AcademyException("Carrello non presente nel database");
+		
+		//recupero la lista degli oggetti
+		List<OggettoNelCarrello> oggetti = new ArrayList<OggettoNelCarrello>();
+		
+		for (OggettoNelCarrello oggetto : oggetti) {
+			//elimino dal database
+			oncR.delete(oggetto);
+		}
+		
+		//resetto direttamente i valori
+		Carrello carr = carrello.get();
+		carr.setNumeroProdotti(0);
+		carr.setPrezzoTotale(0);
+		
+		//aggiorno nel database
+		carrR.save(carr);
+	}
 	
 	
 	
