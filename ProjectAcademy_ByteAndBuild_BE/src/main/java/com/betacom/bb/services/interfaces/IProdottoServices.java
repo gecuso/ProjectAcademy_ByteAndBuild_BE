@@ -8,7 +8,7 @@ import com.betacom.bb.requests.ProdottoReq;
 
 public interface IProdottoServices {
 
-	void create(ProdottoReq req) throws AcademyException;
+	Integer create(ProdottoReq req) throws AcademyException;
 	void update(ProdottoReq req) throws AcademyException;
 	void delete(ProdottoReq req) throws AcademyException;
 

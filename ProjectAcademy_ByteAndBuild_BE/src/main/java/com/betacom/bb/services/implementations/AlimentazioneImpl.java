@@ -13,8 +13,10 @@ import com.betacom.bb.models.Alimentazione;
 import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.repositories.IAlimentazioneRepository;
 import com.betacom.bb.repositories.IProdottoRepository;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.requests.AlimentazioneReq;
 import com.betacom.bb.services.interfaces.IAlimentazioneServices;
+import com.betacom.bb.services.interfaces.IProdottoServices;
 import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
@@ -25,11 +27,13 @@ public class AlimentazioneImpl extends Utilities implements IAlimentazioneServic
 
 	private IAlimentazioneRepository alimR;
 	private IProdottoRepository prodR;
+	private IProdottoServices prodS;
 
-	
-	public AlimentazioneImpl(IAlimentazioneRepository alimR, IProdottoRepository prodR) {
+	public AlimentazioneImpl(IAlimentazioneRepository alimR, IProdottoRepository prodR, IProdottoServices prodS) {
+		super();
 		this.alimR = alimR;
 		this.prodR = prodR;
+		this.prodS = prodS;
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -57,6 +61,19 @@ public class AlimentazioneImpl extends Utilities implements IAlimentazioneServic
 		
 		alimR.save(alim);
 		
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void createAlimProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		Integer idprod = prodS.create(req.getProdReq());
+		
+		req.getAlimReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getAlimReq().setIdProdotto(idprod);
+		
+		create(req.getAlimReq());
+		throw new AcademyException("fatto");
 	}
 	
 	@Transactional(rollbackFor = Exception.class)

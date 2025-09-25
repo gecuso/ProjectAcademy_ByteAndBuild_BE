@@ -77,7 +77,7 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public void create(ProdottoReq req) throws AcademyException {
+	public Integer create(ProdottoReq req) throws AcademyException {
 		log.debug("create: " + req);
 		Prodotto prod = new Prodotto();
 		Optional<Prodotto> p = prodR.findByDescrizione(req.getDescrizione());
@@ -118,7 +118,7 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 			throw new AcademyException("Quantità errata, riprova");
 		prod.setQuantita(req.getQuantita());	
 		
-		prodR.save(prod);
+		return prodR.save(prod).getId();
 		
 	}
 	
