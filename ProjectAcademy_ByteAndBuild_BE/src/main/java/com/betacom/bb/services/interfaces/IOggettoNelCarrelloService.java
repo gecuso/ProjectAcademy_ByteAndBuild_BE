@@ -14,6 +14,6 @@ public interface IOggettoNelCarrelloService {
 
 	List<OggettoNelCarrelloDTO> findAll();
 	OggettoNelCarrelloDTO getById(Integer id) throws AcademyException;
-	OggettoNelCarrelloDTO getByIdCarrello(Integer id) throws AcademyException;	
+	List<OggettoNelCarrelloDTO> getByIdCarrello(Integer id) throws AcademyException;	
 	
 }

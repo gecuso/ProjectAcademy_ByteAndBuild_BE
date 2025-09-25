@@ -14,6 +14,6 @@ public interface ICarrelloService {
 	
 	List<CarrelloDTO> findAll();
 	CarrelloDTO getById(Integer id) throws AcademyException;
-	CarrelloDTO getByIdCliente(Integer id) throws AcademyException;
+	CarrelloDTO getByIdUtente(Integer id) throws AcademyException;
 	
 }
