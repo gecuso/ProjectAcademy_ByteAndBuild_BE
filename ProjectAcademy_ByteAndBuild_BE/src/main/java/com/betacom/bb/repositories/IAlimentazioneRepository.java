@@ -10,5 +10,4 @@ public interface IAlimentazioneRepository extends JpaRepository<Alimentazione, I
 
 	Optional<Alimentazione> findByDescrizione(String descrizione);
 	
-	
 }
