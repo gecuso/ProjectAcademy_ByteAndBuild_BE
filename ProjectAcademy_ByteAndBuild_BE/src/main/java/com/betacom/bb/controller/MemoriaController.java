@@ -101,6 +101,19 @@ public class MemoriaController {
 		return r;
 	}
 	
+	@GetMapping("/findByIdProd")
+	public ResponseObject<MemoriaDTO> findByIdProd(@RequestParam (required = true) Integer idProd ) {
+		ResponseObject<MemoriaDTO> r = new ResponseObject<MemoriaDTO>();
+		try {
+			r.setDati(memS.findByIdProd(idProd));
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
 	@GetMapping("/getById")
 	public ResponseObject<MemoriaDTO> getById(@RequestParam (required = true)  Integer id) {
 		ResponseObject<MemoriaDTO> r = new ResponseObject<MemoriaDTO>();

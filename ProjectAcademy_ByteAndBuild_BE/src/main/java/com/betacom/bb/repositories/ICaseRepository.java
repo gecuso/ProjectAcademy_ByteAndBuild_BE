@@ -13,6 +13,6 @@ public interface ICaseRepository extends JpaRepository<Case, Integer>{
 
 	Optional<Case> findByDescrizione(String descrizione);
 	
-	@Query("select m from casee m join m.prodotto p where p.id = :idProdotto")
+	@Query("select m from Case m join m.prodotto p where p.id = :idProdotto")
     Case findByIdProd(@Param("idProdotto") Integer idProdotto);
 }

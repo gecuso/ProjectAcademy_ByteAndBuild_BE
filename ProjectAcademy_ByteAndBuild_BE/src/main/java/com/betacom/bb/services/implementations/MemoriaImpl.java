@@ -156,5 +156,11 @@ public class MemoriaImpl extends Utilities implements IMemoriaService{
 				.prodotto(buildProdottoDTO(mem.getProdotto()))
 				.build();		
 	}
+
+	@Override
+	public MemoriaDTO findByIdProd(Integer idProd) throws AcademyException {
+		Memoria m = memR.findByIdProd(idProd);
+		return buildMemoriaDTO(m);
+	}
 	
 }

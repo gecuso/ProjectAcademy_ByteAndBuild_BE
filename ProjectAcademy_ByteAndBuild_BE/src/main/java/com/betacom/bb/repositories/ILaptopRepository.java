@@ -12,6 +12,6 @@ public interface ILaptopRepository extends JpaRepository<Laptop, Integer>{
 
 	Optional<Laptop> findByDescrizione(String descrizione);
 
-	@Query("select m from laptop m join m.prodotto p where p.id = :idProdotto")
+	@Query("select m from Laptop m join m.prodotto p where p.id = :idProdotto")
 	Laptop findByIdProd(@Param("idProdotto") Integer idProdotto);
 }

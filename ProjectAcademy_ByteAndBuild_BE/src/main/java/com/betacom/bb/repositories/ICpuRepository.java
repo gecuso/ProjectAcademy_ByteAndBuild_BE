@@ -12,6 +12,6 @@ public interface ICpuRepository extends JpaRepository<Cpu, Integer> {
 
 	Optional<Cpu> findByDescrizione(String descrizione);
 
-	@Query("select m from cpu m join m.prodotto p where p.id = :idProdotto")
+	@Query("select m from Cpu m join m.prodotto p where p.id = :idProdotto")
     Cpu findByIdProd(@Param("idProdotto") Integer idProdotto);
 }
