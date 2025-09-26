@@ -52,11 +52,15 @@ public class CarrelloImpl extends Utilities implements ICarrelloService{
 		//controllo se esiste l'utente
 		Optional<Utente> ute = utenR.findById(req.getIdUtente());
 		if(ute.isEmpty())
-			throw new AcademyException("Utente non presente nel database");		
-		//controllo se quell'utente ha già un carrello	
-		Optional<Carrello> car2 = findByIdUtente(req.getIdUtente());
-		if(!car2.isEmpty())
-			throw new AcademyException("Questo utente ha già un carrello");
+			throw new AcademyException("Utente non presente nel database");
+		
+		//controllo se quell'utente ha già un carrello
+		List<Carrello> carrelli = carrR.findAll();
+		for (Carrello carrello : carrelli) {
+			if(carrello.getUtente().getId() == req.getIdUtente()) {
+				throw new AcademyException("Questo utente ha già un carrello");
+			}
+		}
 		
 		//il controllo del resto dei dati non è necessario
 		//perché nOggetti e pTotale, nel create li segno a 0
@@ -104,29 +108,20 @@ public class CarrelloImpl extends Utilities implements ICarrelloService{
 		Optional<Carrello> car = carrR.findById(req.getId());
 		if(car.isEmpty())
 			throw new AcademyException("Carrello non presente nel database");
-		
-		//devo controllare se non ci sono oggetti all'interno
-		//se ce ne sono non posso eliminare
-		//ciclo i dati per trovare gli oggetti dentro ad uno specifico carrello
-		List<OggettoNelCarrello> tuttiOggetti = oncR.findAll();
-		List<OggettoNelCarrello> oggettiInterni = new ArrayList<OggettoNelCarrello>();
-		
-		for (OggettoNelCarrello oggetto : tuttiOggetti) {
-			if(oggetto.getCarrello().getId() == req.getId()) {
-				oggettiInterni.add(oggetto);
-			}
-		}
-		
-		if(oggettiInterni.isEmpty()) {
-			//elimino
-			carrR.delete(car.get());
-		}else {
-			throw new AcademyException("Ci sono degli oggetti all'interno del carrello, elimina prima quelli...");
-		}
+		// Carrello carrello = car.get();
+	
+	    Optional<List<OggettoNelCarrello>> oggettiNelCarrello = oncR.findByCarrelloId(req.getId());
+	    
+	    if (oggettiNelCarrello.isPresent() && !oggettiNelCarrello.get().isEmpty()) {
+	        throw new AcademyException("Ci sono degli oggetti all'interno del carrello, elimina prima quelli... " + oggettiNelCarrello.get().size());
+	    }
+
+	    // elimina il carrello
+	    carrR.delete(car.get());
 	}
 
 	////////////////////////////////
-	
+
 	@Override
 	public List<CarrelloDTO> findAll() {
 		log.debug("findAll carrello");	

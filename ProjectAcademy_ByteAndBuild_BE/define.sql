@@ -188,9 +188,6 @@
     alter table alimentazione 
        add constraint UKq4q9p35gc0lk9518ljake6jvb unique (descrizione);
 
-    alter table carrello 
-       add constraint UKl287dga2nb4ahi1j34on39ruk unique (id_utente);
-
     alter table casee 
        add constraint UKgo3orw0mwdoap3amq50hrn3xk unique (id_prodotto);
 

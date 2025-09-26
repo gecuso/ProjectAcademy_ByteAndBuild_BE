@@ -1,13 +1,15 @@
 package com.betacom.bb.models;
 
+import java.util.List;
+
 import com.betacom.bb.utilis.Roles;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,11 +33,9 @@ public class Utente {
 	
 	////////////////////////////////	
 	
-	@OneToOne(
-			mappedBy = "utente",
-			cascade = CascadeType.REMOVE
-			)
-	private Carrello carrello;
+	@OneToMany(mappedBy = "utente",
+			   fetch = FetchType.EAGER)
+	private List<Carrello> carrello;
 	
 	
 }
