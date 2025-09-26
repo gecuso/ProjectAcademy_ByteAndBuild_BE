@@ -16,4 +16,6 @@ public interface ICarrelloService {
 	CarrelloDTO getById(Integer id) throws AcademyException;
 	CarrelloDTO getByIdUtente(Integer id) throws AcademyException;
 	
+	void svuotaCarrello(Integer id) throws AcademyException;
+	
 }

@@ -195,7 +195,9 @@ public class CarrelloImpl extends Utilities implements ICarrelloService{
 	////////////////////////////////
 
 	//svuota carrello
-	public void SvuotaCarrello(Integer id) throws AcademyException {
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void svuotaCarrello(Integer id) throws AcademyException {
 		log.debug("Start svuota carrello");
 		
 		//controllo se esiste il carrello
