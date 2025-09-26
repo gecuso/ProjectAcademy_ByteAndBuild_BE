@@ -97,6 +97,17 @@ public class TastieraController {
 		}
 		return r;
 	}
+	@GetMapping("/findByIdProd")
+	public ResponseObject<TastieraDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<TastieraDTO> r = new ResponseObject<TastieraDTO>();
+		try {
+			r.setDati(tS.findByIdProd(idProd));
+		}catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 	
 	@GetMapping("/getById")
 	public ResponseObject<TastieraDTO> getById(@RequestParam (required = true)  Integer id) {

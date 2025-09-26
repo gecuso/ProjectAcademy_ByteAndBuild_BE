@@ -153,6 +153,19 @@ public class MouseImpl implements IMouseService{
 				.build();		
 	}
 
+	@Override
+	public MouseDTO findByIdProd(Integer idProd) throws AcademyException {
+		Mouse mou = mouseR.findByIdProd(idProd);
+		return MouseDTO.builder()
+				.id(mou.getId())
+				.descrizione(mou.getDescrizione())
+				.collegamento(mou.getCollegamento())
+				.prodotto(ProdottoDTO.builder()
+						.id(mou.getProdotto().getId())
+						.build())
+				.build();
+	}
+
 
 	
 }

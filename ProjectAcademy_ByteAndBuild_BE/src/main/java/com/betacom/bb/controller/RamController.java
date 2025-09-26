@@ -97,6 +97,18 @@ public class RamController {
 		return r;
 	}
 	
+	@GetMapping("/findByIdProd")
+	public ResponseObject<RamDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<RamDTO> r = new ResponseObject<RamDTO>();
+		try {
+			r.setDati(ramS.findByIdProd(idProd));
+		}catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
 	@GetMapping("/listAllRam")
 	public ResponseList<RamDTO> listAllRam(){
 		ResponseList<RamDTO> r = new ResponseList<RamDTO>();

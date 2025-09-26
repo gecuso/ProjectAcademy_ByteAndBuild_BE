@@ -12,8 +12,8 @@ public interface ITastieraService {
 	void update(TastieraReq req) throws AcademyException;
 	void delete(TastieraReq req) throws AcademyException;
 	void createTastProd(GeneralReq req) throws AcademyException;
+	TastieraDTO findByIdProd(Integer idProd) throws AcademyException;
 
-	
 	List<TastieraDTO> findAll() throws AcademyException;
 	TastieraDTO getById(Integer id) throws AcademyException;
 }

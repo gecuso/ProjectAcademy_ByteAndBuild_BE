@@ -102,6 +102,18 @@ public class MonitorController {
 		return r;
 	}
 	
+	@GetMapping("/findByIdProd")
+	public ResponseObject<MonitorDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<MonitorDTO> r = new ResponseObject<MonitorDTO>();
+		try {
+			r.setDati(monS.findByIdProd(idProd));
+		}catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
 	@GetMapping("/getById")
 	public ResponseObject<MonitorDTO> getById(@RequestParam (required = true)  Integer id) {
 		ResponseObject<MonitorDTO> r = new ResponseObject<MonitorDTO>();

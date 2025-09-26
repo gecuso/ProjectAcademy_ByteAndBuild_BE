@@ -13,6 +13,7 @@ public interface ISchedaGraficaServices {
 	void update(SchedaGraficaReq req) throws AcademyException;
 	void delete(SchedaGraficaReq req) throws AcademyException;
 	void createSchGrfProd(GeneralReq req) throws AcademyException;
+	SchedaGraficaDTO findByIdProd(Integer idProd) throws AcademyException;
 
 	SchedaGraficaDTO getById(Integer id) throws AcademyException;
 	List<SchedaGraficaDTO> listAll();

@@ -102,6 +102,18 @@ public class MouseController {
 		return r;
 	}
 	
+	@GetMapping("/findByIdProd")
+	public ResponseObject<MouseDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<MouseDTO> r = new ResponseObject<MouseDTO>();
+		try {
+			r.setDati(mouS.findByIdProd(idProd));
+		}catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
 	@GetMapping("/getById")
 	public ResponseObject<MouseDTO> getById(@RequestParam (required = true)  Integer id) {
 		ResponseObject<MouseDTO> r = new ResponseObject<MouseDTO>();

@@ -141,4 +141,10 @@ public class SistemaRaffreddamentoImpl extends Utilities implements ISistemaRaff
 						.build())
 				.collect(Collectors.toList());
 	}
+
+	@Override
+	public SistemaRaffreddamentoDTO findByIdProd(Integer idProd) throws AcademyException {
+		SistemaRaffreddamento alim = sysR.findByIdProd(idProd);
+		return buildSistemaRaffreddamentoDTO(alim);
+	}
 }

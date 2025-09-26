@@ -96,7 +96,17 @@ public class SistemaRaffreddamentoController {
 		}
 		return r;
 	}
-	
+	@GetMapping("/findByIdProd")
+	public ResponseObject<SistemaRaffreddamentoDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<SistemaRaffreddamentoDTO> r = new ResponseObject<SistemaRaffreddamentoDTO>();
+		try {
+			r.setDati(srS.findByIdProd(idProd));
+		}catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 	@GetMapping("/listAllSistemaRaffreddamento")
 	public ResponseList<SistemaRaffreddamentoDTO> listAllSistemaRaffreddamento(){
 		ResponseList<SistemaRaffreddamentoDTO> r = new ResponseList<SistemaRaffreddamentoDTO>();

@@ -140,4 +140,10 @@ public class RamImpl extends Utilities implements IRamServices{
 						.build())
 				.collect(Collectors.toList());
 	}
+
+	@Override
+	public RamDTO findByIdProd(Integer idProd) throws AcademyException {
+		Ram alim = ramR.findByIdProd(idProd);
+		return buildRamDTO(alim);
+	}
 }

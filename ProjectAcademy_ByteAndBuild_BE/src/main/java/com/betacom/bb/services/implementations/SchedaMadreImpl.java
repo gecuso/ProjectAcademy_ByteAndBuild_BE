@@ -162,4 +162,10 @@ public class SchedaMadreImpl extends Utilities implements ISchedaMadreServices{
 						.build())
 				.collect(Collectors.toList());
 	}
+
+	@Override
+	public SchedaMadreDTO findByIdProd(Integer idProd) throws AcademyException {
+		SchedaMadre alim = smR.findByIdProd(idProd);
+		return buildSchedaMadreDTO(alim);
+	}
 }

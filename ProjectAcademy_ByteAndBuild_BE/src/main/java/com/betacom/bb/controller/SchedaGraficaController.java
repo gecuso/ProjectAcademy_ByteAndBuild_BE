@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,8 +18,6 @@ import com.betacom.bb.response.ResponseObject;
 import com.betacom.bb.services.interfaces.ISchedaGraficaServices;
 
 import lombok.extern.log4j.Log4j2;
-
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/rest/schedaGrafica")
@@ -91,6 +90,18 @@ public class SchedaGraficaController {
 		ResponseObject<SchedaGraficaDTO> r = new ResponseObject<SchedaGraficaDTO>();
 		try {
 			r.setDati(sgS.getById(id));
+		}catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	@GetMapping("/findByIdProd")
+	public ResponseObject<SchedaGraficaDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<SchedaGraficaDTO> r = new ResponseObject<SchedaGraficaDTO>();
+		try {
+			r.setDati(sgS.findByIdProd(idProd));
 		}catch (Exception e) {
 			r.setRc(false);
 			r.setMsg(e.getMessage());

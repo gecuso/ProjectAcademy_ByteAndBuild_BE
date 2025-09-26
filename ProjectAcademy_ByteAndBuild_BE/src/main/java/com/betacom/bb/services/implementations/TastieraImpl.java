@@ -134,4 +134,10 @@ public class TastieraImpl extends Utilities implements ITastieraService{
 		return buildTastieraDTO(m);
 	}
 
+	@Override
+	public TastieraDTO findByIdProd(Integer idProd) throws AcademyException {
+		Tastiera alim = tastR.findByIdProd(idProd);
+		return buildTastieraDTO(alim);
+	}
+
 }

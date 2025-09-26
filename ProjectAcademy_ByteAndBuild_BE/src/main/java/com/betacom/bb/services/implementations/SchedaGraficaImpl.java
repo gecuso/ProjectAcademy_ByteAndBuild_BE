@@ -137,6 +137,12 @@ public class SchedaGraficaImpl extends Utilities implements ISchedaGraficaServic
 						.build())
 				.collect(Collectors.toList());
 	}
+
+	@Override
+	public SchedaGraficaDTO findByIdProd(Integer idProd) throws AcademyException {
+		SchedaGrafica alim = sgR.findByIdProd(idProd);
+		return buildSchedaGraficaDTO(alim);
+	}
 	
 	
 }

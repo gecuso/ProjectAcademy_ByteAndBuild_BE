@@ -96,7 +96,17 @@ public class SchedaMadreController {
 		}
 		return r;
 	}
-	
+	@GetMapping("/findByIdProd")
+	public ResponseObject<SchedaMadreDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<SchedaMadreDTO> r = new ResponseObject<SchedaMadreDTO>();
+		try {
+			r.setDati(smS.findByIdProd(idProd));
+		}catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 	@GetMapping("/listAllSchedaMadre")
 	public ResponseList<SchedaMadreDTO> listAllSchedaMadre(){
 		ResponseList<SchedaMadreDTO> r = new ResponseList<SchedaMadreDTO>();

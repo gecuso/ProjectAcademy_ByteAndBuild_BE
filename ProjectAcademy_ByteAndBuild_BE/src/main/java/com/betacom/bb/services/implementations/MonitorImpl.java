@@ -163,6 +163,21 @@ public class MonitorImpl implements IMonitorService{
 						.id(mon.getProdotto().getId())
 						.build())
 				.build();
+	}
+
+	@Override
+	public MonitorDTO findByIdProd(Integer idProd) throws AcademyException {
+		Monitor mon = monR.findByIdProd(idProd);
+		return MonitorDTO.builder()
+				.id(mon.getId())
+				.descrizione(mon.getDescrizione())
+				.risoluzione(mon.getRisoluzione())
+				.latenza(mon.getLatenza())
+				.frequenza(mon.getFrequenza())
+				.prodotto(ProdottoDTO.builder()
+						.id(mon.getProdotto().getId())
+						.build())
+				.build();
 	}	
 	
 }
