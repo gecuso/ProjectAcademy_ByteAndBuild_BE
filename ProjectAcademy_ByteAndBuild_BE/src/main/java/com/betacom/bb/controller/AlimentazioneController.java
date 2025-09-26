@@ -97,6 +97,18 @@ public class AlimentazioneController {
 		return r;
 	}
 	
+	@GetMapping("/findByIdProd")
+	public ResponseObject<AlimentazioneDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<AlimentazioneDTO> r = new ResponseObject<AlimentazioneDTO>();
+		try {
+			r.setDati(alimS.findByIdProd(idProd));
+		}catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
 	@GetMapping("/listAllAlimentazione")
 	public ResponseList<AlimentazioneDTO> listAllAlimentazione(){
 		ResponseList<AlimentazioneDTO> r = new ResponseList<AlimentazioneDTO>();

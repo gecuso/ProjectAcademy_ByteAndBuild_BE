@@ -95,6 +95,17 @@ public class CpuController {
 		}
 		return r;
 	}
+	@GetMapping("/findByIdProd")
+	public ResponseObject<CpuDTO> findByIdProd(@RequestParam (required = true) Integer id ){
+		ResponseObject<CpuDTO> r = new ResponseObject<CpuDTO>();
+		try {
+			r.setDati(cpuS.findByIdProd(id));
+		}catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 	
 	@GetMapping("/listAllCpu")
 	public ResponseList<CpuDTO> listAllCpu(){

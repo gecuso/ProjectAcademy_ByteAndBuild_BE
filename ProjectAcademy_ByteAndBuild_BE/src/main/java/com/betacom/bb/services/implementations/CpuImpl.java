@@ -149,4 +149,9 @@ public class CpuImpl extends Utilities implements ICpuServices{
 						.build())
 				.collect(Collectors.toList());
 	}
+	@Override
+	public CpuDTO findByIdProd(Integer idProd) throws AcademyException {
+		Cpu alim = cpuR.findByIdProd(idProd);
+		return buildCpuDTO(alim);
+	}
 }

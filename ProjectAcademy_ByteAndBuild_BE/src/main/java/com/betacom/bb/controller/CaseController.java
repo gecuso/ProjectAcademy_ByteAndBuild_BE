@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.betacom.bb.dto.AlimentazioneDTO;
 import com.betacom.bb.dto.CaseDTO;
 import com.betacom.bb.requests.CaseReq;
 import com.betacom.bb.requests.GeneralReq;
@@ -88,6 +89,17 @@ public class CaseController {
 		ResponseList<CaseDTO> r = new ResponseList<CaseDTO>();
 		try {
 			r.setDati(csS.listAll());
+		}catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@GetMapping("/findByIdProd")
+	public ResponseObject<CaseDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<CaseDTO> r = new ResponseObject<CaseDTO>();
+		try {
+			r.setDati(csS.findByIdProd(idProd));
 		}catch (Exception e) {
 			r.setRc(false);
 			r.setMsg(e.getMessage());

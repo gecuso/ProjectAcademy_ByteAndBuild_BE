@@ -7,8 +7,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.betacom.bb.dto.AlimentazioneDTO;
 import com.betacom.bb.dto.CaseDTO;
 import com.betacom.bb.exception.AcademyException;
+import com.betacom.bb.models.Alimentazione;
 import com.betacom.bb.models.Case;
 import com.betacom.bb.models.Formato;
 import com.betacom.bb.models.Prodotto;
@@ -137,5 +139,10 @@ public class CaseImpl extends Utilities implements ICaseServices{
 				.formato(buildFormatoDTO(c.getFormato()))
 				.build())
 				.collect(Collectors.toList());
+	}
+	@Override
+	public CaseDTO findByIdProd(Integer idProd) throws AcademyException {
+		Case cas = caseR.findByIdProd(idProd);
+		return buildCaseDTO(cas);
 	}
 }

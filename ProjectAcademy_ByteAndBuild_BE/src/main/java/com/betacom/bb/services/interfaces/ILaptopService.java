@@ -13,6 +13,7 @@ public interface ILaptopService {
 	void update(LaptopReq req) throws AcademyException;
 	void delete(LaptopReq req) throws AcademyException;
 	void createLaptopProd(GeneralReq req) throws AcademyException;
+	LaptopDTO findByIdProd(Integer idProd) throws AcademyException;
 
 	List<LaptopDTO> findAll() throws AcademyException;
 	LaptopDTO getById(Integer id) throws AcademyException;

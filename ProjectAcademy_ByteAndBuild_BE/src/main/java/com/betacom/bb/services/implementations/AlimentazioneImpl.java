@@ -140,6 +140,12 @@ public class AlimentazioneImpl extends Utilities implements IAlimentazioneServic
 						.build())
 				.collect(Collectors.toList());
 	}
+
+	@Override
+	public AlimentazioneDTO findByIdProd(Integer idProd) throws AcademyException {
+		Alimentazione alim = alimR.findByIdProd(idProd);
+		return buildAlimentazioneDTO(alim);
+	}
 	
 //	public AlimentazioneDTO findByIdProd(Integer idP) {
 //		List<AlimentazioneDTO> lA = listAll();

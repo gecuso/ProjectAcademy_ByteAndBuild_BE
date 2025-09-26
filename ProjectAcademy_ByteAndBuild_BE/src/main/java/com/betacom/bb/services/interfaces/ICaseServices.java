@@ -12,7 +12,8 @@ public interface ICaseServices {
 	void create(CaseReq req) throws AcademyException;
 	void createCaseProd(GeneralReq req) throws AcademyException;
 	void delete(CaseReq req) throws AcademyException;
-	
+	CaseDTO findByIdProd(Integer idProd) throws AcademyException;
+
 	CaseDTO getById(Integer id) throws AcademyException;
 	List<CaseDTO> listAll();
 }

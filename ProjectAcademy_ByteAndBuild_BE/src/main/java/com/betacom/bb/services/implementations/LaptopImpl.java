@@ -159,6 +159,18 @@ public class LaptopImpl extends Utilities implements ILaptopService{
 				.prodotto(buildProdottoDTO(lap.getProdotto()))
 				.build();
 	}
+
+	@Override
+	public LaptopDTO findByIdProd(Integer idProd) throws AcademyException {
+		Laptop lap = lapR.findByIdProd(idProd);
+		return LaptopDTO.builder()
+				.id(lap.getId())
+				.descrizione(lap.getDescrizione())
+				.caratteristiche(lap.getCaratteristiche())
+				.consumo(lap.getConsumo())
+				.prodotto(buildProdottoDTO(lap.getProdotto()))
+				.build();
+	}
 	
 	
 	
