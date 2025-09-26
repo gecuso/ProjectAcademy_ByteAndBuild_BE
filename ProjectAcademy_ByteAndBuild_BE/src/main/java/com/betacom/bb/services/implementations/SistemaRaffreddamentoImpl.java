@@ -74,6 +74,7 @@ public class SistemaRaffreddamentoImpl extends Utilities implements ISistemaRaff
 		req.getSisRafReq().setIdProdotto(idprod);
 		
 		create(req.getSisRafReq());
+
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
