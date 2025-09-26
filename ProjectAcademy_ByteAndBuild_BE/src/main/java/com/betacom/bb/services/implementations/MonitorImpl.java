@@ -82,6 +82,7 @@ public class MonitorImpl implements IMonitorService{
 		req.getMonitorReq().setIdProdotto(idprod);
 		
 		create(req.getMonitorReq());
+
 	}
 
 	@Transactional(rollbackFor = Exception.class)

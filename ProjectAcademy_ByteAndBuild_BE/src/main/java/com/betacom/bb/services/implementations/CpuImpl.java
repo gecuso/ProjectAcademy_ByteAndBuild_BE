@@ -25,19 +25,17 @@ import lombok.extern.log4j.Log4j2;
 @Service
 public class CpuImpl extends Utilities implements ICpuServices{
 
-    private final MemoriaImpl memoriaImpl;
-
 	private ICpuRepository cpuR;
 	private IProdottoRepository prodR;
 	private IProdottoServices prodS;
 
 	
-	public CpuImpl(ICpuRepository cpuR,IProdottoRepository prodR, MemoriaImpl memoriaImpl) {
+	public CpuImpl(ICpuRepository cpuR, IProdottoRepository prodR, IProdottoServices prodS) {
+		super();
 		this.cpuR = cpuR;
 		this.prodR = prodR;
-		this.memoriaImpl = memoriaImpl;
+		this.prodS = prodS;
 	}
-	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void create(CpuReq req) throws AcademyException {
