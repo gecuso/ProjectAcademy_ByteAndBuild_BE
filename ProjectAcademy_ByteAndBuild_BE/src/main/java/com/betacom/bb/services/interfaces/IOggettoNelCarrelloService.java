@@ -13,7 +13,7 @@ public interface IOggettoNelCarrelloService {
 	void delete(OggettoNelCarrelloReq req) throws AcademyException;	
 
 	List<OggettoNelCarrelloDTO> findAll();
-	OggettoNelCarrelloDTO getById(Integer id) throws AcademyException;
-	List<OggettoNelCarrelloDTO> getByIdCarrello(Integer id) throws AcademyException;	
+	OggettoNelCarrelloDTO getById(Integer id) throws AcademyException;	
+	List<OggettoNelCarrelloDTO> getByIdCarrello(Integer id) throws AcademyException;
 	
 }

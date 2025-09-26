@@ -185,12 +185,21 @@ public class OggettoNelCarrelloImpl extends Utilities implements IOggettoNelCarr
 	@Override
 	public List<OggettoNelCarrelloDTO> getByIdCarrello(Integer id) throws AcademyException {
 		log.debug("findByIdCarrello OggettoNelCarrello");
-		List<Optional<OggettoNelCarrello>> oggettiO = oncR.findByIdCarrello(id);
+		
+		//ciclo i dati per trovare gli oggetti dentro ad uno specifico carrello
+		List<OggettoNelCarrello> tuttiOggetti = oncR.findAll();
+		List<OggettoNelCarrello> oggettiO = new ArrayList<OggettoNelCarrello>();
+		
+		for (OggettoNelCarrello oggetto : tuttiOggetti) {
+			if(oggetto.getCarrello().getId() == id) {
+				oggettiO.add(oggetto);
+			}
+		}
 		
 		//inserisco i dati dentro una lista normale
 		List<OggettoNelCarrello> oggetti = new ArrayList<OggettoNelCarrello>();
-		for (Optional<OggettoNelCarrello> oggetto : oggettiO) {
-			oggetti.add(oggetto.get());		
+		for (OggettoNelCarrello oggetto : oggettiO) {
+			oggetti.add(oggetto);		
 		}
 		
 		//restituisco i dati

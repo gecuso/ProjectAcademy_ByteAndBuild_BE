@@ -99,8 +99,8 @@ public class OggettoNelCarrelloController {
 	}	
 	
 	@GetMapping("/getByIdCarrello")
-	public ResponseObject<OggettoNelCarrelloDTO> getByIdCarrello(@RequestParam (required = true)  Integer id) {
-		ResponseObject<OggettoNelCarrelloDTO> r = new ResponseObject<OggettoNelCarrelloDTO>();
+	public ResponseList<OggettoNelCarrelloDTO> getByIdCarrello(@RequestParam (required = true)  Integer id) {
+		ResponseList<OggettoNelCarrelloDTO> r = new ResponseList<OggettoNelCarrelloDTO>();
 		try {
 			r.setDati(oncS.getByIdCarrello(id));
 			r.setRc(true);

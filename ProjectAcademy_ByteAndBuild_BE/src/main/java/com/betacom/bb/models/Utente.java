@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name="utente_jpa")
+@Table(name="utente")
 @Getter
 @Setter
 public class Utente {
@@ -31,7 +31,7 @@ public class Utente {
 	////////////////////////////////	
 	
 	@OneToOne(
-			mappedBy = "utente_jpa",
+			mappedBy = "utente",
 			cascade = CascadeType.REMOVE
 			)
 	private Carrello carrello;

@@ -54,7 +54,7 @@ public class CarrelloImpl extends Utilities implements ICarrelloService{
 		if(ute.isEmpty())
 			throw new AcademyException("Utente non presente nel database");		
 		//controllo se quell'utente ha già un carrello	
-		Optional<Carrello> car2 = carrR.findByIdUtente(req.getIdUtente());
+		Optional<Carrello> car2 = findByIdUtente(req.getIdUtente());
 		if(!car2.isEmpty())
 			throw new AcademyException("Questo utente ha già un carrello");
 		
@@ -107,7 +107,16 @@ public class CarrelloImpl extends Utilities implements ICarrelloService{
 		
 		//devo controllare se non ci sono oggetti all'interno
 		//se ce ne sono non posso eliminare
-		List<Optional<OggettoNelCarrello>> oggettiInterni = oncR.findByIdCarrello(req.getId());
+		//ciclo i dati per trovare gli oggetti dentro ad uno specifico carrello
+		List<OggettoNelCarrello> tuttiOggetti = oncR.findAll();
+		List<OggettoNelCarrello> oggettiInterni = new ArrayList<OggettoNelCarrello>();
+		
+		for (OggettoNelCarrello oggetto : tuttiOggetti) {
+			if(oggetto.getCarrello().getId() == req.getId()) {
+				oggettiInterni.add(oggetto);
+			}
+		}
+		
 		if(oggettiInterni.isEmpty()) {
 			//elimino
 			carrR.delete(car.get());
@@ -171,7 +180,7 @@ public class CarrelloImpl extends Utilities implements ICarrelloService{
 		log.debug("findByIdUtente carrello");
 		
 		//controllo se esiste il carrello
-		Optional<Carrello> carrello = carrR.findByIdUtente(id);
+		Optional<Carrello> carrello = findByIdUtente(id);
 		if(carrello.isEmpty())
 			throw new AcademyException("Carrello non presente nel database");
 		
@@ -201,7 +210,7 @@ public class CarrelloImpl extends Utilities implements ICarrelloService{
 		log.debug("Start svuota carrello");
 		
 		//controllo se esiste il carrello
-		Optional<Carrello> carrello = carrR.findByIdUtente(id);
+		Optional<Carrello> carrello = findByIdUtente(id);
 		if(carrello.isEmpty())
 			throw new AcademyException("Carrello non presente nel database");
 		
@@ -223,7 +232,28 @@ public class CarrelloImpl extends Utilities implements ICarrelloService{
 	}
 	
 	
-	
+	public Optional<Carrello> findByIdUtente (Integer id) throws AcademyException{
+		log.debug("start get by utente id");
+		
+		//prendo la lista di carrelli
+		List<Carrello> carrelli = carrR.findAll();
+		
+		int idd = -1;
+		
+		//ciclo i carrelli e cerco quello che mi serve
+		for (Carrello carrello : carrelli) {
+			if(carrello.getUtente().getId() == id) {
+				idd = carrello.getId();
+			}
+		}
+		
+		//se non trova il carrello necessario da errore
+		if(idd == -1) {
+			throw new AcademyException("Carrello con quel id_utente non trovato");
+		}else {
+			return carrR.findById(idd);
+		}
+	}
 	
 	
 	
