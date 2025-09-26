@@ -173,6 +173,7 @@
     create table utente (
         id integer not null auto_increment,
         role tinyint check (role between 0 and 2),
+        currentpwd varchar(255),
         email varchar(255),
         indirizzo varchar(255),
         pwd varchar(255),
