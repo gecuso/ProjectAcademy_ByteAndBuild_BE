@@ -81,6 +81,7 @@ public class LaptopImpl extends Utilities implements ILaptopService{
 		req.getLaptopReq().setIdProdotto(idprod);
 		
 		create(req.getLaptopReq());
+
 	}
 	
 	@Transactional(rollbackFor = Exception.class)

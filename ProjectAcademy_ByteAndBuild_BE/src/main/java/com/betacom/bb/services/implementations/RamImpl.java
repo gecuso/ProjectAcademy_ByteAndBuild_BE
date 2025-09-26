@@ -28,10 +28,12 @@ public class RamImpl extends Utilities implements IRamServices{
 	private IRamRepository ramR;
 	private IProdottoRepository prodR;
 	private IProdottoServices prodS;
-	
-	public RamImpl(IRamRepository ramR, IProdottoRepository prodR) {
+
+	public RamImpl(IRamRepository ramR, IProdottoRepository prodR, IProdottoServices prodS) {
+		super();
 		this.ramR = ramR;
 		this.prodR = prodR;
+		this.prodS = prodS;
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -71,6 +73,7 @@ public class RamImpl extends Utilities implements IRamServices{
 		req.getRamReq().setIdProdotto(idprod);
 		
 		create(req.getRamReq());
+
 	}
 	
 	@Transactional(rollbackFor = Exception.class)

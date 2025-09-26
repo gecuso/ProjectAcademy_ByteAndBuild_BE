@@ -79,6 +79,7 @@ public class MemoriaImpl extends Utilities implements IMemoriaService{
 		req.getMemReq().setIdProdotto(idprod);
 		
 		create(req.getMemReq());
+
 	}
 	
 	
