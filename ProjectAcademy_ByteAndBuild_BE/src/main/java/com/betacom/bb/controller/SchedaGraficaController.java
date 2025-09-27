@@ -48,9 +48,22 @@ public class SchedaGraficaController {
 	@PostMapping("/createSchGrfProd")
 	public ResponseBase createSchGrfProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
-		log.debug("controller alim : "+req);
+		log.debug("createSchGrfProd : "+req);
 		try {
 			sgS.createSchGrfProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PostMapping("/updateSchGrfProd")
+	public ResponseBase updateSchGrfProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updateSchGrfProd : "+req);
+		try {
+			sgS.updateSchGrfProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);

@@ -78,6 +78,18 @@ public class RamImpl extends Utilities implements IRamServices{
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
+	public void updateRamProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getRamReq().setDescrizione(req.getProdReq().getDescrizione());
+		
+		update(req.getRamReq());
+
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
 	public void update(RamReq req) throws AcademyException {
 		log.debug("update :" + req);
 		Optional<Ram> r = ramR.findById(req.getId());

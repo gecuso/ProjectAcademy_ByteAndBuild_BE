@@ -50,9 +50,22 @@ public class MouseController {
 	@PostMapping("/createMouseProd")
 	public ResponseBase createMouseProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
-		log.debug("controller alim : "+req);
+		log.debug("createMouseProd: "+req);
 		try {
 			mouS.createMouseProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PostMapping("/updateMouseProd")
+	public ResponseBase updateMouseProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updateMouseProd: "+req);
+		try {
+			mouS.updateMouseProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);

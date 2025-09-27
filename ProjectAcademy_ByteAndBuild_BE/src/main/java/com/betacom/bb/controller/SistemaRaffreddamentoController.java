@@ -48,9 +48,22 @@ public class SistemaRaffreddamentoController {
 	@PostMapping("/createSisRafProd")
 	public ResponseBase createSisRafProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
-		log.debug("controller alim : "+req);
+		log.debug("createSisRafProd : "+req);
 		try {
 			srS.createSisRafProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PostMapping("/updateSisRafProd")
+	public ResponseBase updateSisRafProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updateSisRafProd : "+req);
+		try {
+			srS.updateSisRafProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);

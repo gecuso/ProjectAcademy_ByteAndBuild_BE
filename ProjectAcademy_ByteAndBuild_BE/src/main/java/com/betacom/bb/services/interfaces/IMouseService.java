@@ -13,6 +13,7 @@ public interface IMouseService {
 	void update(MouseReq req) throws AcademyException;
 	void delete(MouseReq req) throws AcademyException;
 	void createMouseProd(GeneralReq req) throws AcademyException;
+	void updateMouseProd(GeneralReq req) throws AcademyException;
 	MouseDTO findByIdProd(Integer idProd) throws AcademyException;
 	
 	List<MouseDTO> findAll() throws AcademyException;

@@ -78,6 +78,16 @@ public class TastieraImpl extends Utilities implements ITastieraService{
 		
 		create(req.getTastReq());
 	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateTastProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getTastReq().setDescrizione(req.getProdReq().getDescrizione());
+		
+		update(req.getTastReq());
+	}
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override

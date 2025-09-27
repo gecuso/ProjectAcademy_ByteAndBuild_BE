@@ -74,6 +74,16 @@ public class SchedaGraficaImpl extends Utilities implements ISchedaGraficaServic
 		
 		create(req.getSchGrfReq());
 	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateSchGrfProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getSchGrfReq().setDescrizione(req.getProdReq().getDescrizione());
+		
+		update(req.getSchGrfReq());
+	}
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override

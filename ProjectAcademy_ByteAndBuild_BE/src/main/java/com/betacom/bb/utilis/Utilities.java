@@ -54,6 +54,7 @@ public class Utilities {
 				.build();
 	}
 	
+	
 	public CategoriaDTO buildCategoriaDTO(Categoria c) {
 		return CategoriaDTO.builder()
 				.id(c.getId())

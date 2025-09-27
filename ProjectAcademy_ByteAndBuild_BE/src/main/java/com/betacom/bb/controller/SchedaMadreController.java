@@ -48,9 +48,22 @@ public class SchedaMadreController {
 	@PostMapping("/createSchMdrProd")
 	public ResponseBase createSchMdrProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
-		log.debug("controller alim : "+req);
+		log.debug("createSchMdrProd : "+req);
 		try {
 			smS.createSchMdrProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PostMapping("/updateSchMdrProd")
+	public ResponseBase updateSchMdrProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updateSchMdrProd : "+req);
+		try {
+			smS.updateSchMdrProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);

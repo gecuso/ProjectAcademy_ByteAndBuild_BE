@@ -92,6 +92,15 @@ public class SchedaMadreImpl extends Utilities implements ISchedaMadreServices{
 		
 		create(req.getSchMdrReq());
 	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateSchMdrProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getSchMdrReq().setDescrizione(req.getProdReq().getDescrizione());		
+		update(req.getSchMdrReq());
+	}
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override

@@ -48,9 +48,22 @@ public class TastieraController {
 	@PostMapping("/createTastProd")
 	public ResponseBase createTastProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
-		log.debug("controller alim : "+req);
+		log.debug("createTastProd : "+req);
 		try {
 			tS.createTastProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PostMapping("/updateTastProd")
+	public ResponseBase updateTastProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updateTastProd : "+req);
+		try {
+			tS.updateTastProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);

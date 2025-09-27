@@ -48,9 +48,22 @@ public class RamController {
 	@PostMapping("/createRamProd")
 	public ResponseBase createRamProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
-		log.debug("controller alim : "+req);
+		log.debug("createRamProd : "+req);
 		try {
 			ramS.createRamProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PostMapping("/updateRamProd")
+	public ResponseBase updateRamProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updateRamProd : "+req);
+		try {
+			ramS.updateRamProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);

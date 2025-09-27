@@ -81,6 +81,17 @@ public class MemoriaImpl extends Utilities implements IMemoriaService{
 		create(req.getMemReq());
 
 	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateMemProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getMemReq().setDescrizione(req.getProdReq().getDescrizione());
+		
+		update(req.getMemReq());
+
+	}
 	
 	
 	@Transactional(rollbackFor = Exception.class)

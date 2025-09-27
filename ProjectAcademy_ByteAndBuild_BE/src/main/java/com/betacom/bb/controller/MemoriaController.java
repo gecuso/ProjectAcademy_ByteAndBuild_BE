@@ -49,9 +49,23 @@ public class MemoriaController {
 	@PostMapping("/createMemProd")
 	public ResponseBase createMemProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
-		log.debug("controller alim : "+req);
+		log.debug("createMemProd: "+req);
 		try {
 			memS.createMemProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	@PutMapping("/updateMemProd")
+	public ResponseBase updateMemProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updateMemProd: "+req);
+		try {
+			memS.updateMemProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);

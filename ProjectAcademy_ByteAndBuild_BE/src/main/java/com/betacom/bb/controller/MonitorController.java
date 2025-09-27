@@ -50,9 +50,22 @@ public class MonitorController {
 	@PostMapping("/createMonitorProd")
 	public ResponseBase createMonitorProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
-		log.debug("controller alim : "+req);
+		log.debug("createMonitorProd : "+req);
 		try {
 			monS.createMonitorProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PutMapping("/updateMonitorProd")
+	public ResponseBase updateMonitorProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updateMonitorProd : "+req);
+		try {
+			monS.updateMonitorProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);

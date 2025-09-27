@@ -13,6 +13,7 @@ public interface ISistemaRaffreddamentoServices {
 	void update(SistemaRaffreddamentoReq req) throws AcademyException;
 	void delete(SistemaRaffreddamentoReq req) throws AcademyException;
 	void createSisRafProd(GeneralReq req) throws AcademyException;
+	void updateSisRafProd(GeneralReq req) throws AcademyException;
 	SistemaRaffreddamentoDTO findByIdProd(Integer idProd) throws AcademyException;
 
 	SistemaRaffreddamentoDTO getById(Integer id) throws AcademyException;

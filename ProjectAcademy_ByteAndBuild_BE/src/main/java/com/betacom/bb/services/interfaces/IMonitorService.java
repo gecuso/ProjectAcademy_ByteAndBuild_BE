@@ -13,6 +13,7 @@ public interface IMonitorService {
 	void update(MonitorReq req) throws AcademyException;
 	void delete(MonitorReq req) throws AcademyException;
 	void createMonitorProd(GeneralReq req) throws AcademyException;
+	void updateMonitorProd(GeneralReq req) throws AcademyException;
 	MonitorDTO findByIdProd(Integer idProd) throws AcademyException;
 
 	
