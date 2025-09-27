@@ -80,6 +80,17 @@ public class CpuImpl extends Utilities implements ICpuServices{
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
+	public void updateCpuProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getCpuReq().setDescrizione(req.getProdReq().getDescrizione());
+		
+		update(req.getCpuReq());
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
 	public void update(CpuReq req) throws AcademyException {
 		log.debug("update :" + req);
 		Optional<Cpu> c = cpuR.findById(req.getId());

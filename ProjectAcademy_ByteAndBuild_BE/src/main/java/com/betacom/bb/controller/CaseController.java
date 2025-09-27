@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.betacom.bb.dto.AlimentazioneDTO;
 import com.betacom.bb.dto.CaseDTO;
 import com.betacom.bb.requests.CaseReq;
 import com.betacom.bb.requests.GeneralReq;
@@ -47,9 +46,22 @@ public class CaseController {
 	@PostMapping("/createCaseProd")
 	public ResponseBase createCaseProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
-		log.debug("controller alim : "+req);
+		log.debug("createCaseProd : "+req);
 		try {
 			csS.createCaseProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PostMapping("/updateCaseProd")
+	public ResponseBase updateCaseProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updateCaseProd : "+req);
+		try {
+			csS.updateCaseProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);

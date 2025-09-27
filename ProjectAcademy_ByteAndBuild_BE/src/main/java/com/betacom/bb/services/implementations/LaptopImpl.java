@@ -83,6 +83,17 @@ public class LaptopImpl extends Utilities implements ILaptopService{
 		create(req.getLaptopReq());
 
 	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateLaptopProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getLaptopReq().setDescrizione(req.getProdReq().getDescrizione());
+		
+		update(req.getLaptopReq());
+
+	}
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override

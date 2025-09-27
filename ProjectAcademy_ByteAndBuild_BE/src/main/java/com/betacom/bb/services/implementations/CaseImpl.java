@@ -7,10 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.betacom.bb.dto.AlimentazioneDTO;
 import com.betacom.bb.dto.CaseDTO;
 import com.betacom.bb.exception.AcademyException;
-import com.betacom.bb.models.Alimentazione;
 import com.betacom.bb.models.Case;
 import com.betacom.bb.models.Formato;
 import com.betacom.bb.models.Prodotto;
@@ -90,6 +88,15 @@ public class CaseImpl extends Utilities implements ICaseServices{
 		
 		create(req.getCaseReq());
 	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateCaseProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getCaseReq().setDescrizione(req.getProdReq().getDescrizione());
+		update(req.getCaseReq());
+	}
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -104,6 +111,26 @@ public class CaseImpl extends Utilities implements ICaseServices{
 			throw new AcademyException("Case contenutaa in un pc, non eliminabile");
 		
 		caseR.delete(c.get());
+		
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void update(CaseReq req) throws AcademyException {
+		log.debug("update :" + req);
+		Optional<Case> a = caseR.findById(req.getId());
+		
+		if(a.isEmpty())
+			throw new AcademyException("case non esistente");
+		Case cas = a.get();
+		
+		if(req.getDimensioni() == null )
+			throw new AcademyException("dimensioni non presenti, riprova");
+		cas.setDimensioni(req.getDimensioni());
+		if(req.getDescrizione() == null )
+			throw new AcademyException("descrizione non presente, riprova");
+		cas.setDescrizione(req.getDescrizione());
+		
+		caseR.save(cas);
 		
 	}
 	
