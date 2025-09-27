@@ -7,6 +7,14 @@
         primary key (id)
     ) engine=InnoDB;
 
+    create table carrello (
+        id integer not null auto_increment,
+        id_utente integer,
+        numero_prodotti integer not null,
+        prezzo_totale integer not null,
+        primary key (id)
+    ) engine=InnoDB;
+
     create table casee (
         id integer not null auto_increment,
         id_formato integer,
@@ -83,6 +91,14 @@
         primary key (id)
     ) engine=InnoDB;
 
+    create table oggetto_nel_carrello (
+        id integer not null auto_increment,
+        id_carrello integer,
+        id_prodotto integer,
+        quantita integer not null,
+        primary key (id)
+    ) engine=InnoDB;
+
     create table pc (
         id integer not null auto_increment,
         id_alimentazione integer,
@@ -154,9 +170,10 @@
         primary key (id)
     ) engine=InnoDB;
 
-    create table utente_jpa (
+    create table utente (
         id integer not null auto_increment,
         role tinyint check (role between 0 and 2),
+        currentpwd varchar(255),
         email varchar(255),
         indirizzo varchar(255),
         pwd varchar(255),
@@ -245,6 +262,11 @@
        foreign key (id_prodotto) 
        references prodotto (id);
 
+    alter table carrello 
+       add constraint FKimyxl9cko6g83slko5cldpbh 
+       foreign key (id_utente) 
+       references utente (id);
+
     alter table casee 
        add constraint FKku42w51dqftbygngninjhdd9n 
        foreign key (id_formato) 
@@ -287,6 +309,16 @@
 
     alter table mouse 
        add constraint FKgmgsa2kl1w8c0q5lxf0cykd3s 
+       foreign key (id_prodotto) 
+       references prodotto (id);
+
+    alter table oggetto_nel_carrello 
+       add constraint FK6bfhwb991pmwm4nc9wbarr6kb 
+       foreign key (id_carrello) 
+       references carrello (id);
+
+    alter table oggetto_nel_carrello 
+       add constraint FKhilt76x3lvcoaaxri4f14m4su 
        foreign key (id_prodotto) 
        references prodotto (id);
 

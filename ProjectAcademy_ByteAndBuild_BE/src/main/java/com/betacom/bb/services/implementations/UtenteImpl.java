@@ -37,6 +37,7 @@ public class UtenteImpl implements IUtenteServices{
 		Utente ut = new Utente();
 		ut.setUserName(req.getUserName());
 		ut.setPwd(req.getPwd());
+		ut.setCurrentpwd(req.getPwd());
 		ut.setEmail(req.getEmail());
 		ut.setIndirizzo(req.getIndirizzo());
 		ut.setTelefono(req.getTelefono());
@@ -52,10 +53,13 @@ public class UtenteImpl implements IUtenteServices{
 		Optional<Utente> u = utenR.findById(req.getId());
 		if (u.isEmpty())
 			throw new AcademyException("Username inesistente");
-		if (req.getUserName() != null)
-		    u.get().setUserName(req.getUserName());
-		if (req.getPwd() != null)
+		if(req.getCurrentpwd() == null || !req.getCurrentpwd().equals(u.get().getPwd())) {
+			throw new AcademyException("Password corrente errata");
+		}
+		if (req.getPwd() != null && !req.getPwd().isEmpty()) {
 			u.get().setPwd(req.getPwd());
+			u.get().setCurrentpwd(req.getPwd());
+		}
 		if (req.getRole() != null)
 			u.get().setRole(Roles.valueOf(req.getRole()));
 		if (req.getEmail() != null)
@@ -80,6 +84,7 @@ public class UtenteImpl implements IUtenteServices{
 				.id(u.get().getId())
 				.userName(u.get().getUserName())
 				.pwd(u.get().getPwd())
+				.currentpwd(u.get().getCurrentpwd())
 				.email(u.get().getEmail())
 				.indirizzo(u.get().getIndirizzo())
 				.telefono(u.get().getTelefono())
@@ -141,6 +146,7 @@ public class UtenteImpl implements IUtenteServices{
 	            .id(utenteEntity.getId())
 	            .userName(utenteEntity.getUserName())
 	            .pwd(utenteEntity.getPwd())
+	            .currentpwd(utenteEntity.getCurrentpwd())
 	            .email(utenteEntity.getEmail())
 	            .indirizzo(utenteEntity.getIndirizzo())
 	            .telefono(utenteEntity.getTelefono())

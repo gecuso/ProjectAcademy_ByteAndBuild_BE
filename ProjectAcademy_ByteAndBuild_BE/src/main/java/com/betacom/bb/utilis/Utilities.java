@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.betacom.bb.dto.AlimentazioneDTO;
+import com.betacom.bb.dto.CarrelloDTO;
 import com.betacom.bb.dto.CaseDTO;
 import com.betacom.bb.dto.CategoriaDTO;
 import com.betacom.bb.dto.CpuDTO;
@@ -17,7 +18,9 @@ import com.betacom.bb.dto.SchedaGraficaDTO;
 import com.betacom.bb.dto.SchedaMadreDTO;
 import com.betacom.bb.dto.SistemaRaffreddamentoDTO;
 import com.betacom.bb.dto.TastieraDTO;
+import com.betacom.bb.dto.UtenteDTO;
 import com.betacom.bb.models.Alimentazione;
+import com.betacom.bb.models.Carrello;
 import com.betacom.bb.models.Case;
 import com.betacom.bb.models.Categoria;
 import com.betacom.bb.models.Cpu;
@@ -191,6 +194,41 @@ public class Utilities {
 						.build()))
 				.collect(Collectors.toList());
 				
+	}
+	
+	public List<CarrelloDTO> buildListCarrelloDTO(List<Carrello> carrelli){
+		return carrelli.stream()
+				.map(car -> CarrelloDTO.builder()
+						.id(car.getId())
+						.numeroProdotti(car.getNumeroProdotti())
+						.prezzoTotale(car.getPrezzoTotale())
+						.utente(UtenteDTO.builder()
+								.id(car.getUtente().getId())
+								.userName(car.getUtente().getUserName())
+								.pwd(car.getUtente().getPwd())
+								.email(car.getUtente().getEmail())
+								.indirizzo(car.getUtente().getIndirizzo())
+								.telefono(car.getUtente().getTelefono())
+								.role(car.getUtente().getRole().toString())
+								.build())
+						.build()).collect(Collectors.toList());
+	}
+	
+	public CarrelloDTO buildCarrelloDTO(Carrello carrello){
+		return CarrelloDTO.builder()
+						.id(carrello.getId())
+						.numeroProdotti(carrello.getNumeroProdotti())
+						.prezzoTotale(carrello.getPrezzoTotale())
+						.utente(UtenteDTO.builder()
+								.id(carrello.getUtente().getId())
+								.userName(carrello.getUtente().getUserName())
+								.pwd(carrello.getUtente().getPwd())
+								.email(carrello.getUtente().getEmail())
+								.indirizzo(carrello.getUtente().getIndirizzo())
+								.telefono(carrello.getUtente().getTelefono())
+								.role(carrello.getUtente().getRole().toString())
+								.build())
+						.build();
 	}
 	
 }

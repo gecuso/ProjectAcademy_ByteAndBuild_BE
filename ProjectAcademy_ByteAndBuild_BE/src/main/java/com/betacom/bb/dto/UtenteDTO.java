@@ -12,6 +12,7 @@ public class UtenteDTO {
 	
 	private String userName;
 	private String pwd;
+	private String currentpwd;
 	private String email;
 	private String indirizzo;
 	private String telefono;
