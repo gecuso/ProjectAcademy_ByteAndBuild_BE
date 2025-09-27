@@ -58,7 +58,7 @@ public class RamController {
 		}
 		return r;
 	}
-	@PostMapping("/updateRamProd")
+	@PutMapping("/updateRamProd")
 	public ResponseBase updateRamProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
 		log.debug("updateRamProd : "+req);

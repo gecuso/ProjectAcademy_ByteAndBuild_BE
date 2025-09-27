@@ -58,7 +58,7 @@ public class CpuController {
 		return r;
 	}
 	
-	@PostMapping("/updateCpuProd")
+	@PutMapping("/updateCpuProd")
 	public ResponseBase updateCpuProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
 		log.debug("updateCpuProd: "+req);

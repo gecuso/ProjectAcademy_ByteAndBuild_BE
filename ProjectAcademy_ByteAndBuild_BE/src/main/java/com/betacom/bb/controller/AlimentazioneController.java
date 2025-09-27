@@ -72,7 +72,7 @@ public class AlimentazioneController {
 		return r;
 	}
 	
-	@PostMapping("/updateAlimProd")
+	@PutMapping("/updateAlimProd")
 	public ResponseBase updateAlimProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
 		log.debug("controller alim : "+req);

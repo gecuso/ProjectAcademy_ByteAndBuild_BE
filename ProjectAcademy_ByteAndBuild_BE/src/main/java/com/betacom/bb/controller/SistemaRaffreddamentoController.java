@@ -58,7 +58,7 @@ public class SistemaRaffreddamentoController {
 		}
 		return r;
 	}
-	@PostMapping("/updateSisRafProd")
+	@PutMapping("/updateSisRafProd")
 	public ResponseBase updateSisRafProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
 		log.debug("updateSisRafProd : "+req);

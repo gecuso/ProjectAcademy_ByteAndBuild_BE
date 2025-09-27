@@ -60,7 +60,7 @@ public class MouseController {
 		}
 		return r;
 	}
-	@PostMapping("/updateMouseProd")
+	@PutMapping("/updateMouseProd")
 	public ResponseBase updateMouseProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
 		log.debug("updateMouseProd: "+req);

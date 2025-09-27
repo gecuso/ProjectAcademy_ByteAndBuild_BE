@@ -58,7 +58,7 @@ public class SchedaGraficaController {
 		}
 		return r;
 	}
-	@PostMapping("/updateSchGrfProd")
+	@PutMapping("/updateSchGrfProd")
 	public ResponseBase updateSchGrfProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
 		log.debug("updateSchGrfProd : "+req);

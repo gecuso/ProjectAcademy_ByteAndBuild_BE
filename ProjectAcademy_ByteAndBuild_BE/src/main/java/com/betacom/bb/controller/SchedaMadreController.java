@@ -58,7 +58,7 @@ public class SchedaMadreController {
 		}
 		return r;
 	}
-	@PostMapping("/updateSchMdrProd")
+	@PutMapping("/updateSchMdrProd")
 	public ResponseBase updateSchMdrProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
 		log.debug("updateSchMdrProd : "+req);
