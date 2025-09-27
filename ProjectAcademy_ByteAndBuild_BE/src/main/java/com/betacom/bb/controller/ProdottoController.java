@@ -58,12 +58,12 @@ public class ProdottoController {
 		return r;
 	}
 	
-	@PostMapping("/delete")
-	public ResponseBase delete(@RequestBody (required = true) ProdottoReq req) {
+	@GetMapping("/delete")
+	public ResponseBase delete(@RequestParam (required = true) Integer idProd ) {
 
 		ResponseBase r = new ResponseBase();
 		try {
-			prodS.delete(req);
+			prodS.delete(idProd);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);

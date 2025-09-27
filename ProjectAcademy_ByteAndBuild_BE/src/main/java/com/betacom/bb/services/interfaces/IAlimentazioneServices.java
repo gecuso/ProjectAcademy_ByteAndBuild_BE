@@ -12,6 +12,7 @@ public interface IAlimentazioneServices {
 	void create(AlimentazioneReq req) throws AcademyException;
 	void createAlimProd(GeneralReq req) throws AcademyException;
 	void updateAlimProd(GeneralReq req) throws AcademyException;
+	void deleteAlimProd(GeneralReq req) throws AcademyException;
 	void update(AlimentazioneReq req) throws AcademyException;
 	void delete(AlimentazioneReq req) throws AcademyException;
 	AlimentazioneDTO findByIdProd(Integer idProd) throws AcademyException;

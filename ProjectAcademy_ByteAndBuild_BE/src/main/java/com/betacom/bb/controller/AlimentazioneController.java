@@ -58,6 +58,19 @@ public class AlimentazioneController {
 		}
 		return r;
 	}
+	@PostMapping("/deleteAlimProd")
+	public ResponseBase deleteAlimProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteAlimProd : "+req);
+		try {
+			alimS.deleteAlimProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 	
 	@PostMapping("/updateAlimProd")
 	public ResponseBase updateAlimProd(@RequestBody (required = true) GeneralReq req) {
