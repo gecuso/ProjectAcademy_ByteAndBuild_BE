@@ -73,6 +73,19 @@ public class MonitorController {
 		}
 		return r;
 	}
+	@PutMapping("/deleteMonitorProd")
+	public ResponseBase deleteMonitorProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteMonitorProd : "+req);
+		try {
+			monS.deleteMonitorProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 	
 	@PutMapping("update")
 	public ResponseBase update(@RequestBody (required = true) MonitorReq req) {

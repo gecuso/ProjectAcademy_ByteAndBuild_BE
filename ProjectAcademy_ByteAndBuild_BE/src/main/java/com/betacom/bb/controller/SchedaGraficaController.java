@@ -71,6 +71,19 @@ public class SchedaGraficaController {
 		}
 		return r;
 	}
+	@PostMapping("/deleteSchGrfProd")
+	public ResponseBase deleteSchGrfProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteSchGrfProd : "+req);
+		try {
+			sgS.deleteSchGrfProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 	
 	@PutMapping("update")
 	public ResponseBase update(@RequestBody (required = true)  SchedaGraficaReq req) {

@@ -69,6 +69,19 @@ public class CaseController {
 		}
 		return r;
 	}
+	@PostMapping("/deleteCaseProd")
+	public ResponseBase deleteCaseProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteCaseProd : "+req);
+		try {
+			csS.deleteCaseProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 
 	
 	@PostMapping("/delete")

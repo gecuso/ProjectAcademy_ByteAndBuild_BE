@@ -97,6 +97,14 @@ public class CaseImpl extends Utilities implements ICaseServices{
 		req.getCaseReq().setDescrizione(req.getProdReq().getDescrizione());
 		update(req.getCaseReq());
 	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteCaseProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getCaseReq());
+		prodS.delete(req.getProdReq().getId());	
+		throw new AcademyException("fatto");
+	}
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override

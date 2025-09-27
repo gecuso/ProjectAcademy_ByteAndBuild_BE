@@ -14,9 +14,8 @@ public interface ILaptopService {
 	void delete(LaptopReq req) throws AcademyException;
 	void createLaptopProd(GeneralReq req) throws AcademyException;
 	void updateLaptopProd(GeneralReq req) throws AcademyException;
-
+	void deleteLaptopProd(GeneralReq req) throws AcademyException;
 	LaptopDTO findByIdProd(Integer idProd) throws AcademyException;
-
 	List<LaptopDTO> findAll() throws AcademyException;
 	LaptopDTO getById(Integer id) throws AcademyException;
 	

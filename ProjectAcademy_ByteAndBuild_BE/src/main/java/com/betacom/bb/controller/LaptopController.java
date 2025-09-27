@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.betacom.bb.dto.AlimentazioneDTO;
 import com.betacom.bb.dto.LaptopDTO;
 import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.requests.LaptopReq;
@@ -69,6 +68,19 @@ public class LaptopController {
 		log.debug("updateLaptopProd : "+req);
 		try {
 			laptS.updateLaptopProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PutMapping("/deleteLaptopProd")
+	public ResponseBase deleteLaptopProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteLaptopProd : "+req);
+		try {
+			laptS.deleteLaptopProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);

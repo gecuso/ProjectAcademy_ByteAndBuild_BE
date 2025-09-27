@@ -71,6 +71,19 @@ public class CpuController {
 		}
 		return r;
 	}
+	@PostMapping("/deleteCpuProd")
+	public ResponseBase deleteCpuProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteCpuProd: "+req);
+		try {
+			cpuS.deleteCpuProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 	
 	@PutMapping("/update")
 	public ResponseBase update(@RequestBody (required = true)  CpuReq req) {

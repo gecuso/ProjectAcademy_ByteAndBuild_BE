@@ -78,6 +78,13 @@ public class MouseImpl extends Utilities implements IMouseService{
 		
 		create(req.getMouseReq());
 	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteMouseProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getMouseReq());
+		prodS.delete(req.getProdReq().getId());
+	}
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override

@@ -77,6 +77,13 @@ public class CpuImpl extends Utilities implements ICpuServices{
 		
 		create(req.getCpuReq());
 	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteCpuProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getCpuReq());
+		prodS.delete(req.getProdReq().getId());
+	}
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override

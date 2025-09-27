@@ -71,6 +71,19 @@ public class SistemaRaffreddamentoController {
 		}
 		return r;
 	}
+	@PostMapping("/deleteSisRafProd")
+	public ResponseBase deleteSisRafProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteSisRafProd : "+req);
+		try {
+			srS.deleteSisRafProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 	
 	@PutMapping("update")
 	public ResponseBase update(@RequestBody (required = true)  SistemaRaffreddamentoReq req) {

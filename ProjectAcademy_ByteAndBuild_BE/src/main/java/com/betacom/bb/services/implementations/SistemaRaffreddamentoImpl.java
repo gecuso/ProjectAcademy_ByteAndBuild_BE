@@ -85,6 +85,13 @@ public class SistemaRaffreddamentoImpl extends Utilities implements ISistemaRaff
 		
 		update(req.getSisRafReq());
 	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteSisRafProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getSisRafReq());
+		prodS.delete(req.getProdReq().getId());
+	}
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override

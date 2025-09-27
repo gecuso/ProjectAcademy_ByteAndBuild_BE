@@ -14,7 +14,7 @@ public interface ICpuServices{
 	void delete(CpuReq req) throws AcademyException;
 	void createCpuProd(GeneralReq req)throws AcademyException;
 	void updateCpuProd(GeneralReq req)throws AcademyException;
-
+	void deleteCpuProd(GeneralReq req)throws AcademyException;
 	CpuDTO findByIdProd(Integer idProd) throws AcademyException;
 	CpuDTO getById(Integer id) throws AcademyException;
 	List<CpuDTO> listAll();

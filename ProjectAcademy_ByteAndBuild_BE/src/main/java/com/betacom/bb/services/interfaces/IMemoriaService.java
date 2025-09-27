@@ -14,6 +14,8 @@ public interface IMemoriaService {
 	void delete(MemoriaReq req) throws AcademyException;
 	void createMemProd(GeneralReq req) throws AcademyException;
 	void updateMemProd(GeneralReq req) throws AcademyException;
+	void deleteMemProd(GeneralReq req) throws AcademyException;
+
 
 	MemoriaDTO findByIdProd(Integer idProd) throws AcademyException;
 

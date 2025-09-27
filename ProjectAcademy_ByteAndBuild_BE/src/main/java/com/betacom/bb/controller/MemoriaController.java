@@ -73,6 +73,19 @@ public class MemoriaController {
 		}
 		return r;
 	}
+	@PutMapping("/deleteMemProd")
+	public ResponseBase deleteMemProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteMemProd: "+req);
+		try {
+			memS.deleteMemProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 	
 	@PutMapping("update")
 	public ResponseBase update(@RequestBody (required = true) MemoriaReq req) {

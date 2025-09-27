@@ -73,6 +73,19 @@ public class MouseController {
 		}
 		return r;
 	}
+	@PostMapping("/deleteMouseProd")
+	public ResponseBase deleteMouseProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteMouseProd: "+req);
+		try {
+			mouS.deleteMouseProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 	
 	@PutMapping("update")
 	public ResponseBase update(@RequestBody (required = true) MouseReq req) {

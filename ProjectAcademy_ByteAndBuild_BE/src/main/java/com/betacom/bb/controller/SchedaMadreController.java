@@ -71,6 +71,19 @@ public class SchedaMadreController {
 		}
 		return r;
 	}
+	@PostMapping("/deleteSchMdrProd")
+	public ResponseBase deleteSchMdrProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteSchMdrProd : "+req);
+		try {
+			smS.deleteSchMdrProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 	
 	@PutMapping("update")
 	public ResponseBase update(@RequestBody (required = true)  SchedaMadreReq req) {

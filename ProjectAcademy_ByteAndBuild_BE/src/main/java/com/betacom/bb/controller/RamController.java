@@ -71,6 +71,19 @@ public class RamController {
 		}
 		return r;
 	}
+	@PostMapping("/deleteRamProd")
+	public ResponseBase deleteRamProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteRamProd : "+req);
+		try {
+			ramS.deleteRamProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 	
 	@PutMapping("update")
 	public ResponseBase update(@RequestBody (required = true)  RamReq req) {

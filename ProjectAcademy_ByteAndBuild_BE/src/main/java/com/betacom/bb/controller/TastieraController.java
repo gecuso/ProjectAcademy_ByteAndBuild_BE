@@ -71,6 +71,19 @@ public class TastieraController {
 		}
 		return r;
 	}
+	@PostMapping("/deleteTastProd")
+	public ResponseBase deleteTastProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteTastProd : "+req);
+		try {
+			tS.deleteTastProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 	
 	@PostMapping("/update")
 	public ResponseBase update(@RequestBody (required = true)  TastieraReq req) {

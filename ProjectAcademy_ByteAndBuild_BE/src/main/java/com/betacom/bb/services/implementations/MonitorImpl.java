@@ -92,7 +92,13 @@ public class MonitorImpl extends Utilities implements IMonitorService{
 		
 		req.getMonitorReq().setDescrizione(req.getProdReq().getDescrizione());		
 		update(req.getMonitorReq());
-
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteMonitorProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getMonitorReq());
+		prodS.delete(req.getProdReq().getId());
 	}
 
 	@Transactional(rollbackFor = Exception.class)

@@ -90,7 +90,13 @@ public class MemoriaImpl extends Utilities implements IMemoriaService{
 		req.getMemReq().setDescrizione(req.getProdReq().getDescrizione());
 		
 		update(req.getMemReq());
-
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteMemProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getMemReq());
+		prodS.delete(req.getProdReq().getId());
 	}
 	
 	
