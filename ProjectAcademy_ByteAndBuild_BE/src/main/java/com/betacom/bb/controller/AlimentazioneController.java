@@ -59,6 +59,20 @@ public class AlimentazioneController {
 		return r;
 	}
 	
+	@PostMapping("/updateAlimProd")
+	public ResponseBase updateAlimProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("controller alim : "+req);
+		try {
+			alimS.updateAlimProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
 	@PutMapping("/update")
 	public ResponseBase update(@RequestBody (required = true)  AlimentazioneReq req) {
 		ResponseBase r = new ResponseBase();

@@ -77,6 +77,16 @@ public class AlimentazioneImpl extends Utilities implements IAlimentazioneServic
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
+	public void updateAlimProd(GeneralReq req) throws AcademyException {
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getAlimReq().setDescrizione(req.getProdReq().getDescrizione());
+		update(req.getAlimReq());
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
 	public void update(AlimentazioneReq req) throws AcademyException {
 		log.debug("update :" + req);
 		Optional<Alimentazione> a = alimR.findById(req.getId());
