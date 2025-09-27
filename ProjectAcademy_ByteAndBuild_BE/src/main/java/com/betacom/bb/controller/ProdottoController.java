@@ -1,5 +1,6 @@
 package com.betacom.bb.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,16 +13,21 @@ import com.betacom.bb.requests.ProdottoReq;
 import com.betacom.bb.response.ResponseBase;
 import com.betacom.bb.response.ResponseList;
 import com.betacom.bb.response.ResponseObject;
+import com.betacom.bb.services.implementations.ProdottoImpl;
 import com.betacom.bb.services.interfaces.IProdottoServices;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/rest/prodotto")
 public class ProdottoController {
 
+    private final ProdottoImpl prodottoImpl;
+
 	private IProdottoServices prodS;
 
-	public ProdottoController(IProdottoServices prodS) {
+	public ProdottoController(IProdottoServices prodS, ProdottoImpl prodottoImpl) {
 		this.prodS = prodS;
+		this.prodottoImpl = prodottoImpl;
 	}
 	
 	@PostMapping("/create")
@@ -78,11 +84,38 @@ public class ProdottoController {
 		return r;
 	}
 	
+	@GetMapping("/listByFilter")
+	public ResponseList<ProdottoDTO> listByFilter(@RequestParam(name="descrizione", required = false)String descrizione){
+		ResponseList<ProdottoDTO> p = new ResponseList<ProdottoDTO>();
+		if(descrizione == null || descrizione.isBlank())
+			descrizione = null;
+		
+		try {
+			p.setDati(prodS.list(descrizione));
+		} catch(Exception e) {
+			p.setRc(false);
+			p.setMsg(e.getMessage());
+		}
+		return p;
+	}
+	
 	@GetMapping("/listAllProdotto")
 	public ResponseList<ProdottoDTO> listAllProdotto(){
 		ResponseList<ProdottoDTO> r = new ResponseList<ProdottoDTO>();
 		try {
 			r.setDati(prodS.listAll());
+		}catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	@GetMapping("/listAllByIdCategoria")
+	public ResponseList<ProdottoDTO> listAllByIdCategoria(@RequestParam (required = true) Integer id ){
+		ResponseList<ProdottoDTO> r = new ResponseList<ProdottoDTO>();
+		try {
+			r.setDati(prodS.listAllByIdCategoria(id));
 		}catch (Exception e) {
 			r.setRc(false);
 			r.setMsg(e.getMessage());

@@ -14,7 +14,9 @@ import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.models.SistemaRaffreddamento;
 import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.repositories.ISistemaRaffreddamentoRepository;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.requests.SistemaRaffreddamentoReq;
+import com.betacom.bb.services.interfaces.IProdottoServices;
 import com.betacom.bb.services.interfaces.ISistemaRaffreddamentoServices;
 import com.betacom.bb.utilis.Utilities;
 
@@ -26,13 +28,16 @@ public class SistemaRaffreddamentoImpl extends Utilities implements ISistemaRaff
 
 	private ISistemaRaffreddamentoRepository sysR;
 	private IProdottoRepository prodR;
-
+	private IProdottoServices prodS;
 	
-	public SistemaRaffreddamentoImpl(ISistemaRaffreddamentoRepository sysR,IProdottoRepository prodR) {
+	public SistemaRaffreddamentoImpl(ISistemaRaffreddamentoRepository sysR, IProdottoRepository prodR,
+			IProdottoServices prodS) {
+		super();
 		this.sysR = sysR;
 		this.prodR = prodR;
+		this.prodS = prodS;
 	}
-	
+
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void create(SistemaRaffreddamentoReq req) throws AcademyException {
@@ -58,6 +63,19 @@ public class SistemaRaffreddamentoImpl extends Utilities implements ISistemaRaff
 		sys.setProdotto(p.get());
 		
 		sysR.save(sys);
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void createSisRafProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		Integer idprod = prodS.create(req.getProdReq());
+		
+		req.getSisRafReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getSisRafReq().setIdProdotto(idprod);
+		
+		create(req.getSisRafReq());
+
 	}
 	
 	@Transactional(rollbackFor = Exception.class)

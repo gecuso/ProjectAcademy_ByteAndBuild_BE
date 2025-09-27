@@ -17,7 +17,9 @@ import com.betacom.bb.repositories.ICaseRepository;
 import com.betacom.bb.repositories.IFormatoRepository;
 import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.requests.CaseReq;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.services.interfaces.ICaseServices;
+import com.betacom.bb.services.interfaces.IProdottoServices;
 import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
@@ -29,14 +31,17 @@ public class CaseImpl extends Utilities implements ICaseServices{
 	private ICaseRepository caseR;
 	private IFormatoRepository formR;
 	private IProdottoRepository prodR;
-	
-	
-	public CaseImpl(ICaseRepository caseR, IFormatoRepository formR, IProdottoRepository prodR) {
+	private IProdottoServices prodS;
+
+
+	public CaseImpl(ICaseRepository caseR, IFormatoRepository formR, IProdottoRepository prodR,
+			IProdottoServices prodS) {
+		super();
 		this.caseR = caseR;
 		this.formR = formR;
 		this.prodR = prodR;
+		this.prodS = prodS;
 	}
-
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -73,6 +78,17 @@ public class CaseImpl extends Utilities implements ICaseServices{
 		
 	}
 	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void createCaseProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		Integer idprod = prodS.create(req.getProdReq());
+		
+		req.getCaseReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getCaseReq().setIdProdotto(idprod);
+		
+		create(req.getCaseReq());
+	}
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override

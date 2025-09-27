@@ -15,8 +15,10 @@ import com.betacom.bb.models.Mouse;
 import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.repositories.IMouseRepository;
 import com.betacom.bb.repositories.IProdottoRepository;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.requests.MouseReq;
 import com.betacom.bb.services.interfaces.IMouseService;
+import com.betacom.bb.services.interfaces.IProdottoServices;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -26,11 +28,14 @@ public class MouseImpl implements IMouseService{
 
 	private IMouseRepository mouseR;
 	private IProdottoRepository prodR;
-
+	private IProdottoServices prodS;
 	
-	public MouseImpl(IMouseRepository mouseR, IProdottoRepository prodR) {
+	
+	public MouseImpl(IMouseRepository mouseR, IProdottoRepository prodR, IProdottoServices prodS) {
+		super();
 		this.mouseR = mouseR;
 		this.prodR = prodR;
+		this.prodS = prodS;
 	}
 
 	////////////////////////////////
@@ -61,6 +66,18 @@ public class MouseImpl implements IMouseService{
 		
 		//salvo nel database
 		mouseR.save(mouse);
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void createMouseProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		Integer idprod = prodS.create(req.getProdReq());
+		
+		req.getMouseReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getMouseReq().setIdProdotto(idprod);
+		
+		create(req.getMouseReq());
 	}
 
 	@Transactional(rollbackFor = Exception.class)

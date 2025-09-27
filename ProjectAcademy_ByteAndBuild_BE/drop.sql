@@ -3,6 +3,10 @@
        drop 
        foreign key FKbvchl8gmwr1hga1q8yyphwsmf;
 
+    alter table carrello 
+       drop 
+       foreign key FKimyxl9cko6g83slko5cldpbh;
+
     alter table casee 
        drop 
        foreign key FKku42w51dqftbygngninjhdd9n;
@@ -38,6 +42,14 @@
     alter table mouse 
        drop 
        foreign key FKgmgsa2kl1w8c0q5lxf0cykd3s;
+
+    alter table oggetto_nel_carrello 
+       drop 
+       foreign key FK6bfhwb991pmwm4nc9wbarr6kb;
+
+    alter table oggetto_nel_carrello 
+       drop 
+       foreign key FKhilt76x3lvcoaaxri4f14m4su;
 
     alter table pc 
        drop 
@@ -109,6 +121,8 @@
 
     drop table if exists alimentazione;
 
+    drop table if exists carrello;
+
     drop table if exists casee;
 
     drop table if exists categoria;
@@ -129,6 +143,8 @@
 
     drop table if exists mouse;
 
+    drop table if exists oggetto_nel_carrello;
+
     drop table if exists pc;
 
     drop table if exists prodotto;
@@ -142,3 +158,5 @@
     drop table if exists sistema_raffreddamento;
 
     drop table if exists tastiera;
+
+    drop table if exists utente;

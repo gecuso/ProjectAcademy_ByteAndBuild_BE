@@ -77,7 +77,7 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public void create(ProdottoReq req) throws AcademyException {
+	public Integer create(ProdottoReq req) throws AcademyException {
 		log.debug("create: " + req);
 		Prodotto prod = new Prodotto();
 		Optional<Prodotto> p = prodR.findByDescrizione(req.getDescrizione());
@@ -118,7 +118,7 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 			throw new AcademyException("Quantità errata, riprova");
 		prod.setQuantita(req.getQuantita());	
 		
-		prodR.save(prod);
+		return prodR.save(prod).getId();
 		
 	}
 	
@@ -322,9 +322,47 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 	}
 
 	@Override
+	public List<ProdottoDTO> list(String descrizione) {
+		log.debug("listByFilter");
+		List<Prodotto> lP = prodR.searchByFilter(descrizione);
+		return lP.stream()
+				.map(p -> ProdottoDTO.builder()
+						.id(p.getId())
+						.descrizione(p.getDescrizione())
+						.costo(p.getCosto())
+						.prezzo(p.getPrezzo())
+						.quantita(p.getQuantita())
+						.img(p.getImg())
+						.categoria(buildCategoriaDTO(p.getCategoria()))
+						.marca(buildMarcaDTO(p.getMarca()))
+						.build())
+				.collect(Collectors.toList());
+	}
+	
+	@Override
 	public List<ProdottoDTO> listAll() {
 		log.debug("lisAll di Alimentazione: ");
 		List<Prodotto> lP = prodR.findAll();
+		
+		return lP.stream()
+				.map(p -> ProdottoDTO.builder()
+						.id(p.getId())
+						.descrizione(p.getDescrizione())
+						.costo(p.getCosto())
+						.prezzo(p.getPrezzo())
+						.quantita(p.getQuantita())
+						.img(p.getImg())
+						.categoria(buildCategoriaDTO(p.getCategoria()))
+						.marca(buildMarcaDTO(p.getMarca()))
+						.build())
+				.collect(Collectors.toList());
+	}
+	
+	
+	@Override
+	public List<ProdottoDTO> listAllByIdCategoria(Integer idCategoria) {
+		log.debug("list all by id categoria: " + idCategoria);
+		List<Prodotto> lP = prodR.findAllByCategoria(idCategoria);
 		
 		return lP.stream()
 				.map(p -> ProdottoDTO.builder()

@@ -1,5 +1,6 @@
 package com.betacom.bb.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +16,7 @@ import com.betacom.bb.response.ResponseList;
 import com.betacom.bb.response.ResponseObject;
 import com.betacom.bb.services.interfaces.IMarcaService;
 
-
-
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/rest/marca")
 public class MarcaController {
@@ -109,4 +109,16 @@ public class MarcaController {
 		return r;
 	}
 	
+	@GetMapping("/byCategoria")
+	public ResponseList<MarcaDTO> getMarcaByCategoria(@RequestParam Integer idCategoria) {
+	    ResponseList<MarcaDTO> r = new ResponseList<>();
+	    try {
+	        r.setDati(marS.findByCategoria(idCategoria));
+	        r.setRc(true);
+	    } catch (Exception e) {
+	        r.setRc(false);
+	        r.setMsg(e.getMessage());
+	    }
+	    return r;
+	}
 }

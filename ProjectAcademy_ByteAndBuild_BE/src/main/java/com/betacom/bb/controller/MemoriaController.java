@@ -1,5 +1,6 @@
 package com.betacom.bb.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,14 +11,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.betacom.bb.dto.MemoriaDTO;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.requests.MemoriaReq;
 import com.betacom.bb.response.ResponseBase;
 import com.betacom.bb.response.ResponseList;
 import com.betacom.bb.response.ResponseObject;
 import com.betacom.bb.services.interfaces.IMemoriaService;
 
+import lombok.extern.log4j.Log4j2;
+
 @RestController
 @RequestMapping("/rest/memoria")
+@CrossOrigin(origins = "*")
+@Log4j2
 public class MemoriaController {
 
 	private IMemoriaService memS;
@@ -33,6 +39,19 @@ public class MemoriaController {
 		ResponseBase r = new ResponseBase();
 		try {
 			memS.create(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PostMapping("/createMemProd")
+	public ResponseBase createMemProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("controller alim : "+req);
+		try {
+			memS.createMemProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);
