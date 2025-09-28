@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.betacom.bb.dto.AlimentazioneDTO;
 import com.betacom.bb.dto.PcDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Alimentazione;
@@ -162,7 +161,7 @@ public class PcImpl extends Utilities implements IPcService{
 						  schgraf.get().getProdotto().getCosto() + schmdr.get().getProdotto().getCosto();
 
 
-		prod.get().setCosto(consumoTot);
+		prod.get().setCosto(costoTot);
 		
 		return pcR.save(c).getId();
 	}
@@ -187,6 +186,7 @@ public class PcImpl extends Utilities implements IPcService{
 		if(pcReq.getId()==null) throw new AcademyException("necessario l'id del pc per modificarlo");
 		Optional<Pc> m = pcR.findById(pcReq.getId());
 		Integer oldId=pcReq.getId();
+		
 		if(!m.isPresent()) throw new AcademyException("pc non esistente");
 		
 		if(pcReq.getIdAlimentazione()==null)throw new AcademyException("Alimentazione nulla");
@@ -239,29 +239,32 @@ public class PcImpl extends Utilities implements IPcService{
 		{
 			throw new AcademyException("gli elementi consumano troppa potenza, scegliere un alimentatore piu potente");
 		}
+		
+		PcReq pr = buildPcReq(m.get());
+		
+		aumentaQuantita(m.get().getProdotto().getQuantita(), pr);
 		if(controlloQuantita(prodR.getById(pcReq.getIdProdotto()).getQuantita(),pcReq))
 		{
 			riduciQuantita(prodR.getById(pcReq.getIdProdotto()).getQuantita(),pcReq);
 		}
 		else throw new AcademyException("elementi non sufficienti");
+		
+		List<Pc> lp = pcR.findAll();
+		for (Pc pc : lp) {
+			if(pc.getDescrizione().equalsIgnoreCase(pcReq.getDescrizione()) && pc.getId() != oldId)
+				throw new AcademyException("Esiste già un PC con questa descrione");
+		}
+		
+		m.get().setAlimentazione(alimR.findByIdProd(pcReq.getIdAlimentazione()));
+		m.get().setCasee(caseR.findByIdProd(pcReq.getIdCase()));
+		m.get().setCpu(cpuR.findByIdProd(pcReq.getIdCpu()));
+		m.get().setMemoria(memR.findByIdProd(pcReq.getIdMemoria()));
+		m.get().setRam(ramR.findByIdProd(pcReq.getIdRam()));
+		m.get().setSchedaGrafica(schgrfR.findByIdProd(pcReq.getIdSchedaGrafica()));
+		m.get().setSchedaMadre(schMdrR.findByIdProd(pcReq.getIdSchedaMadre()));
+		m.get().setSistemaRaffreddamento(sisRafR.findByIdProd(pcReq.getIdSistemaRaffreddamento()));
 
-		
-		try {
-			aumentaQuantita(m.get().getProdotto().getQuantita(), pcReq);
-			List<Pc> lp = pcR.findAll();
-			for (Pc pc : lp) {
-				if(pc.getDescrizione().equalsIgnoreCase(pcReq.getDescrizione()) && pc.getId() != oldId)
-					throw new AcademyException("Esiste già un PC con questa descrione");
-			}
-			pcR.delete(m.get());
-			Integer newId = create(pcReq);
-			m = pcR.findById(newId);
-			m.get().setId(oldId);
-			pcR.save(m.get());
-		} catch (Exception e) {
-			throw new AcademyException(e.getMessage());
-		}	
-		
+		pcR.save(m.get());			
 	}
 	
 	
@@ -339,6 +342,7 @@ public class PcImpl extends Utilities implements IPcService{
 	{
 		return comp1.equalsIgnoreCase(comp2);
 	}
+	
 	@Override
 	public Boolean controlloQuantita(Integer n, PcReq pcReq) throws AcademyException {
 		

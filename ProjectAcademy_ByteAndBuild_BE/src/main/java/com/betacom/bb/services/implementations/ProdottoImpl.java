@@ -99,7 +99,7 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 		List<Prodotto> lp = prodR.findAll();
 		for (Prodotto pr : lp) {
 			if(pr.getDescrizione().equalsIgnoreCase(req.getDescrizione())&&pr.getId()!=req.getId())
-				throw new AcademyException("Prodotto con la stessa descrizione");
+				throw new AcademyException("Esiste gia un Prodotto con la stessa descrizione");
 			}
 		prod.setDescrizione(req.getDescrizione());
 		
