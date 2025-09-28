@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.betacom.bb.dto.AlimentazioneDTO;
 import com.betacom.bb.dto.PcDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Alimentazione;
@@ -30,8 +31,10 @@ import com.betacom.bb.repositories.IRamRepository;
 import com.betacom.bb.repositories.ISchedaGraficaRepository;
 import com.betacom.bb.repositories.ISchedaMadreRepository;
 import com.betacom.bb.repositories.ISistemaRaffreddamentoRepository;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.requests.PcReq;
 import com.betacom.bb.services.interfaces.IPcService;
+import com.betacom.bb.services.interfaces.IProdottoServices;
 import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
@@ -50,13 +53,14 @@ public class PcImpl extends Utilities implements IPcService{
 	private ISchedaMadreRepository schMdrR;
 	private ISistemaRaffreddamentoRepository sisRafR;
 	private IRamRepository ramR;
+	private IProdottoServices prodS;
 
 	
 
 	public PcImpl(IPcRepository pcR, IAlimentazioneRepository alimR, ICaseRepository caseR, ICpuRepository cpuR,
 			IFormatoRepository formR, IMarcaRepository marcaR, IProdottoRepository prodR, IMemoriaRepository memR,
 			ISchedaGraficaRepository schgrfR, ISchedaMadreRepository schMdrR, ISistemaRaffreddamentoRepository sisRafR,
-			IRamRepository ramR) {
+			IRamRepository ramR,IProdottoServices prodS) {
 		super();
 		this.pcR = pcR;
 		this.alimR = alimR;
@@ -68,6 +72,7 @@ public class PcImpl extends Utilities implements IPcService{
 		this.schMdrR = schMdrR;
 		this.sisRafR = sisRafR;
 		this.ramR = ramR;
+		this.prodS = prodS;
 	}
 
 	@Override
@@ -259,6 +264,39 @@ public class PcImpl extends Utilities implements IPcService{
 		
 	}
 	
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void createPcProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		Integer idprod = prodS.create(req.getProdReq());
+		
+		req.getPcReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getPcReq().setIdProdotto(idprod);
+		
+		create(req.getPcReq());
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updatePcProd(GeneralReq req) throws AcademyException {
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getPcReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getPcReq().setIdProdotto(req.getProdReq().getId());
+		update(req.getPcReq());
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deletePcProd(GeneralReq req) throws AcademyException {
+		log.debug(req);
+		delete(req.getPcReq());
+		prodS.delete(req.getProdReq().getId());
+	}
+	
+	
 	@Override
 	public PcDTO getById(Integer id) throws AcademyException
 	{
@@ -409,7 +447,24 @@ public class PcImpl extends Utilities implements IPcService{
 	}
 	
 	
-
+	@Override
+	public PcDTO findByIdProd(Integer idProd) throws AcademyException {
+		Pc p = pcR.findByIdProd(idProd);
+		return PcDTO.builder()
+				.id(p.getId())
+				.descrizione(p.getDescrizione())
+				.totConsumo(p.getTotConsumo())
+				.prodotto(buildProdottoDTO(p.getProdotto()))
+				.schedaMadre(buildSchedaMadreDTO(p.getSchedaMadre()))
+				.schedaGrafica(buildSchedaGraficaDTO(p.getSchedaGrafica()))
+				.cpu(buildCpuDTO(p.getCpu()))
+				.ram(buildRamDTO(p.getRam()))
+				.memoria(buildMemoriaDTO(p.getMemoria()))
+				.casee(buildCaseDTO(p.getCasee()))
+				.sistemaRaffreddamento(buildSistemaRaffreddamentoDTO(p.getSistemaRaffreddamento()))
+				.alimentazione(buildAlimentazioneDTO(p.getAlimentazione()))
+				.build();
+	}
 	
 
 	

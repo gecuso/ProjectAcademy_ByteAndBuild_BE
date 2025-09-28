@@ -1,21 +1,29 @@
 package com.betacom.bb.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.betacom.bb.dto.PcDTO;
 import com.betacom.bb.exception.AcademyException;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.requests.PcReq;
 import com.betacom.bb.response.ResponseBase;
 import com.betacom.bb.response.ResponseList;
 import com.betacom.bb.response.ResponseObject;
 import com.betacom.bb.services.interfaces.IPcService;
 
+import lombok.extern.log4j.Log4j2;
+
 @RestController
 @RequestMapping("/rest/pc")
+@CrossOrigin(origins = "*")
+@Log4j2
 public class PcController {
 
 	private IPcService pcS;
@@ -60,6 +68,59 @@ public class PcController {
 			pcS.delete(req);
 			r.setRc(true);
 		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	@PostMapping("/createPcProd")
+	public ResponseBase createPcProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("createPcProd : "+req);
+		try {
+			pcS.createPcProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PostMapping("/deletePcProd")
+	public ResponseBase deletePcProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deletePcProd : "+req);
+		try {
+			pcS.deletePcProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	@PutMapping("/updatePcProd")
+	public ResponseBase updatePcProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updatePcProd: "+req);
+		try {
+			pcS.updatePcProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	@GetMapping("/findByIdProd")
+	public ResponseObject<PcDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<PcDTO> r = new ResponseObject<PcDTO>();
+		try {
+			r.setDati(pcS.findByIdProd(idProd));
+		}catch (Exception e) {
 			r.setRc(false);
 			r.setMsg(e.getMessage());
 		}

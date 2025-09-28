@@ -6,6 +6,7 @@ import lombok.Data;
 public class GeneralReq {
 	private AlimentazioneReq alimReq;
 	private ProdottoReq prodReq;
+	private PcReq pcReq;
 	private CaseReq caseReq;
 	private CpuReq cpuReq;
 	private LaptopReq laptopReq;
