@@ -15,7 +15,7 @@ import com.betacom.bb.response.ResponseObject;
 import com.betacom.bb.services.interfaces.IPcService;
 
 @RestController
-@RequestMapping("/rest/controller")
+@RequestMapping("/rest/pc")
 public class PcController {
 
 	private IPcService pcS;
