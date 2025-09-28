@@ -3,6 +3,7 @@ package com.betacom.bb.controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,9 +49,35 @@ public class TastieraController {
 	@PostMapping("/createTastProd")
 	public ResponseBase createTastProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
-		log.debug("controller alim : "+req);
+		log.debug("createTastProd : "+req);
 		try {
 			tS.createTastProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PutMapping("/updateTastProd")
+	public ResponseBase updateTastProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updateTastProd : "+req);
+		try {
+			tS.updateTastProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PostMapping("/deleteTastProd")
+	public ResponseBase deleteTastProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteTastProd : "+req);
+		try {
+			tS.deleteTastProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);
@@ -92,6 +119,17 @@ public class TastieraController {
 			r.setDati(tS.findAll());
 			r.setRc(true);
 		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@GetMapping("/findByIdProd")
+	public ResponseObject<TastieraDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<TastieraDTO> r = new ResponseObject<TastieraDTO>();
+		try {
+			r.setDati(tS.findByIdProd(idProd));
+		}catch (Exception e) {
 			r.setRc(false);
 			r.setMsg(e.getMessage());
 		}

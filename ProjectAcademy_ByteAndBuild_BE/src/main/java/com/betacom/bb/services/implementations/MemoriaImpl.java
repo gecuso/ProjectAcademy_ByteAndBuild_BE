@@ -81,6 +81,23 @@ public class MemoriaImpl extends Utilities implements IMemoriaService{
 		create(req.getMemReq());
 
 	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateMemProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getMemReq().setDescrizione(req.getProdReq().getDescrizione());
+		
+		update(req.getMemReq());
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteMemProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getMemReq());
+		prodS.delete(req.getProdReq().getId());
+	}
 	
 	
 	@Transactional(rollbackFor = Exception.class)
@@ -155,6 +172,12 @@ public class MemoriaImpl extends Utilities implements IMemoriaService{
 				.spazio(mem.getSpazio())
 				.prodotto(buildProdottoDTO(mem.getProdotto()))
 				.build();		
+	}
+
+	@Override
+	public MemoriaDTO findByIdProd(Integer idProd) throws AcademyException {
+		Memoria m = memR.findByIdProd(idProd);
+		return buildMemoriaDTO(m);
 	}
 	
 }

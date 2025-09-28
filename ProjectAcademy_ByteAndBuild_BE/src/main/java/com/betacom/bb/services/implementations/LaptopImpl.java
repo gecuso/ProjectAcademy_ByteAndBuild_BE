@@ -83,6 +83,24 @@ public class LaptopImpl extends Utilities implements ILaptopService{
 		create(req.getLaptopReq());
 
 	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateLaptopProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getLaptopReq().setDescrizione(req.getProdReq().getDescrizione());
+		
+		update(req.getLaptopReq());
+
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteLaptopProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getLaptopReq());
+		prodS.delete(req.getProdReq().getId());
+	}
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -151,6 +169,18 @@ public class LaptopImpl extends Utilities implements ILaptopService{
 			throw new AcademyException("Laptop non presente nel database");
 		
 		Laptop lap = l.get();
+		return LaptopDTO.builder()
+				.id(lap.getId())
+				.descrizione(lap.getDescrizione())
+				.caratteristiche(lap.getCaratteristiche())
+				.consumo(lap.getConsumo())
+				.prodotto(buildProdottoDTO(lap.getProdotto()))
+				.build();
+	}
+
+	@Override
+	public LaptopDTO findByIdProd(Integer idProd) throws AcademyException {
+		Laptop lap = lapR.findByIdProd(idProd);
 		return LaptopDTO.builder()
 				.id(lap.getId())
 				.descrizione(lap.getDescrizione())

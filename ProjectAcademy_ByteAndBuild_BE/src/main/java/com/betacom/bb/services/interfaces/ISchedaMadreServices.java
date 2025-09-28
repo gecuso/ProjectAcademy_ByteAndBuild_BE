@@ -13,8 +13,10 @@ public interface ISchedaMadreServices {
 	void update(SchedaMadreReq req) throws AcademyException;
 	void delete(SchedaMadreReq req) throws AcademyException;
 	void createSchMdrProd(GeneralReq req) throws AcademyException;
+	void updateSchMdrProd(GeneralReq req) throws AcademyException;
+	void deleteSchMdrProd(GeneralReq req) throws AcademyException;
 
-	
+	SchedaMadreDTO findByIdProd(Integer idProd) throws AcademyException;
 	SchedaMadreDTO getById(Integer id) throws AcademyException;
 	List<SchedaMadreDTO> listAll();
 }

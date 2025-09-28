@@ -3,6 +3,7 @@ package com.betacom.bb.controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,9 +47,35 @@ public class CaseController {
 	@PostMapping("/createCaseProd")
 	public ResponseBase createCaseProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
-		log.debug("controller alim : "+req);
+		log.debug("createCaseProd : "+req);
 		try {
 			csS.createCaseProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PutMapping("/updateCaseProd")
+	public ResponseBase updateCaseProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updateCaseProd : "+req);
+		try {
+			csS.updateCaseProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PostMapping("/deleteCaseProd")
+	public ResponseBase deleteCaseProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteCaseProd : "+req);
+		try {
+			csS.deleteCaseProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);
@@ -88,6 +115,17 @@ public class CaseController {
 		ResponseList<CaseDTO> r = new ResponseList<CaseDTO>();
 		try {
 			r.setDati(csS.listAll());
+		}catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@GetMapping("/findByIdProd")
+	public ResponseObject<CaseDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<CaseDTO> r = new ResponseObject<CaseDTO>();
+		try {
+			r.setDati(csS.findByIdProd(idProd));
 		}catch (Exception e) {
 			r.setRc(false);
 			r.setMsg(e.getMessage());

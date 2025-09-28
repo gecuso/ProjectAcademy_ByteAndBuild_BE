@@ -50,9 +50,35 @@ public class MonitorController {
 	@PostMapping("/createMonitorProd")
 	public ResponseBase createMonitorProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
-		log.debug("controller alim : "+req);
+		log.debug("createMonitorProd : "+req);
 		try {
 			monS.createMonitorProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PutMapping("/updateMonitorProd")
+	public ResponseBase updateMonitorProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updateMonitorProd : "+req);
+		try {
+			monS.updateMonitorProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PutMapping("/deleteMonitorProd")
+	public ResponseBase deleteMonitorProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteMonitorProd : "+req);
+		try {
+			monS.deleteMonitorProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);
@@ -96,6 +122,18 @@ public class MonitorController {
 			r.setDati(monS.findAll());
 			r.setRc(true);
 		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	@GetMapping("/findByIdProd")
+	public ResponseObject<MonitorDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<MonitorDTO> r = new ResponseObject<MonitorDTO>();
+		try {
+			r.setDati(monS.findByIdProd(idProd));
+		}catch (Exception e) {
 			r.setRc(false);
 			r.setMsg(e.getMessage());
 		}

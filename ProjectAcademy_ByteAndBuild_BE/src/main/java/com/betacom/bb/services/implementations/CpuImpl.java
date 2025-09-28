@@ -77,6 +77,24 @@ public class CpuImpl extends Utilities implements ICpuServices{
 		
 		create(req.getCpuReq());
 	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteCpuProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getCpuReq());
+		prodS.delete(req.getProdReq().getId());
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateCpuProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getCpuReq().setDescrizione(req.getProdReq().getDescrizione());
+		
+		update(req.getCpuReq());
+	}
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -148,5 +166,10 @@ public class CpuImpl extends Utilities implements ICpuServices{
 						.prodotto(buildProdottoDTO(c.getProdotto()))
 						.build())
 				.collect(Collectors.toList());
+	}
+	@Override
+	public CpuDTO findByIdProd(Integer idProd) throws AcademyException {
+		Cpu alim = cpuR.findByIdProd(idProd);
+		return buildCpuDTO(alim);
 	}
 }

@@ -47,9 +47,36 @@ public class CpuController {
 	@PostMapping("/createCpuProd")
 	public ResponseBase createCpuProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
-		log.debug("controller alim : "+req);
+		log.debug("createCpuProd: "+req);
 		try {
 			cpuS.createCpuProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	@PutMapping("/updateCpuProd")
+	public ResponseBase updateCpuProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updateCpuProd: "+req);
+		try {
+			cpuS.updateCpuProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PostMapping("/deleteCpuProd")
+	public ResponseBase deleteCpuProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteCpuProd: "+req);
+		try {
+			cpuS.deleteCpuProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);
@@ -89,6 +116,17 @@ public class CpuController {
 		ResponseObject<CpuDTO> r = new ResponseObject<CpuDTO>();
 		try {
 			r.setDati(cpuS.getById(id));
+		}catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@GetMapping("/findByIdProd")
+	public ResponseObject<CpuDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<CpuDTO> r = new ResponseObject<CpuDTO>();
+		try {
+			r.setDati(cpuS.findByIdProd(idProd));
 		}catch (Exception e) {
 			r.setRc(false);
 			r.setMsg(e.getMessage());

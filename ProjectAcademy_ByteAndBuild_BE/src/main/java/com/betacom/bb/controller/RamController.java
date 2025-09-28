@@ -48,9 +48,35 @@ public class RamController {
 	@PostMapping("/createRamProd")
 	public ResponseBase createRamProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
-		log.debug("controller alim : "+req);
+		log.debug("createRamProd : "+req);
 		try {
 			ramS.createRamProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PutMapping("/updateRamProd")
+	public ResponseBase updateRamProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updateRamProd : "+req);
+		try {
+			ramS.updateRamProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PostMapping("/deleteRamProd")
+	public ResponseBase deleteRamProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteRamProd : "+req);
+		try {
+			ramS.deleteRamProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);
@@ -90,6 +116,18 @@ public class RamController {
 		ResponseObject<RamDTO> r = new ResponseObject<RamDTO>();
 		try {
 			r.setDati(ramS.getById(id));
+		}catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	@GetMapping("/findByIdProd")
+	public ResponseObject<RamDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<RamDTO> r = new ResponseObject<RamDTO>();
+		try {
+			r.setDati(ramS.findByIdProd(idProd));
 		}catch (Exception e) {
 			r.setRc(false);
 			r.setMsg(e.getMessage());

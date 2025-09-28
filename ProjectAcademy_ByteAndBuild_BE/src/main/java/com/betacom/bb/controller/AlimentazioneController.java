@@ -58,6 +58,33 @@ public class AlimentazioneController {
 		}
 		return r;
 	}
+	@PostMapping("/deleteAlimProd")
+	public ResponseBase deleteAlimProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteAlimProd : "+req);
+		try {
+			alimS.deleteAlimProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	@PutMapping("/updateAlimProd")
+	public ResponseBase updateAlimProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("controller alim : "+req);
+		try {
+			alimS.updateAlimProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 	
 	@PutMapping("/update")
 	public ResponseBase update(@RequestBody (required = true)  AlimentazioneReq req) {
@@ -90,6 +117,18 @@ public class AlimentazioneController {
 		ResponseObject<AlimentazioneDTO> r = new ResponseObject<AlimentazioneDTO>();
 		try {
 			r.setDati(alimS.getById(id));
+		}catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	@GetMapping("/findByIdProd")
+	public ResponseObject<AlimentazioneDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<AlimentazioneDTO> r = new ResponseObject<AlimentazioneDTO>();
+		try {
+			r.setDati(alimS.findByIdProd(idProd));
 		}catch (Exception e) {
 			r.setRc(false);
 			r.setMsg(e.getMessage());

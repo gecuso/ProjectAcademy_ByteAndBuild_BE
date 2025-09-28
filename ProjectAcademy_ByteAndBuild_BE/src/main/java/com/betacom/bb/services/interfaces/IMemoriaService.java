@@ -13,6 +13,11 @@ public interface IMemoriaService {
 	void update(MemoriaReq req) throws AcademyException;
 	void delete(MemoriaReq req) throws AcademyException;
 	void createMemProd(GeneralReq req) throws AcademyException;
+	void updateMemProd(GeneralReq req) throws AcademyException;
+	void deleteMemProd(GeneralReq req) throws AcademyException;
+
+
+	MemoriaDTO findByIdProd(Integer idProd) throws AcademyException;
 
 	List<MemoriaDTO> findAll() throws AcademyException;
 	MemoriaDTO getById(Integer id) throws AcademyException;

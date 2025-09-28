@@ -77,6 +77,25 @@ public class AlimentazioneImpl extends Utilities implements IAlimentazioneServic
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
+	public void updateAlimProd(GeneralReq req) throws AcademyException {
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getAlimReq().setDescrizione(req.getProdReq().getDescrizione());
+		update(req.getAlimReq());
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteAlimProd(GeneralReq req) throws AcademyException {
+		log.debug(req);
+		delete(req.getAlimReq());
+		prodS.delete(req.getProdReq().getId());
+		throw new AcademyException("fatto");
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
 	public void update(AlimentazioneReq req) throws AcademyException {
 		log.debug("update :" + req);
 		Optional<Alimentazione> a = alimR.findById(req.getId());
@@ -140,4 +159,17 @@ public class AlimentazioneImpl extends Utilities implements IAlimentazioneServic
 						.build())
 				.collect(Collectors.toList());
 	}
+
+	@Override
+	public AlimentazioneDTO findByIdProd(Integer idProd) throws AcademyException {
+		Alimentazione alim = alimR.findByIdProd(idProd);
+		return buildAlimentazioneDTO(alim);
+	}
+	
+//	public AlimentazioneDTO findByIdProd(Integer idP) {
+//		List<AlimentazioneDTO> lA = listAll();
+//		AlimentazioneDTO alim=lA.stream().filter(a->a.getProdotto().getId()==idP).findFirst().get();
+//		return alim;
+//		
+//	}
 }

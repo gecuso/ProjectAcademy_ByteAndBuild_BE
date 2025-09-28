@@ -50,9 +50,35 @@ public class MouseController {
 	@PostMapping("/createMouseProd")
 	public ResponseBase createMouseProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
-		log.debug("controller alim : "+req);
+		log.debug("createMouseProd: "+req);
 		try {
 			mouS.createMouseProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PutMapping("/updateMouseProd")
+	public ResponseBase updateMouseProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updateMouseProd: "+req);
+		try {
+			mouS.updateMouseProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PostMapping("/deleteMouseProd")
+	public ResponseBase deleteMouseProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteMouseProd: "+req);
+		try {
+			mouS.deleteMouseProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);
@@ -96,6 +122,18 @@ public class MouseController {
 			r.setDati(mouS.findAll());
 			r.setRc(true);
 		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	@GetMapping("/findByIdProd")
+	public ResponseObject<MouseDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<MouseDTO> r = new ResponseObject<MouseDTO>();
+		try {
+			r.setDati(mouS.findByIdProd(idProd));
+		}catch (Exception e) {
 			r.setRc(false);
 			r.setMsg(e.getMessage());
 		}

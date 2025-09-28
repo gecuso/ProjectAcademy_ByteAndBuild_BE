@@ -88,6 +88,23 @@ public class CaseImpl extends Utilities implements ICaseServices{
 		
 		create(req.getCaseReq());
 	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateCaseProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getCaseReq().setDescrizione(req.getProdReq().getDescrizione());
+		update(req.getCaseReq());
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteCaseProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getCaseReq());
+		prodS.delete(req.getProdReq().getId());	
+		throw new AcademyException("fatto");
+	}
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -102,6 +119,26 @@ public class CaseImpl extends Utilities implements ICaseServices{
 			throw new AcademyException("Case contenutaa in un pc, non eliminabile");
 		
 		caseR.delete(c.get());
+		
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void update(CaseReq req) throws AcademyException {
+		log.debug("update :" + req);
+		Optional<Case> a = caseR.findById(req.getId());
+		
+		if(a.isEmpty())
+			throw new AcademyException("case non esistente");
+		Case cas = a.get();
+		
+		if(req.getDimensioni() == null )
+			throw new AcademyException("dimensioni non presenti, riprova");
+		cas.setDimensioni(req.getDimensioni());
+		if(req.getDescrizione() == null )
+			throw new AcademyException("descrizione non presente, riprova");
+		cas.setDescrizione(req.getDescrizione());
+		
+		caseR.save(cas);
 		
 	}
 	
@@ -137,5 +174,10 @@ public class CaseImpl extends Utilities implements ICaseServices{
 				.formato(buildFormatoDTO(c.getFormato()))
 				.build())
 				.collect(Collectors.toList());
+	}
+	@Override
+	public CaseDTO findByIdProd(Integer idProd) throws AcademyException {
+		Case cas = caseR.findByIdProd(idProd);
+		return buildCaseDTO(cas);
 	}
 }

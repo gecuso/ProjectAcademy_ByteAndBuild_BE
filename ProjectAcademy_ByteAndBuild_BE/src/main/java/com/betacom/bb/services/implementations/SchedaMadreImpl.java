@@ -92,6 +92,22 @@ public class SchedaMadreImpl extends Utilities implements ISchedaMadreServices{
 		
 		create(req.getSchMdrReq());
 	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateSchMdrProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getSchMdrReq().setDescrizione(req.getProdReq().getDescrizione());		
+		update(req.getSchMdrReq());
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteSchMdrProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getSchMdrReq());
+		prodS.delete(req.getProdReq().getId());
+	}
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -161,5 +177,11 @@ public class SchedaMadreImpl extends Utilities implements ISchedaMadreServices{
 						.formato(buildFormatoDTO(s.getFormato()))
 						.build())
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public SchedaMadreDTO findByIdProd(Integer idProd) throws AcademyException {
+		SchedaMadre alim = smR.findByIdProd(idProd);
+		return buildSchedaMadreDTO(alim);
 	}
 }

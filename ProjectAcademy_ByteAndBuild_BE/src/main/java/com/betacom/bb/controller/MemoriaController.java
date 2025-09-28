@@ -49,9 +49,36 @@ public class MemoriaController {
 	@PostMapping("/createMemProd")
 	public ResponseBase createMemProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
-		log.debug("controller alim : "+req);
+		log.debug("createMemProd: "+req);
 		try {
 			memS.createMemProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	@PutMapping("/updateMemProd")
+	public ResponseBase updateMemProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updateMemProd: "+req);
+		try {
+			memS.updateMemProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PutMapping("/deleteMemProd")
+	public ResponseBase deleteMemProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteMemProd: "+req);
+		try {
+			memS.deleteMemProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);
@@ -93,6 +120,19 @@ public class MemoriaController {
 		ResponseList<MemoriaDTO> r = new ResponseList<MemoriaDTO>();
 		try {
 			r.setDati(memS.findAll());
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	@GetMapping("/findByIdProd")
+	public ResponseObject<MemoriaDTO> findByIdProd(@RequestParam (required = true) Integer idProd ) {
+		ResponseObject<MemoriaDTO> r = new ResponseObject<MemoriaDTO>();
+		try {
+			r.setDati(memS.findByIdProd(idProd));
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);

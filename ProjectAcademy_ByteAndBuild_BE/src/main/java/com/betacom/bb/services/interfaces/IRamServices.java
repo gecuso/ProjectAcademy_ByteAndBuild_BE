@@ -13,6 +13,10 @@ public interface IRamServices {
 	void update(RamReq req) throws AcademyException;
 	void delete(RamReq req) throws AcademyException;
 	void createRamProd(GeneralReq req) throws AcademyException;
+	void updateRamProd(GeneralReq req) throws AcademyException;
+	void deleteRamProd(GeneralReq req) throws AcademyException;
+
+	RamDTO findByIdProd(Integer idProd) throws AcademyException;
 
 	RamDTO getById(Integer id) throws AcademyException;
 	List<RamDTO> listAll();

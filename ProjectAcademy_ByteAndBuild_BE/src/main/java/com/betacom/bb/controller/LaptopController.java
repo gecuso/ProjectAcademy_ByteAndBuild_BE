@@ -51,9 +51,36 @@ public class LaptopController {
 	@PostMapping("/createLaptopProd")
 	public ResponseBase createLaptopProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
-		log.debug("controller alim : "+req);
+		log.debug("createLaptopProd: "+req);
 		try {
 			laptS.createLaptopProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	
+	@PutMapping("/updateLaptopProd")
+	public ResponseBase updateLaptopProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updateLaptopProd : "+req);
+		try {
+			laptS.updateLaptopProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PutMapping("/deleteLaptopProd")
+	public ResponseBase deleteLaptopProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteLaptopProd : "+req);
+		try {
+			laptS.deleteLaptopProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);
@@ -114,6 +141,17 @@ public class LaptopController {
 			r.setMsg(e.getMessage());
 		}
 		return r;	
-	}	
+	}
+	@GetMapping("/findByIdProd")
+	public ResponseObject<LaptopDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<LaptopDTO> r = new ResponseObject<LaptopDTO>();
+		try {
+			r.setDati(laptS.findByIdProd(idProd));
+		}catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 
 }

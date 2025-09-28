@@ -78,6 +78,23 @@ public class TastieraImpl extends Utilities implements ITastieraService{
 		
 		create(req.getTastReq());
 	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateTastProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getTastReq().setDescrizione(req.getProdReq().getDescrizione());
+		
+		update(req.getTastReq());
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteTastProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getTastReq());
+		prodS.delete(req.getProdReq().getId());
+	}
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -132,6 +149,12 @@ public class TastieraImpl extends Utilities implements ITastieraService{
 	public TastieraDTO getById(Integer id) throws AcademyException {
 		Tastiera m = tastR.getById(id);
 		return buildTastieraDTO(m);
+	}
+
+	@Override
+	public TastieraDTO findByIdProd(Integer idProd) throws AcademyException {
+		Tastiera alim = tastR.findByIdProd(idProd);
+		return buildTastieraDTO(alim);
 	}
 
 }

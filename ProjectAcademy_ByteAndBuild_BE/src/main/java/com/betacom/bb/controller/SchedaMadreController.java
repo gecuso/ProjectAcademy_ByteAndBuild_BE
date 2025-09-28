@@ -48,9 +48,35 @@ public class SchedaMadreController {
 	@PostMapping("/createSchMdrProd")
 	public ResponseBase createSchMdrProd(@RequestBody (required = true) GeneralReq req) {
 		ResponseBase r = new ResponseBase();
-		log.debug("controller alim : "+req);
+		log.debug("createSchMdrProd : "+req);
 		try {
 			smS.createSchMdrProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PutMapping("/updateSchMdrProd")
+	public ResponseBase updateSchMdrProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("updateSchMdrProd : "+req);
+		try {
+			smS.updateSchMdrProd(req);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
+	@PostMapping("/deleteSchMdrProd")
+	public ResponseBase deleteSchMdrProd(@RequestBody (required = true) GeneralReq req) {
+		ResponseBase r = new ResponseBase();
+		log.debug("deleteSchMdrProd : "+req);
+		try {
+			smS.deleteSchMdrProd(req);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);
@@ -96,7 +122,17 @@ public class SchedaMadreController {
 		}
 		return r;
 	}
-	
+	@GetMapping("/findByIdProd")
+	public ResponseObject<SchedaMadreDTO> findByIdProd(@RequestParam (required = true) Integer idProd ){
+		ResponseObject<SchedaMadreDTO> r = new ResponseObject<SchedaMadreDTO>();
+		try {
+			r.setDati(smS.findByIdProd(idProd));
+		}catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;
+	}
 	@GetMapping("/listAllSchedaMadre")
 	public ResponseList<SchedaMadreDTO> listAllSchedaMadre(){
 		ResponseList<SchedaMadreDTO> r = new ResponseList<SchedaMadreDTO>();

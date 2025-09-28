@@ -34,6 +34,7 @@ import com.betacom.bb.models.SchedaGrafica;
 import com.betacom.bb.models.SchedaMadre;
 import com.betacom.bb.models.SistemaRaffreddamento;
 import com.betacom.bb.models.Tastiera;
+import com.betacom.bb.requests.PcReq;
 
 public class Utilities {
 
@@ -50,12 +51,29 @@ public class Utilities {
 				.build();
 	}
 	
+	public PcReq buildPcReq(Pc p) {
+		return PcReq.builder()
+				.id(p.getId())
+				.descrizione(p.getDescrizione())
+				.idProdotto(p.getProdotto().getId())
+				.idSchedaMadre(p.getSchedaMadre().getId())
+				.idSchedaGrafica(p.getSchedaGrafica().getId())
+				.idCpu(p.getCpu().getId())
+				.idRam(p.getRam().getId())
+				.idMemoria(p.getMemoria().getId())
+				.idCase(p.getCasee().getId())
+				.idSistemaRaffreddamento(p.getSistemaRaffreddamento().getId())
+				.idAlimentazione(p.getAlimentazione().getId())
+				.build();
+	}
+	
 	public FormatoDTO buildFormatoDTO(Formato f) {
 		return FormatoDTO.builder()
 				.id(f.getId())
 				.descrizione(f.getDescrizione())
 				.build();
 	}
+	
 	
 	public CategoriaDTO buildCategoriaDTO(Categoria c) {
 		return CategoriaDTO.builder()

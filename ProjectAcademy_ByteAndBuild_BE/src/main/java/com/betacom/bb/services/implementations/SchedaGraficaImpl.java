@@ -74,6 +74,23 @@ public class SchedaGraficaImpl extends Utilities implements ISchedaGraficaServic
 		
 		create(req.getSchGrfReq());
 	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateSchGrfProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getSchGrfReq().setDescrizione(req.getProdReq().getDescrizione());
+		
+		update(req.getSchGrfReq());
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteSchGrfProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getSchGrfReq());
+		prodS.delete(req.getProdReq().getId());
+	}
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -136,6 +153,12 @@ public class SchedaGraficaImpl extends Utilities implements ISchedaGraficaServic
 						.prodotto(buildProdottoDTO(s.getProdotto()))
 						.build())
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public SchedaGraficaDTO findByIdProd(Integer idProd) throws AcademyException {
+		SchedaGrafica alim = sgR.findByIdProd(idProd);
+		return buildSchedaGraficaDTO(alim);
 	}
 	
 	

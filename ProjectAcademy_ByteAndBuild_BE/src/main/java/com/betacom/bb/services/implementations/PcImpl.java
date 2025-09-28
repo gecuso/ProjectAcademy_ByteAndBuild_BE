@@ -30,8 +30,10 @@ import com.betacom.bb.repositories.IRamRepository;
 import com.betacom.bb.repositories.ISchedaGraficaRepository;
 import com.betacom.bb.repositories.ISchedaMadreRepository;
 import com.betacom.bb.repositories.ISistemaRaffreddamentoRepository;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.requests.PcReq;
 import com.betacom.bb.services.interfaces.IPcService;
+import com.betacom.bb.services.interfaces.IProdottoServices;
 import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
@@ -50,13 +52,14 @@ public class PcImpl extends Utilities implements IPcService{
 	private ISchedaMadreRepository schMdrR;
 	private ISistemaRaffreddamentoRepository sisRafR;
 	private IRamRepository ramR;
+	private IProdottoServices prodS;
 
 	
 
 	public PcImpl(IPcRepository pcR, IAlimentazioneRepository alimR, ICaseRepository caseR, ICpuRepository cpuR,
 			IFormatoRepository formR, IMarcaRepository marcaR, IProdottoRepository prodR, IMemoriaRepository memR,
 			ISchedaGraficaRepository schgrfR, ISchedaMadreRepository schMdrR, ISistemaRaffreddamentoRepository sisRafR,
-			IRamRepository ramR) {
+			IRamRepository ramR,IProdottoServices prodS) {
 		super();
 		this.pcR = pcR;
 		this.alimR = alimR;
@@ -68,6 +71,7 @@ public class PcImpl extends Utilities implements IPcService{
 		this.schMdrR = schMdrR;
 		this.sisRafR = sisRafR;
 		this.ramR = ramR;
+		this.prodS = prodS;
 	}
 
 	@Override
@@ -157,7 +161,7 @@ public class PcImpl extends Utilities implements IPcService{
 						  schgraf.get().getProdotto().getCosto() + schmdr.get().getProdotto().getCosto();
 
 
-		prod.get().setCosto(consumoTot);
+		prod.get().setCosto(costoTot);
 		
 		return pcR.save(c).getId();
 	}
@@ -182,6 +186,7 @@ public class PcImpl extends Utilities implements IPcService{
 		if(pcReq.getId()==null) throw new AcademyException("necessario l'id del pc per modificarlo");
 		Optional<Pc> m = pcR.findById(pcReq.getId());
 		Integer oldId=pcReq.getId();
+		
 		if(!m.isPresent()) throw new AcademyException("pc non esistente");
 		
 		if(pcReq.getIdAlimentazione()==null)throw new AcademyException("Alimentazione nulla");
@@ -234,30 +239,66 @@ public class PcImpl extends Utilities implements IPcService{
 		{
 			throw new AcademyException("gli elementi consumano troppa potenza, scegliere un alimentatore piu potente");
 		}
+		
+		PcReq pr = buildPcReq(m.get());
+		
+		aumentaQuantita(m.get().getProdotto().getQuantita(), pr);
 		if(controlloQuantita(prodR.getById(pcReq.getIdProdotto()).getQuantita(),pcReq))
 		{
 			riduciQuantita(prodR.getById(pcReq.getIdProdotto()).getQuantita(),pcReq);
 		}
 		else throw new AcademyException("elementi non sufficienti");
+		
+		List<Pc> lp = pcR.findAll();
+		for (Pc pc : lp) {
+			if(pc.getDescrizione().equalsIgnoreCase(pcReq.getDescrizione()) && pc.getId() != oldId)
+				throw new AcademyException("Esiste già un PC con questa descrione");
+		}
+		
+		m.get().setAlimentazione(alimR.findByIdProd(pcReq.getIdAlimentazione()));
+		m.get().setCasee(caseR.findByIdProd(pcReq.getIdCase()));
+		m.get().setCpu(cpuR.findByIdProd(pcReq.getIdCpu()));
+		m.get().setMemoria(memR.findByIdProd(pcReq.getIdMemoria()));
+		m.get().setRam(ramR.findByIdProd(pcReq.getIdRam()));
+		m.get().setSchedaGrafica(schgrfR.findByIdProd(pcReq.getIdSchedaGrafica()));
+		m.get().setSchedaMadre(schMdrR.findByIdProd(pcReq.getIdSchedaMadre()));
+		m.get().setSistemaRaffreddamento(sisRafR.findByIdProd(pcReq.getIdSistemaRaffreddamento()));
 
-		
-		try {
-			aumentaQuantita(m.get().getProdotto().getQuantita(), pcReq);
-			List<Pc> lp = pcR.findAll();
-			for (Pc pc : lp) {
-				if(pc.getDescrizione().equalsIgnoreCase(pcReq.getDescrizione()) && pc.getId() != oldId)
-					throw new AcademyException("Esiste già un PC con questa descrione");
-			}
-			pcR.delete(m.get());
-			Integer newId = create(pcReq);
-			m = pcR.findById(newId);
-			m.get().setId(oldId);
-			pcR.save(m.get());
-		} catch (Exception e) {
-			throw new AcademyException(e.getMessage());
-		}	
-		
+		pcR.save(m.get());			
 	}
+	
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void createPcProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		Integer idprod = prodS.create(req.getProdReq());
+		
+		req.getPcReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getPcReq().setIdProdotto(idprod);
+		
+		create(req.getPcReq());
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updatePcProd(GeneralReq req) throws AcademyException {
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getPcReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getPcReq().setIdProdotto(req.getProdReq().getId());
+		update(req.getPcReq());
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deletePcProd(GeneralReq req) throws AcademyException {
+		log.debug(req);
+		delete(req.getPcReq());
+		prodS.delete(req.getProdReq().getId());
+	}
+	
 	
 	@Override
 	public PcDTO getById(Integer id) throws AcademyException
@@ -301,6 +342,7 @@ public class PcImpl extends Utilities implements IPcService{
 	{
 		return comp1.equalsIgnoreCase(comp2);
 	}
+	
 	@Override
 	public Boolean controlloQuantita(Integer n, PcReq pcReq) throws AcademyException {
 		
@@ -409,7 +451,24 @@ public class PcImpl extends Utilities implements IPcService{
 	}
 	
 	
-
+	@Override
+	public PcDTO findByIdProd(Integer idProd) throws AcademyException {
+		Pc p = pcR.findByIdProd(idProd);
+		return PcDTO.builder()
+				.id(p.getId())
+				.descrizione(p.getDescrizione())
+				.totConsumo(p.getTotConsumo())
+				.prodotto(buildProdottoDTO(p.getProdotto()))
+				.schedaMadre(buildSchedaMadreDTO(p.getSchedaMadre()))
+				.schedaGrafica(buildSchedaGraficaDTO(p.getSchedaGrafica()))
+				.cpu(buildCpuDTO(p.getCpu()))
+				.ram(buildRamDTO(p.getRam()))
+				.memoria(buildMemoriaDTO(p.getMemoria()))
+				.casee(buildCaseDTO(p.getCasee()))
+				.sistemaRaffreddamento(buildSistemaRaffreddamentoDTO(p.getSistemaRaffreddamento()))
+				.alimentazione(buildAlimentazioneDTO(p.getAlimentazione()))
+				.build();
+	}
 	
 
 	
