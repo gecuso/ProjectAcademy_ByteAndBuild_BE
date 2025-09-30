@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import com.betacom.bb.dto.SignInDTO;
 import com.betacom.bb.dto.UtenteDTO;
 import com.betacom.bb.exception.AcademyException;
+import com.betacom.bb.models.Carrello;
 import com.betacom.bb.models.Utente;
+import com.betacom.bb.repositories.ICarrelloRepository;
 import com.betacom.bb.repositories.IUtenteRepository;
 import com.betacom.bb.requests.SignInReq;
 import com.betacom.bb.requests.UtenteReq;
@@ -21,10 +23,13 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class UtenteImpl implements IUtenteServices{
+	
 	private IUtenteRepository utenR;
+	private ICarrelloRepository carrR;
 
-	public UtenteImpl(IUtenteRepository utenR) {
+	public UtenteImpl(IUtenteRepository utenR, ICarrelloRepository carrR) {
 		this.utenR = utenR;
+		this.carrR = carrR;
 	}
 
 	
@@ -43,7 +48,14 @@ public class UtenteImpl implements IUtenteServices{
 		ut.setTelefono(req.getTelefono());
 		ut.setRole(Roles.valueOf(req.getRole()));
 		
+		//creo il carrello associato a quell'utente
+		Carrello carrelo = new Carrello();
+		carrelo.setUtente(ut);
+		carrelo.setPrezzoTotale(0);
+		carrelo.setNumeroProdotti(0);
+		
 		utenR.save(ut);
+		carrR.save(carrelo);
 		
 	}
 
