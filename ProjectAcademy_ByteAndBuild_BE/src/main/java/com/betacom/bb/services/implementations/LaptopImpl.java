@@ -13,8 +13,10 @@ import com.betacom.bb.models.Laptop;
 import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.repositories.ILaptopRepository;
 import com.betacom.bb.repositories.IProdottoRepository;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.requests.LaptopReq;
 import com.betacom.bb.services.interfaces.ILaptopService;
+import com.betacom.bb.services.interfaces.IProdottoServices;
 import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
@@ -25,14 +27,17 @@ public class LaptopImpl extends Utilities implements ILaptopService{
 	
 	private ILaptopRepository lapR;
 	private IProdottoRepository prodR;
-	
-	public LaptopImpl(ILaptopRepository lapR, IProdottoRepository prodR) {
-		this.lapR = lapR;
-		this.prodR = prodR;
-	}
+	private IProdottoServices prodS;
 	
 	////////////////////////////////
 	
+	public LaptopImpl(ILaptopRepository lapR, IProdottoRepository prodR, IProdottoServices prodS) {
+		super();
+		this.lapR = lapR;
+		this.prodR = prodR;
+		this.prodS = prodS;
+	}
+
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void create(LaptopReq req) throws AcademyException {	
@@ -64,6 +69,37 @@ public class LaptopImpl extends Utilities implements ILaptopService{
 		
 		//salvo nel database
 		lapR.save(laptop);
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void createLaptopProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		Integer idprod = prodS.create(req.getProdReq());
+		
+		req.getLaptopReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getLaptopReq().setIdProdotto(idprod);
+		
+		create(req.getLaptopReq());
+
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateLaptopProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getLaptopReq().setDescrizione(req.getProdReq().getDescrizione());
+		
+		update(req.getLaptopReq());
+
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteLaptopProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getLaptopReq());
+		prodS.delete(req.getProdReq().getId());
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
@@ -133,6 +169,18 @@ public class LaptopImpl extends Utilities implements ILaptopService{
 			throw new AcademyException("Laptop non presente nel database");
 		
 		Laptop lap = l.get();
+		return LaptopDTO.builder()
+				.id(lap.getId())
+				.descrizione(lap.getDescrizione())
+				.caratteristiche(lap.getCaratteristiche())
+				.consumo(lap.getConsumo())
+				.prodotto(buildProdottoDTO(lap.getProdotto()))
+				.build();
+	}
+
+	@Override
+	public LaptopDTO findByIdProd(Integer idProd) throws AcademyException {
+		Laptop lap = lapR.findByIdProd(idProd);
 		return LaptopDTO.builder()
 				.id(lap.getId())
 				.descrizione(lap.getDescrizione())

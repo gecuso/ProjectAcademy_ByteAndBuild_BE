@@ -13,8 +13,10 @@ import com.betacom.bb.models.Memoria;
 import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.repositories.IMemoriaRepository;
 import com.betacom.bb.repositories.IProdottoRepository;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.requests.MemoriaReq;
 import com.betacom.bb.services.interfaces.IMemoriaService;
+import com.betacom.bb.services.interfaces.IProdottoServices;
 import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
@@ -25,12 +27,16 @@ public class MemoriaImpl extends Utilities implements IMemoriaService{
 
 	private IMemoriaRepository memR;
 	private IProdottoRepository prodR;
+	private IProdottoServices prodS;
 
-	public MemoriaImpl(IMemoriaRepository memR, IProdottoRepository prodR) {
+	
+	public MemoriaImpl(IMemoriaRepository memR, IProdottoRepository prodR, IProdottoServices prodS) {
+		super();
 		this.memR = memR;
 		this.prodR = prodR;
+		this.prodS = prodS;
 	}
-	
+
 	////////////////////////////////
 	
 	@Transactional(rollbackFor = Exception.class)
@@ -62,6 +68,37 @@ public class MemoriaImpl extends Utilities implements IMemoriaService{
 		//salvo nel database
 		memR.save(memoria);	
 	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void createMemProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		Integer idprod = prodS.create(req.getProdReq());
+		
+		req.getMemReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getMemReq().setIdProdotto(idprod);
+		
+		create(req.getMemReq());
+
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateMemProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getMemReq().setDescrizione(req.getProdReq().getDescrizione());
+		
+		update(req.getMemReq());
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteMemProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getMemReq());
+		prodS.delete(req.getProdReq().getId());
+	}
+	
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -135,6 +172,12 @@ public class MemoriaImpl extends Utilities implements IMemoriaService{
 				.spazio(mem.getSpazio())
 				.prodotto(buildProdottoDTO(mem.getProdotto()))
 				.build();		
+	}
+
+	@Override
+	public MemoriaDTO findByIdProd(Integer idProd) throws AcademyException {
+		Memoria m = memR.findByIdProd(idProd);
+		return buildMemoriaDTO(m);
 	}
 	
 }

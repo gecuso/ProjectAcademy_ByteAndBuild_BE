@@ -12,11 +12,12 @@ import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Formato;
 import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.models.SchedaMadre;
-import com.betacom.bb.repositories.ICaseRepository;
 import com.betacom.bb.repositories.IFormatoRepository;
 import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.repositories.ISchedaMadreRepository;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.requests.SchedaMadreReq;
+import com.betacom.bb.services.interfaces.IProdottoServices;
 import com.betacom.bb.services.interfaces.ISchedaMadreServices;
 import com.betacom.bb.utilis.Utilities;
 
@@ -30,15 +31,17 @@ public class SchedaMadreImpl extends Utilities implements ISchedaMadreServices{
 	private ISchedaMadreRepository smR;
 	private IFormatoRepository formR;
 	private IProdottoRepository prodR;
+	private IProdottoServices prodS;
 	
-	
-	public SchedaMadreImpl(ISchedaMadreRepository smR, IFormatoRepository formR, IProdottoRepository prodR) {
+	public SchedaMadreImpl(ISchedaMadreRepository smR, IFormatoRepository formR, IProdottoRepository prodR,
+			IProdottoServices prodS) {
+		super();
 		this.smR = smR;
 		this.formR = formR;
 		this.prodR = prodR;
+		this.prodS = prodS;
 	}
-	
-	
+
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void create(SchedaMadreReq req) throws AcademyException {
@@ -76,6 +79,34 @@ public class SchedaMadreImpl extends Utilities implements ISchedaMadreServices{
 		
 		smR.save(smadre);
 		
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void createSchMdrProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		Integer idprod = prodS.create(req.getProdReq());
+		
+		req.getSchMdrReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getSchMdrReq().setIdProdotto(idprod);
+		
+		create(req.getSchMdrReq());
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateSchMdrProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getSchMdrReq().setDescrizione(req.getProdReq().getDescrizione());		
+		update(req.getSchMdrReq());
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteSchMdrProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getSchMdrReq());
+		prodS.delete(req.getProdReq().getId());
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
@@ -146,5 +177,11 @@ public class SchedaMadreImpl extends Utilities implements ISchedaMadreServices{
 						.formato(buildFormatoDTO(s.getFormato()))
 						.build())
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public SchedaMadreDTO findByIdProd(Integer idProd) throws AcademyException {
+		SchedaMadre alim = smR.findByIdProd(idProd);
+		return buildSchedaMadreDTO(alim);
 	}
 }

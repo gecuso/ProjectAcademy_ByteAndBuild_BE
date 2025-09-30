@@ -197,4 +197,12 @@ public class MarcaImpl extends Utilities implements IMarcaService{
 		return tutteLeMarche;
 	}
 	
+	
+	@Override
+	public List<MarcaDTO> findByCategoria(Integer idCategoria) throws AcademyException {
+	    List<Marca> marche = marcaR.findByIdCategoria(idCategoria);
+	    return marche.stream()
+	            .map(this::buildMarcaDTO)
+	            .collect(Collectors.toList());
+	}
 }

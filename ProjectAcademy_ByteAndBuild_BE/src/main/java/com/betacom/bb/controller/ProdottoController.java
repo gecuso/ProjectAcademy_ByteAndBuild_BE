@@ -13,6 +13,7 @@ import com.betacom.bb.requests.ProdottoReq;
 import com.betacom.bb.response.ResponseBase;
 import com.betacom.bb.response.ResponseList;
 import com.betacom.bb.response.ResponseObject;
+import com.betacom.bb.services.implementations.ProdottoImpl;
 import com.betacom.bb.services.interfaces.IProdottoServices;
 
 @CrossOrigin("*")
@@ -20,10 +21,13 @@ import com.betacom.bb.services.interfaces.IProdottoServices;
 @RequestMapping("/rest/prodotto")
 public class ProdottoController {
 
+    private final ProdottoImpl prodottoImpl;
+
 	private IProdottoServices prodS;
 
-	public ProdottoController(IProdottoServices prodS) {
+	public ProdottoController(IProdottoServices prodS, ProdottoImpl prodottoImpl) {
 		this.prodS = prodS;
+		this.prodottoImpl = prodottoImpl;
 	}
 	
 	@PostMapping("/create")
@@ -54,12 +58,12 @@ public class ProdottoController {
 		return r;
 	}
 	
-	@PostMapping("/delete")
-	public ResponseBase delete(@RequestBody (required = true) ProdottoReq req) {
+	@GetMapping("/delete")
+	public ResponseBase delete(@RequestParam (required = true) Integer idProd ) {
 
 		ResponseBase r = new ResponseBase();
 		try {
-			prodS.delete(req);
+			prodS.delete(idProd);
 			r.setRc(true);
 		} catch (Exception e) {
 			r.setRc(false);
@@ -78,6 +82,21 @@ public class ProdottoController {
 			r.setMsg(e.getMessage());
 		}
 		return r;
+	}
+	
+	@GetMapping("/listByFilter")
+	public ResponseList<ProdottoDTO> listByFilter(@RequestParam(name="descrizione", required = false)String descrizione){
+		ResponseList<ProdottoDTO> p = new ResponseList<ProdottoDTO>();
+		if(descrizione == null || descrizione.isBlank())
+			descrizione = null;
+		
+		try {
+			p.setDati(prodS.list(descrizione));
+		} catch(Exception e) {
+			p.setRc(false);
+			p.setMsg(e.getMessage());
+		}
+		return p;
 	}
 	
 	@GetMapping("/listAllProdotto")

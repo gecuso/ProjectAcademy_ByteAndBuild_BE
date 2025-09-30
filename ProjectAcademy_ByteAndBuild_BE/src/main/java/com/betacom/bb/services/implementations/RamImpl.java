@@ -13,7 +13,9 @@ import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.models.Ram;
 import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.repositories.IRamRepository;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.requests.RamReq;
+import com.betacom.bb.services.interfaces.IProdottoServices;
 import com.betacom.bb.services.interfaces.IRamServices;
 import com.betacom.bb.utilis.Utilities;
 
@@ -25,11 +27,13 @@ public class RamImpl extends Utilities implements IRamServices{
 
 	private IRamRepository ramR;
 	private IProdottoRepository prodR;
-	
-	
-	public RamImpl(IRamRepository ramR, IProdottoRepository prodR) {
+	private IProdottoServices prodS;
+
+	public RamImpl(IRamRepository ramR, IProdottoRepository prodR, IProdottoServices prodS) {
+		super();
 		this.ramR = ramR;
 		this.prodR = prodR;
+		this.prodS = prodS;
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -57,6 +61,38 @@ public class RamImpl extends Utilities implements IRamServices{
 		ram.setProdotto(p.get());
 		
 		ramR.save(ram);
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void createRamProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		Integer idprod = prodS.create(req.getProdReq());
+		
+		req.getRamReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getRamReq().setIdProdotto(idprod);
+		
+		create(req.getRamReq());
+
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateRamProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getRamReq().setDescrizione(req.getProdReq().getDescrizione());
+		
+		update(req.getRamReq());
+
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteRamProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getRamReq());
+		prodS.delete(req.getProdReq().getId());
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
@@ -122,5 +158,11 @@ public class RamImpl extends Utilities implements IRamServices{
 						.prodotto(buildProdottoDTO(r.getProdotto()))
 						.build())
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public RamDTO findByIdProd(Integer idProd) throws AcademyException {
+		Ram alim = ramR.findByIdProd(idProd);
+		return buildRamDTO(alim);
 	}
 }

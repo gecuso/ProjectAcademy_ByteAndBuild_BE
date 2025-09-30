@@ -15,34 +15,8 @@ import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.repositories.ICategoriaRepository;
 import com.betacom.bb.repositories.IMarcaRepository;
 import com.betacom.bb.repositories.IProdottoRepository;
-import com.betacom.bb.requests.AlimentazioneReq;
-import com.betacom.bb.requests.CaseReq;
-import com.betacom.bb.requests.CpuReq;
-import com.betacom.bb.requests.LaptopReq;
-import com.betacom.bb.requests.MemoriaReq;
-import com.betacom.bb.requests.MonitorReq;
-import com.betacom.bb.requests.MouseReq;
-import com.betacom.bb.requests.PcReq;
 import com.betacom.bb.requests.ProdottoReq;
-import com.betacom.bb.requests.RamReq;
-import com.betacom.bb.requests.SchedaGraficaReq;
-import com.betacom.bb.requests.SchedaMadreReq;
-import com.betacom.bb.requests.SistemaRaffreddamentoReq;
-import com.betacom.bb.requests.TastieraReq;
-import com.betacom.bb.services.interfaces.IAlimentazioneServices;
-import com.betacom.bb.services.interfaces.ICaseServices;
-import com.betacom.bb.services.interfaces.ICpuServices;
-import com.betacom.bb.services.interfaces.ILaptopService;
-import com.betacom.bb.services.interfaces.IMemoriaService;
-import com.betacom.bb.services.interfaces.IMonitorService;
-import com.betacom.bb.services.interfaces.IMouseService;
-import com.betacom.bb.services.interfaces.IPcService;
 import com.betacom.bb.services.interfaces.IProdottoServices;
-import com.betacom.bb.services.interfaces.IRamServices;
-import com.betacom.bb.services.interfaces.ISchedaGraficaServices;
-import com.betacom.bb.services.interfaces.ISchedaMadreServices;
-import com.betacom.bb.services.interfaces.ISistemaRaffreddamentoServices;
-import com.betacom.bb.services.interfaces.ITastieraService;
 import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
@@ -54,22 +28,9 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 	private IProdottoRepository prodR;
 	private ICategoriaRepository catR;
 	private IMarcaRepository marcaR;
-	private IAlimentazioneServices alimS;
-	private ICaseServices csS;
-	private ICpuServices cpuS;
-	private ILaptopService lapS;
-	private IMemoriaService memS;
-	private IMonitorService monS;
-	private IMouseService mouS;
-	private IPcService pcS;
-	private IRamServices ramS;
-	private ISchedaGraficaServices sgS;
-	private ISchedaMadreServices smS;
-	private ISistemaRaffreddamentoServices sisS;
-	private ITastieraService tS;
-	
 
 	public ProdottoImpl(IProdottoRepository prodR, ICategoriaRepository catR, IMarcaRepository marcaR) {
+		super();
 		this.prodR = prodR;
 		this.catR = catR;
 		this.marcaR = marcaR;
@@ -77,7 +38,7 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public void create(ProdottoReq req) throws AcademyException {
+	public Integer create(ProdottoReq req) throws AcademyException {
 		log.debug("create: " + req);
 		Prodotto prod = new Prodotto();
 		Optional<Prodotto> p = prodR.findByDescrizione(req.getDescrizione());
@@ -118,7 +79,7 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 			throw new AcademyException("Quantità errata, riprova");
 		prod.setQuantita(req.getQuantita());	
 		
-		prodR.save(prod);
+		return prodR.save(prod).getId();
 		
 	}
 	
@@ -138,7 +99,7 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 		List<Prodotto> lp = prodR.findAll();
 		for (Prodotto pr : lp) {
 			if(pr.getDescrizione().equalsIgnoreCase(req.getDescrizione())&&pr.getId()!=req.getId())
-				throw new AcademyException("Prodotto con la stessa descrizione");
+				throw new AcademyException("Esiste gia un Prodotto con la stessa descrizione");
 			}
 		prod.setDescrizione(req.getDescrizione());
 		
@@ -178,125 +139,14 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public void delete(ProdottoReq req) throws AcademyException {
-		log.debug("delete :" + req);
-		Optional<Prodotto> p = prodR.findById(req.getId());
+	public void delete(Integer idProd) throws AcademyException {
+		log.debug("delete :" + idProd);
+		Optional<Prodotto> p = prodR.findById(idProd);
 		
 		if(p.isEmpty())
 			throw new AcademyException("Prodotto non esistente");
 	
-		switch (p.get().getCategoria().getDescrizione()) {
-		case "Alimentazione": {
-			AlimentazioneReq r = new AlimentazioneReq();
-			
-			r.setId(p.get().getAlimentazione().getId());
-			alimS.delete(r);
-			prodR.delete(p.get());
-			
-		}
-		case "Case": {
-			CaseReq r = new CaseReq();
-			
-			r.setId(p.get().getCasee().getId());
-			csS.delete(r);
-			prodR.delete(p.get());
-			
-		}
-		case "Cpu": {
-			CpuReq r = new CpuReq();
-			
-			r.setId(p.get().getCpu().getId());
-			cpuS.delete(r);
-			prodR.delete(p.get());
-			
-		}
-		case "Laptop": {
-			LaptopReq r = new LaptopReq();
-			
-			r.setId(p.get().getLaptop().getId());
-			lapS.delete(r);
-			prodR.delete(p.get());
-			
-		}
-		
-		case "Memoria": {
-			MemoriaReq r = new MemoriaReq();
-			
-			r.setId(p.get().getMemoria().getId());
-			memS.delete(r);
-			prodR.delete(p.get());
-			
-		}
-		case "Monitor": {
-			MonitorReq r = new MonitorReq();
-			
-			r.setId(p.get().getMonitor().getId());
-			monS.delete(r);
-			prodR.delete(p.get());
-			
-		}
-		case "Mouse": {
-			MouseReq r = new MouseReq();
-			
-			r.setId(p.get().getMouse().getId());
-			mouS.delete(r);
-			prodR.delete(p.get());
-			
-		}
-		case "Pc": {
-			PcReq r = new PcReq();
-			
-			r.setId(p.get().getPc().getId());
-			pcS.delete(r);
-			prodR.delete(p.get());
-			
-		}
-		case "Ram": {
-			RamReq r = new RamReq();
-			
-			r.setId(p.get().getPc().getId());
-			ramS.delete(r);
-			prodR.delete(p.get());
-			
-		}
-		case "SchedaGrafica": {
-			SchedaGraficaReq r = new SchedaGraficaReq();
-			
-			r.setId(p.get().getSchedagrafica().getId());
-			sgS.delete(r);
-			prodR.delete(p.get());
-			
-		}
-		case "SchedaMadre": {
-			SchedaMadreReq r = new SchedaMadreReq();
-			
-			r.setId(p.get().getSchedamadre().getId());
-			smS.delete(r);
-			prodR.delete(p.get());
-			
-		}
-		case "SistemaRaffreddamento": {
-			SistemaRaffreddamentoReq r = new SistemaRaffreddamentoReq();
-			
-			r.setId(p.get().getSistemaRaffreddamento().getId());
-			sisS.delete(r);
-			prodR.delete(p.get());
-			
-		}
-		case "Tasiera": {
-			TastieraReq r = new TastieraReq();
-			
-			r.setId(p.get().getTastiera().getId());
-			tS.delete(r);
-			prodR.delete(p.get());
-			
-		}
-		
-		
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + p.get().getCategoria().getDescrizione());
-		}		
-		
+		prodR.delete(p.get());
 	}
 	
 	
@@ -321,6 +171,24 @@ public class ProdottoImpl extends Utilities implements IProdottoServices{
 				.build();
 	}
 
+	@Override
+	public List<ProdottoDTO> list(String descrizione) {
+		log.debug("listByFilter");
+		List<Prodotto> lP = prodR.searchByFilter(descrizione);
+		return lP.stream()
+				.map(p -> ProdottoDTO.builder()
+						.id(p.getId())
+						.descrizione(p.getDescrizione())
+						.costo(p.getCosto())
+						.prezzo(p.getPrezzo())
+						.quantita(p.getQuantita())
+						.img(p.getImg())
+						.categoria(buildCategoriaDTO(p.getCategoria()))
+						.marca(buildMarcaDTO(p.getMarca()))
+						.build())
+				.collect(Collectors.toList());
+	}
+	
 	@Override
 	public List<ProdottoDTO> listAll() {
 		log.debug("lisAll di Alimentazione: ");

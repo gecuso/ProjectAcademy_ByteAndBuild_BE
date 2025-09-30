@@ -16,7 +16,9 @@ import com.betacom.bb.repositories.ICaseRepository;
 import com.betacom.bb.repositories.IFormatoRepository;
 import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.requests.CaseReq;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.services.interfaces.ICaseServices;
+import com.betacom.bb.services.interfaces.IProdottoServices;
 import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
@@ -28,14 +30,17 @@ public class CaseImpl extends Utilities implements ICaseServices{
 	private ICaseRepository caseR;
 	private IFormatoRepository formR;
 	private IProdottoRepository prodR;
-	
-	
-	public CaseImpl(ICaseRepository caseR, IFormatoRepository formR, IProdottoRepository prodR) {
+	private IProdottoServices prodS;
+
+
+	public CaseImpl(ICaseRepository caseR, IFormatoRepository formR, IProdottoRepository prodR,
+			IProdottoServices prodS) {
+		super();
 		this.caseR = caseR;
 		this.formR = formR;
 		this.prodR = prodR;
+		this.prodS = prodS;
 	}
-
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -72,6 +77,34 @@ public class CaseImpl extends Utilities implements ICaseServices{
 		
 	}
 	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void createCaseProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		Integer idprod = prodS.create(req.getProdReq());
+		
+		req.getCaseReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getCaseReq().setIdProdotto(idprod);
+		
+		create(req.getCaseReq());
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateCaseProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getCaseReq().setDescrizione(req.getProdReq().getDescrizione());
+		update(req.getCaseReq());
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteCaseProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getCaseReq());
+		prodS.delete(req.getProdReq().getId());	
+		throw new AcademyException("fatto");
+	}
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -86,6 +119,26 @@ public class CaseImpl extends Utilities implements ICaseServices{
 			throw new AcademyException("Case contenutaa in un pc, non eliminabile");
 		
 		caseR.delete(c.get());
+		
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void update(CaseReq req) throws AcademyException {
+		log.debug("update :" + req);
+		Optional<Case> a = caseR.findById(req.getId());
+		
+		if(a.isEmpty())
+			throw new AcademyException("case non esistente");
+		Case cas = a.get();
+		
+		if(req.getDimensioni() == null )
+			throw new AcademyException("dimensioni non presenti, riprova");
+		cas.setDimensioni(req.getDimensioni());
+		if(req.getDescrizione() == null )
+			throw new AcademyException("descrizione non presente, riprova");
+		cas.setDescrizione(req.getDescrizione());
+		
+		caseR.save(cas);
 		
 	}
 	
@@ -121,5 +174,10 @@ public class CaseImpl extends Utilities implements ICaseServices{
 				.formato(buildFormatoDTO(c.getFormato()))
 				.build())
 				.collect(Collectors.toList());
+	}
+	@Override
+	public CaseDTO findByIdProd(Integer idProd) throws AcademyException {
+		Case cas = caseR.findByIdProd(idProd);
+		return buildCaseDTO(cas);
 	}
 }

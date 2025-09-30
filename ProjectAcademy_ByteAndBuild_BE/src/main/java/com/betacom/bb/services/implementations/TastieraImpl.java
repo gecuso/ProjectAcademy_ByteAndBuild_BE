@@ -12,7 +12,9 @@ import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.models.Tastiera;
 import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.repositories.ITastieraRepository;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.requests.TastieraReq;
+import com.betacom.bb.services.interfaces.IProdottoServices;
 import com.betacom.bb.services.interfaces.ITastieraService;
 import com.betacom.bb.utilis.Utilities;
 
@@ -24,11 +26,13 @@ public class TastieraImpl extends Utilities implements ITastieraService{
 
 	private ITastieraRepository tastR;
 	private IProdottoRepository prodR;
-	
-	
-	public TastieraImpl(ITastieraRepository tastR, IProdottoRepository prodR) {
+	private IProdottoServices prodS;
+
+	public TastieraImpl(ITastieraRepository tastR, IProdottoRepository prodR, IProdottoServices prodS) {
+		super();
 		this.tastR = tastR;
 		this.prodR = prodR;
+		this.prodS = prodS;
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -61,6 +65,35 @@ public class TastieraImpl extends Utilities implements ITastieraService{
 		//salvo nel database
 		tastR.save(tastiera);
 		
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void createTastProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		Integer idprod = prodS.create(req.getProdReq());
+		
+		req.getTastReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getTastReq().setIdProdotto(idprod);
+		
+		create(req.getTastReq());
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateTastProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getTastReq().setDescrizione(req.getProdReq().getDescrizione());
+		
+		update(req.getTastReq());
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteTastProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getTastReq());
+		prodS.delete(req.getProdReq().getId());
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
@@ -116,6 +149,12 @@ public class TastieraImpl extends Utilities implements ITastieraService{
 	public TastieraDTO getById(Integer id) throws AcademyException {
 		Tastiera m = tastR.getById(id);
 		return buildTastieraDTO(m);
+	}
+
+	@Override
+	public TastieraDTO findByIdProd(Integer idProd) throws AcademyException {
+		Tastiera alim = tastR.findByIdProd(idProd);
+		return buildTastieraDTO(alim);
 	}
 
 }

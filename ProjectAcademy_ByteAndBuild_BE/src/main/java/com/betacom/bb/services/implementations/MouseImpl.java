@@ -8,28 +8,33 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.betacom.bb.dto.MouseDTO;
-import com.betacom.bb.dto.ProdottoDTO;
 import com.betacom.bb.exception.AcademyException;
 import com.betacom.bb.models.Mouse;
 import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.repositories.IMouseRepository;
 import com.betacom.bb.repositories.IProdottoRepository;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.requests.MouseReq;
 import com.betacom.bb.services.interfaces.IMouseService;
+import com.betacom.bb.services.interfaces.IProdottoServices;
+import com.betacom.bb.utilis.Utilities;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Service
-public class MouseImpl implements IMouseService{
+public class MouseImpl extends Utilities implements IMouseService{
 
 	private IMouseRepository mouseR;
 	private IProdottoRepository prodR;
-
+	private IProdottoServices prodS;
 	
-	public MouseImpl(IMouseRepository mouseR, IProdottoRepository prodR) {
+	
+	public MouseImpl(IMouseRepository mouseR, IProdottoRepository prodR, IProdottoServices prodS) {
+		super();
 		this.mouseR = mouseR;
 		this.prodR = prodR;
+		this.prodS = prodS;
 	}
 
 	////////////////////////////////
@@ -60,6 +65,36 @@ public class MouseImpl implements IMouseService{
 		
 		//salvo nel database
 		mouseR.save(mouse);
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void createMouseProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		Integer idprod = prodS.create(req.getProdReq());
+		
+		req.getMouseReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getMouseReq().setIdProdotto(idprod);
+		
+		create(req.getMouseReq());
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteMouseProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getMouseReq());
+		prodS.delete(req.getProdReq().getId());
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateMouseProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getMouseReq().setDescrizione(req.getProdReq().getDescrizione());
+		
+		update(req.getMouseReq());
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -109,9 +144,7 @@ public class MouseImpl implements IMouseService{
 						.id(mou.getId())
 						.descrizione(mou.getDescrizione())
 						.collegamento(mou.getCollegamento())
-						.prodotto(ProdottoDTO.builder()
-								.id(mou.getProdotto().getId())
-								.build())
+						.prodotto(buildProdottoDTO(mou.getProdotto()))
 						.build()).collect(Collectors.toList());
 	}
 	
@@ -130,10 +163,19 @@ public class MouseImpl implements IMouseService{
 				.id(mou.getId())
 				.descrizione(mou.getDescrizione())
 				.collegamento(mou.getCollegamento())
-				.prodotto(ProdottoDTO.builder()
-						.id(mou.getProdotto().getId())
-						.build())
+				.prodotto(buildProdottoDTO(mou.getProdotto()))
 				.build();		
+	}
+
+	@Override
+	public MouseDTO findByIdProd(Integer idProd) throws AcademyException {
+		Mouse mou = mouseR.findByIdProd(idProd);
+		return MouseDTO.builder()
+				.id(mou.getId())
+				.descrizione(mou.getDescrizione())
+				.collegamento(mou.getCollegamento())
+				.prodotto(buildProdottoDTO(mou.getProdotto()))
+				.build();
 	}
 
 

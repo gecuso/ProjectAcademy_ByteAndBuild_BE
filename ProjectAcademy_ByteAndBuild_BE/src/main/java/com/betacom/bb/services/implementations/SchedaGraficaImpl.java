@@ -13,7 +13,9 @@ import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.models.SchedaGrafica;
 import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.repositories.ISchedaGraficaRepository;
+import com.betacom.bb.requests.GeneralReq;
 import com.betacom.bb.requests.SchedaGraficaReq;
+import com.betacom.bb.services.interfaces.IProdottoServices;
 import com.betacom.bb.services.interfaces.ISchedaGraficaServices;
 import com.betacom.bb.utilis.Utilities;
 
@@ -25,11 +27,13 @@ public class SchedaGraficaImpl extends Utilities implements ISchedaGraficaServic
 
 	private ISchedaGraficaRepository sgR;
 	private IProdottoRepository prodR;
+	private IProdottoServices prodS;
 
-	
-	public SchedaGraficaImpl(ISchedaGraficaRepository sgR, IProdottoRepository prodR) {
+	public SchedaGraficaImpl(ISchedaGraficaRepository sgR, IProdottoRepository prodR, IProdottoServices prodS) {
+		super();
 		this.sgR = sgR;
 		this.prodR = prodR;
+		this.prodS = prodS;
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -57,6 +61,35 @@ public class SchedaGraficaImpl extends Utilities implements ISchedaGraficaServic
 		sgrafica.setProdotto(p.get());
 		
 		sgR.save(sgrafica);
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void createSchGrfProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		Integer idprod = prodS.create(req.getProdReq());
+		
+		req.getSchGrfReq().setDescrizione(req.getProdReq().getDescrizione());
+		req.getSchGrfReq().setIdProdotto(idprod);
+		
+		create(req.getSchGrfReq());
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void updateSchGrfProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		prodS.update(req.getProdReq());
+		
+		req.getSchGrfReq().setDescrizione(req.getProdReq().getDescrizione());
+		
+		update(req.getSchGrfReq());
+	}
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void deleteSchGrfProd(GeneralReq req)throws AcademyException{
+		log.debug(req);
+		delete(req.getSchGrfReq());
+		prodS.delete(req.getProdReq().getId());
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
@@ -120,6 +153,12 @@ public class SchedaGraficaImpl extends Utilities implements ISchedaGraficaServic
 						.prodotto(buildProdottoDTO(s.getProdotto()))
 						.build())
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public SchedaGraficaDTO findByIdProd(Integer idProd) throws AcademyException {
+		SchedaGrafica alim = sgR.findByIdProd(idProd);
+		return buildSchedaGraficaDTO(alim);
 	}
 	
 	

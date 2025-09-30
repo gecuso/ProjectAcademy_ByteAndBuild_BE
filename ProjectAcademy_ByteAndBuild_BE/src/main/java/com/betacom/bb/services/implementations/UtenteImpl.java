@@ -56,6 +56,8 @@ public class UtenteImpl implements IUtenteServices{
 		if(req.getCurrentpwd() == null || !req.getCurrentpwd().equals(u.get().getPwd())) {
 			throw new AcademyException("Password corrente errata");
 		}
+		if (req.getUserName() != null)
+		    u.get().setUserName(req.getUserName());
 		if (req.getPwd() != null && !req.getPwd().isEmpty()) {
 			u.get().setPwd(req.getPwd());
 			u.get().setCurrentpwd(req.getPwd());
