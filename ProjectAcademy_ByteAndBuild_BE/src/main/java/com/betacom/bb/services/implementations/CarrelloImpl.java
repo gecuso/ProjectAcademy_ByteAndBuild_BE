@@ -228,7 +228,7 @@ public class CarrelloImpl extends Utilities implements ICarrelloService{
 	
 	
 	public Optional<Carrello> findByIdUtente (Integer id) throws AcademyException{
-		log.debug("start get by utente id");
+		log.debug("carrelloImpl findByIdUtente :"+ id);
 		
 		//prendo la lista di carrelli
 		List<Carrello> carrelli = carrR.findAll();

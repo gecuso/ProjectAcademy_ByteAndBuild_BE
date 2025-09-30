@@ -60,7 +60,7 @@ public class OggettoNelCarrelloImpl extends Utilities implements IOggettoNelCarr
 		}
 		
 		//controllo se la quantità inserita è accettabile
-		if(req.getQuantita() == null || req.getQuantita() < 0)
+		if(req.getQuantita() == null || req.getQuantita() < 1)
 			throw new AcademyException("Quantità inserita non valida");
 		
 		//controllo se esiste quel prodotto
@@ -149,18 +149,21 @@ public class OggettoNelCarrelloImpl extends Utilities implements IOggettoNelCarr
 		Optional<OggettoNelCarrello> oggNelCarr = oncR.findById(req.getId());
 		if(oggNelCarr.isEmpty())
 			throw new AcademyException("Oggetto non presente nel database");		
+		OggettoNelCarrello o = oggNelCarr.get();
 		
+		log.debug(o.getId());
 		//devo cambiare il prezzo del carrello
 		
 		AggiornaPrezzoTotaleCarrelloByIdProdotto(req.getIdProdotto(),req.getIdCarrello(), 0);
-		AggiornaNumeroProdotti(req.getIdProdotto(),req.getIdCarrello(), req.getQuantita());
-		
-		Optional<OggettoNelCarrello> oggNelCarr2 = oncR.findById(req.getId());
-		OggettoNelCarrello oggetto = oggNelCarr2.get();
+		Carrello c = carrR.findById(req.getIdCarrello()).get();
+		Integer totale= c.getNumeroProdotti()-o.getQuantita();
+		c.setNumeroProdotti(totale);
+		log.debug(1);
+		carrR.save(c);
+		log.debug(2);
 		
 		//elimino dal database
-		oncR.delete(oggetto);		
-		throw new AcademyException("fatto");
+		oncR.delete(o);		
 	}
 	
 	////////////////////////////////
@@ -253,11 +256,11 @@ public class OggettoNelCarrelloImpl extends Utilities implements IOggettoNelCarr
 		Optional<List<OggettoNelCarrello>> oggettoList = oncR.findByCarrelloId(idCarrello);
 		List<OggettoNelCarrello> oggettiDaControllare = oggettoList.get();
 		
-		for(int i=0; i<oggettiDaControllare.size(); i++) {
+		for(OggettoNelCarrello o: oggettiDaControllare) {
 			
-			if(oggettiDaControllare.get(i).getProdotto().getId() == idProdotto) {
+			if(o.getProdotto().getId() == idProdotto) {
 				// log.debug("ciaoooooooooooooooooooooooo111 " + prezzo);
-				prezzo = prezzo - (oggettiDaControllare.get(i).getQuantita() * oggettiDaControllare.get(i).getProdotto().getPrezzo());
+				prezzo = prezzo - (o.getQuantita() * o.getProdotto().getPrezzo());
 				// log.debug("ciaoooooooooooooooooooooooo222 " + prezzo);
 			}
 			

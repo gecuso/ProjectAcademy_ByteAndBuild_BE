@@ -20,9 +20,12 @@ import com.betacom.bb.response.ResponseObject;
 import com.betacom.bb.services.interfaces.IMouseService;
 import com.betacom.bb.services.interfaces.IOggettoNelCarrelloService;
 
+import lombok.extern.log4j.Log4j2;
+
 @RestController
 @RequestMapping("/rest/onc")
 @CrossOrigin("*")
+@Log4j2
 public class OggettoNelCarrelloController {
 
 	private IOggettoNelCarrelloService oncS;
@@ -33,9 +36,10 @@ public class OggettoNelCarrelloController {
 	
 	////////////////////////////////
 
-	@PostMapping("create")
+	@PostMapping("/create")
 	public ResponseBase create(@RequestBody (required = true) OggettoNelCarrelloReq req) {		
 		ResponseBase r = new ResponseBase();
+		log.debug(req);
 		try {
 			oncS.create(req);
 			r.setRc(true);
@@ -46,7 +50,7 @@ public class OggettoNelCarrelloController {
 		return r;
 	}
 	
-	@PutMapping("update")
+	@PutMapping("/update")
 	public ResponseBase update(@RequestBody (required = true) OggettoNelCarrelloReq req) {
 		ResponseBase r = new ResponseBase();
 		try {
@@ -59,7 +63,7 @@ public class OggettoNelCarrelloController {
 		return r;
 	}
 	
-	@DeleteMapping("delete")
+	@DeleteMapping("/delete")
 	public ResponseBase delete(@RequestBody (required = true) OggettoNelCarrelloReq req) {
 		ResponseBase r = new ResponseBase();
 		try {
