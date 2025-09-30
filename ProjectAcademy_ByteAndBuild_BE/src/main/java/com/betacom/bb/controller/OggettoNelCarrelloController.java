@@ -1,5 +1,6 @@
 package com.betacom.bb.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import com.betacom.bb.services.interfaces.IOggettoNelCarrelloService;
 
 @RestController
 @RequestMapping("/rest/onc")
+@CrossOrigin("*")
 public class OggettoNelCarrelloController {
 
 	private IOggettoNelCarrelloService oncS;

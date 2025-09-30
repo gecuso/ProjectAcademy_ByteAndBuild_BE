@@ -11,5 +11,5 @@ public class CarrelloDTO {
 	private Integer numeroProdotti;
 	private Integer prezzoTotale;
 	private UtenteDTO utente;
-	
+//	private List<OggettoNelCarrelloDTO> listaOggetti;
 }

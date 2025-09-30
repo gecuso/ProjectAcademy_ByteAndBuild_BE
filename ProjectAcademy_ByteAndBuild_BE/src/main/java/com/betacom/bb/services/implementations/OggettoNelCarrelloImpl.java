@@ -160,6 +160,7 @@ public class OggettoNelCarrelloImpl extends Utilities implements IOggettoNelCarr
 		
 		//elimino dal database
 		oncR.delete(oggetto);		
+		throw new AcademyException("fatto");
 	}
 	
 	////////////////////////////////
@@ -197,7 +198,7 @@ public class OggettoNelCarrelloImpl extends Utilities implements IOggettoNelCarr
 
 	@Override
 	public List<OggettoNelCarrelloDTO> getByIdCarrello(Integer id) throws AcademyException {
-		log.debug("findByIdCarrello OggettoNelCarrello");
+		log.debug("findByIdCarrello OggettoNelCarrello "+id);
 		
 		//ciclo i dati per trovare gli oggetti dentro ad uno specifico carrello
 		List<OggettoNelCarrello> tuttiOggetti = oncR.findAll();

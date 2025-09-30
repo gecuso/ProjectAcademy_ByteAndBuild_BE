@@ -146,7 +146,7 @@ public class CarrelloImpl extends Utilities implements ICarrelloService{
 
 	@Override
 	public CarrelloDTO getById(Integer id) throws AcademyException {
-		log.debug("findById carrello");
+		log.debug("findById carrello "+id);
 		
 		//controllo se esiste il carrello
 		Optional<Carrello> carrello = carrR.findById(id);
@@ -172,7 +172,7 @@ public class CarrelloImpl extends Utilities implements ICarrelloService{
 
 	@Override
 	public CarrelloDTO getByIdUtente(Integer id) throws AcademyException {
-		log.debug("findByIdUtente carrello");
+		log.debug("findByIdUtente carrello "+id);
 		
 		//controllo se esiste il carrello
 		Optional<Carrello> carrello = findByIdUtente(id);

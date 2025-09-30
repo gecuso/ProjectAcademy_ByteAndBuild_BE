@@ -11,6 +11,7 @@ import com.betacom.bb.dto.CpuDTO;
 import com.betacom.bb.dto.FormatoDTO;
 import com.betacom.bb.dto.MarcaDTO;
 import com.betacom.bb.dto.MemoriaDTO;
+import com.betacom.bb.dto.OggettoNelCarrelloDTO;
 import com.betacom.bb.dto.PcDTO;
 import com.betacom.bb.dto.ProdottoDTO;
 import com.betacom.bb.dto.RamDTO;
@@ -27,6 +28,7 @@ import com.betacom.bb.models.Cpu;
 import com.betacom.bb.models.Formato;
 import com.betacom.bb.models.Marca;
 import com.betacom.bb.models.Memoria;
+import com.betacom.bb.models.OggettoNelCarrello;
 import com.betacom.bb.models.Pc;
 import com.betacom.bb.models.Prodotto;
 import com.betacom.bb.models.Ram;
@@ -81,6 +83,7 @@ public class Utilities {
 				.descrizione(c.getDescrizione())
 				.build();
 	}
+	
 	
 	public List<CategoriaDTO> buildListCategoriaDTO(List<Categoria> cat) {
 		return cat.stream()
