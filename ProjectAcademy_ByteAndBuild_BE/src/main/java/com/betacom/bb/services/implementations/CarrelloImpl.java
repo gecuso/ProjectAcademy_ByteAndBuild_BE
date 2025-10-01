@@ -16,6 +16,7 @@ import com.betacom.bb.models.OggettoNelCarrello;
 import com.betacom.bb.models.Utente;
 import com.betacom.bb.repositories.ICarrelloRepository;
 import com.betacom.bb.repositories.IOggettoNelCarrelloRepository;
+import com.betacom.bb.repositories.IProdottoRepository;
 import com.betacom.bb.repositories.IUtenteRepository;
 import com.betacom.bb.requests.CarrelloReq;
 import com.betacom.bb.services.interfaces.ICarrelloService;
@@ -30,13 +31,19 @@ public class CarrelloImpl extends Utilities implements ICarrelloService{
 	private ICarrelloRepository carrR;
 	private IUtenteRepository utenR;
 	private IOggettoNelCarrelloRepository oncR;
+	private IProdottoRepository prodR;
 	
-	public CarrelloImpl(ICarrelloRepository carrR, IUtenteRepository utenR, IOggettoNelCarrelloRepository oncR) {
+	
+
+	public CarrelloImpl(ICarrelloRepository carrR, IUtenteRepository utenR, IOggettoNelCarrelloRepository oncR,
+			IProdottoRepository prodR) {
+		super();
 		this.carrR = carrR;
 		this.utenR = utenR;
 		this.oncR = oncR;
+		this.prodR = prodR;
 	}
-	
+
 	////////////////////////////////	
 
 	@Transactional(rollbackFor = Exception.class)
@@ -211,6 +218,13 @@ public class CarrelloImpl extends Utilities implements ICarrelloService{
 		
 		//recupero la lista degli oggetti
 		List<OggettoNelCarrello> oggetti = new ArrayList<OggettoNelCarrello>();
+		List<OggettoNelCarrello> tuttiOggetti = oncR.findAll();
+		
+		for (OggettoNelCarrello oggetto : tuttiOggetti) {
+			if(oggetto.getCarrello().getId() == id) {
+				oggetti.add(oggetto);
+			}
+		}
 		
 		for (OggettoNelCarrello oggetto : oggetti) {
 			//elimino dal database
@@ -248,6 +262,36 @@ public class CarrelloImpl extends Utilities implements ICarrelloService{
 		}else {
 			return carrR.findById(idd);
 		}
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void acquista(Integer id) throws AcademyException {
+		log.debug("acquista : "+id);
+		Integer tot;
+		
+		Optional<Carrello> carrello = findByIdUtente(id);
+		if(carrello.isEmpty())
+			throw new AcademyException("Carrello non presente nel database");
+		
+		List<OggettoNelCarrello> oggetti = new ArrayList<OggettoNelCarrello>();
+		List<OggettoNelCarrello> tuttiOggetti = oncR.findAll();
+		
+		for (OggettoNelCarrello oggetto : tuttiOggetti) {
+			if(oggetto.getCarrello().getId() == id) {
+				if(oggetto.getProdotto().getQuantita()>oggetto.getQuantita()) {
+					tot=oggetto.getProdotto().getQuantita()-oggetto.getQuantita();
+				oggetto.getProdotto().setQuantita(tot);
+				prodR.save(oggetto.getProdotto());
+				}
+				else {
+					throw new AcademyException("il prodotto :"+oggetto.getProdotto().getDescrizione()+" non è disponibile nella quantita richiesta, oggetti disponibili attualmente :" +oggetto.getProdotto().getQuantita());
+				}
+				
+			}
+		}
+		svuotaCarrello(id);
+		
 	}
 	
 	

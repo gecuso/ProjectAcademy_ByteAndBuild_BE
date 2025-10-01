@@ -151,11 +151,19 @@ public class OggettoNelCarrelloImpl extends Utilities implements IOggettoNelCarr
 			throw new AcademyException("Oggetto non presente nel database");		
 		OggettoNelCarrello o = oggNelCarr.get();
 		
+		Optional<Prodotto> prod = prodR.findById(req.getIdProdotto());
+		if(prod.isEmpty())
+			throw new AcademyException("prodotto non presente nel database");		
+		Prodotto p = prod.get();
+		
 		log.debug(o.getId());
 		//devo cambiare il prezzo del carrello
-		
-		AggiornaPrezzoTotaleCarrelloByIdProdotto(req.getIdProdotto(),req.getIdCarrello(), 0);
 		Carrello c = carrR.findById(req.getIdCarrello()).get();
+		Integer prezzoTotale=c.getPrezzoTotale();
+		Integer prezzoDaRimuovere= p.getPrezzo()*o.getQuantita();
+		prezzoTotale=prezzoTotale-prezzoDaRimuovere;
+		c.setPrezzoTotale(prezzoTotale);
+		
 		Integer totale= c.getNumeroProdotti()-o.getQuantita();
 		c.setNumeroProdotti(totale);
 		log.debug(1);

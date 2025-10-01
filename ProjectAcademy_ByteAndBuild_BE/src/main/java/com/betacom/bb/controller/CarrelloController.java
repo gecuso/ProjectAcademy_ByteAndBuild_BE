@@ -123,4 +123,17 @@ public class CarrelloController {
 		return r;	
 	}	
 	
+	@GetMapping("/acquista")
+	public ResponseBase acquista(@RequestParam (required = true)  Integer id) {
+		ResponseBase r = new ResponseBase();
+		try {
+			carrS.acquista(id);
+			r.setRc(true);
+		} catch (Exception e) {
+			r.setRc(false);
+			r.setMsg(e.getMessage());
+		}
+		return r;	
+	}	
+	
 }

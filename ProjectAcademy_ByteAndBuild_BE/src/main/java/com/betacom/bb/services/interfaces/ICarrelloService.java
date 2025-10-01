@@ -11,7 +11,7 @@ public interface ICarrelloService {
 	void create(CarrelloReq req) throws AcademyException;
 	void update(CarrelloReq req) throws AcademyException;
 	void delete(CarrelloReq req) throws AcademyException;	
-	
+	void acquista(Integer id) throws AcademyException;	
 	List<CarrelloDTO> findAll();
 	CarrelloDTO getById(Integer id) throws AcademyException;
 	CarrelloDTO getByIdUtente(Integer id) throws AcademyException;
