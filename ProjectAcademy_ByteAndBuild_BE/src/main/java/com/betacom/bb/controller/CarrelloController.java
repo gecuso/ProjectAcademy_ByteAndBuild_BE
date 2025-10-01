@@ -110,7 +110,7 @@ public class CarrelloController {
 		return r;	
 	}
 	
-	@GetMapping("/svuotaCarrello")
+	@DeleteMapping("/svuotaCarrello")
 	public ResponseBase svuotaCarrello(@RequestParam (required = true)  Integer id) {
 		ResponseBase r = new ResponseBase();
 		try {
