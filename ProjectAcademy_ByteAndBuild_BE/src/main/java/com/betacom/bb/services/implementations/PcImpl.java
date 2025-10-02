@@ -180,6 +180,7 @@ public class PcImpl extends Utilities implements IPcService{
 		pcR.delete(m.get());	
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void update(PcReq pcReq) throws AcademyException {
@@ -254,15 +255,15 @@ public class PcImpl extends Utilities implements IPcService{
 			if(pc.getDescrizione().equalsIgnoreCase(pcReq.getDescrizione()) && pc.getId() != oldId)
 				throw new AcademyException("Esiste già un PC con questa descrione");
 		}
-		
-		m.get().setAlimentazione(alimR.findByIdProd(pcReq.getIdAlimentazione()));
-		m.get().setCasee(caseR.findByIdProd(pcReq.getIdCase()));
-		m.get().setCpu(cpuR.findByIdProd(pcReq.getIdCpu()));
-		m.get().setMemoria(memR.findByIdProd(pcReq.getIdMemoria()));
-		m.get().setRam(ramR.findByIdProd(pcReq.getIdRam()));
-		m.get().setSchedaGrafica(schgrfR.findByIdProd(pcReq.getIdSchedaGrafica()));
-		m.get().setSchedaMadre(schMdrR.findByIdProd(pcReq.getIdSchedaMadre()));
-		m.get().setSistemaRaffreddamento(sisRafR.findByIdProd(pcReq.getIdSistemaRaffreddamento()));
+		m.get().setDescrizione(pcReq.getDescrizione());
+		m.get().setAlimentazione(alimR.getById(pcReq.getIdAlimentazione()));
+		m.get().setCasee(caseR.getById(pcReq.getIdCase()));
+		m.get().setCpu(cpuR.getById(pcReq.getIdCpu()));
+		m.get().setMemoria(memR.getById(pcReq.getIdMemoria()));
+		m.get().setRam(ramR.getById(pcReq.getIdRam()));
+		m.get().setSchedaGrafica(schgrfR.getById(pcReq.getIdSchedaGrafica()));
+		m.get().setSchedaMadre(schMdrR.getById(pcReq.getIdSchedaMadre()));
+		m.get().setSistemaRaffreddamento(sisRafR.getById(pcReq.getIdSistemaRaffreddamento()));
 
 		pcR.save(m.get());			
 	}
@@ -288,6 +289,7 @@ public class PcImpl extends Utilities implements IPcService{
 		
 		req.getPcReq().setDescrizione(req.getProdReq().getDescrizione());
 		req.getPcReq().setIdProdotto(req.getProdReq().getId());
+		log.debug(req.getPcReq());
 		update(req.getPcReq());
 	}
 	
